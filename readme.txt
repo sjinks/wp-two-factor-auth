@@ -17,9 +17,13 @@ XMLRPC users will not be affected, this is just for the login to admin pages.
 
 == Installation ==
 
+Easy installation.
+
 1. Upload `two-factor-auth.zip` through the 'Plugins' menu in WordPress
 2. Activate the plugin through the 'Plugins' menu in WordPress
+
 or
+
 1. Search for 'Two Factor Auth' in the 'Plugins' menu in WordPress.
 2. Click the 'Install' button. (Make sure you picks the right one)
 3. Activate the plugin through the 'Plugins' menu in WordPress
@@ -30,10 +34,12 @@ or
 
 Nope. If you have access to the database you can look in the table 'user_meta' for meta_key = 'two_factor_login_code' and look at the meta_vaule.
 
+
 == Screenshots ==
 
 1. The normal login page is not affected
 2. After the first login in page, this is shown and an email with the code is sent to the users email.
+
 
 == Upgrade ==
 
