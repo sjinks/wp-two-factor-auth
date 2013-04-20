@@ -17,7 +17,7 @@ Users trying to login will be prompted with a page to enter a code that was emai
 
 XMLRPC users will not be affected, this is just for the login to admin pages.
 
-Notice that righ now the "Remember me" cookie overrides this which means that you will still be auto logged in if you choose that option.
+Notice that right now the "Remember me" cookie overrides this which means that you will still be auto logged in if you choose that option.
 
 See http://oskarhane.com/plugin-two-factor-auth-for-wordpress/ for more info.
 
@@ -29,7 +29,7 @@ See http://oskarhane.com/plugin-two-factor-auth-for-wordpress/ for more info.
 
 Easy installation.
 
-1. Upload `two-factor-auth.zip` through the 'Plugins' menu in WordPress
+1. Upload *two-factor-auth.zip* through the 'Plugins' menu in WordPress
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
 or
@@ -41,11 +41,11 @@ or
 == Frequently Asked Questions ==
 
 = If I can't reach my email account, can I bypass this plugin and log in anyway? =
-Nope. If you have access to the database you can look in the table 'user_meta' for meta_key = 'two_factor_login_code' and look at the meta_vaule.
+Nope. If you have access to the database you can look in the table *user_meta* for meta_key = *two_factor_login_code* and look at the meta_vaule.
 
 == Screenshots ==
 
-1. The normal login page is not affected.
+1. The normal login page is not affected
 2. After the first login in page, this is shown and an email with the code is sent to the users email.
 
 == Upgrade Notice ==
