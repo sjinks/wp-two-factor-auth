@@ -1,6 +1,5 @@
 === Two Factor Auth ===
 Contributors: oskarhane
-Donate link: http://oskarhane.com/
 Tags: auth, two factor auth, login, security, authenticate
 Requires at least: 3.0.1
 Tested up to: 3.5.1
@@ -12,7 +11,9 @@ Add extra security to your WordPress login with this two factor auth. Users will
 
 == Description ==
 
-Add extra security to your WordPress login with this two factor auth. Users will be prompted with a page to enter a code that was emailed to them.
+Add extra security to your WordPress login with this two factor auth. 
+Users trying to login will be prompted with a page to enter a code that was emailed to them.
+
 XMLRPC users will not be affected, this is just for the login to admin pages.
 
 == Installation ==
@@ -36,8 +37,6 @@ Nope. If you have access to the database you can look in the table 'user_meta' f
 
 
 == Screenshots ==
-
-= This is how the plugin behaves =
 
 1. The normal login page is not affected
 2. After the first login in page, this is shown and an email with the code is sent to the users email.
