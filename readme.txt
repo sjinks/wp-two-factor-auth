@@ -37,11 +37,11 @@ Nope. If you have access to the database you can look in the table 'user_meta' f
 
 == Screenshots ==
 
+= This is how the plugin behaves =
+
 1. The normal login page is not affected
 2. After the first login in page, this is shown and an email with the code is sent to the users email.
 
-
-== Upgrade ==
 
 == Upgrade Notice ==
 Just install.
