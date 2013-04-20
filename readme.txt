@@ -16,6 +16,8 @@ Users trying to login will be prompted with a page to enter a code that was emai
 
 XMLRPC users will not be affected, this is just for the login to admin pages.
 
+See http://oskarhane.com/plugin-two-factor-auth-for-wordpress/ for more info.
+
 == Installation ==
 
 Easy installation.
@@ -37,9 +39,8 @@ Nope. If you have access to the database you can look in the table 'user_meta' f
 
 
 == Screenshots ==
-
-
 1. The normal login page is not affected
+
 2. After the first login in page, this is shown and an email with the code is sent to the users email.
 
 
