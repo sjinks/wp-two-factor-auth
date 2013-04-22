@@ -1,0 +1,64 @@
+=== Two Factor Auth ===
+Contributors: oskarhane
+Tags: auth, two factor auth, login, security, authenticate
+Requires at least: 3.0.1
+Tested up to: 3.5.1
+Stable tag: 1.0
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+
+Add extra security to your WordPress login with this two factor auth. Users will be prompted with a page to enter a code that was emailed to them.
+
+== Description ==
+
+Add extra security to your WordPress login with this two factor auth. 
+Users trying to login will be prompted with a page to enter a code that was emailed to them.
+
+XMLRPC users will not be affected, this is just for the login to admin pages.
+
+Notice that right now the "Remember me" cookie overrides this which means that you will still be auto logged in if you choose that option.
+
+See http://oskarhane.com/plugin-two-factor-auth-for-wordpress/ for more info.
+
+= Coming Soon =
+* Option to override "Remember me" cookie.
+* Choose which user roles that will have this plugin activated.
+
+== Installation ==
+
+Easy installation.
+
+1. Upload *two-factor-auth.zip* through the 'Plugins' menu in WordPress
+2. Activate the plugin through the 'Plugins' menu in WordPress
+
+or
+
+1. Search for 'Two Factor Auth' in the 'Plugins' menu in WordPress.
+2. Click the 'Install' button. (Make sure you picks the right one)
+3. Activate the plugin through the 'Plugins' menu in WordPress
+
+== Frequently Asked Questions ==
+
+= If I can't reach my email account, can I bypass this plugin and log in anyway? =
+Nope. If you have access to the database you can look in the table *user_meta* for meta_key = *two_factor_login_code* and look at the meta_vaule.
+
+== Screenshots ==
+
+1. The normal login page where the password field is removed.
+2. After the first login in page, this is shown and an email with the code is sent to the users email.
+
+== Changelog ==
+
+= 1.1 =
+* Removed password field from regular login page and added it to the second page where the user now enters both the emailed code and the password.
+
+= 1.0 =
+* Initial release
+
+== Upgrade Notice ==
+
+= 1.1 =
+Nothing special to consider. Just upgrade as usual.
+
+= 1.0 =
+Just released.
