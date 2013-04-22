@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Two Factor Auth for WordPress
+Plugin Name: Two Factor Auth
 Plugin URI: http://oskarhane.com/plugin-two-factor-auth-for-wordpress
 Description: Add extra security to your WordPress login with this two factor auth. Users will be prompted with a page to enter a code that was emailed to them.
 Author: Oskar Hane
@@ -16,10 +16,10 @@ function breakAuth($log)
 	
 	if(!$params)
 		return;
-	if(!$params['log'] || !$params['pwd'])
+	if(!$params['log'])
 		return;
 	
-	if(!$params['two_factor_code'])
+	if(!$params['two_factor_code_submitted'])
 		loadTwoFactorForm($params);
 	else
 		checkTwoFactorCode($params);
@@ -44,8 +44,27 @@ function loadTwoFactorForm($params)
 	}
 	
 	include 'form.php';
+	
+	
 	exit;
 }
+
+
+function hideAndEmptyPasswordField()
+{
+	if($_POST['log'] && !$_POST['two_factor_code_submitted'])
+		return;
+	
+	?>
+	<script type="text/javascript">
+		var pw_field = document.getElementsByName('pwd')[0];
+		pw_field.value = '';
+		pw_field.parentNode.parentNode.style.display = 'none';
+	</script>
+	<?php
+}
+add_action('login_footer', 'hideAndEmptyPasswordField');
+
 
 
 function checkTwoFactorCode($params)
@@ -69,7 +88,7 @@ function checkTwoFactorCode($params)
 
 function sendTwoFactorEmail($email, $code)
 {
-	wp_mail( $email, 'Login Code for '.get_bloginfo('name'), "\n\nEnter this code to log in: ".$code."\n\n".site_url(), "Content-Type: text/plain");
+	wp_mail( $email, 'Login Code for '.get_bloginfo('name'), "\n\nEnter this code to log in: ".$code."\n\n\n".site_url(), "Content-Type: text/plain");
 }
 
 

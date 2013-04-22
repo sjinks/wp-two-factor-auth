@@ -1,5 +1,4 @@
 === Two Factor Auth ===
-
 Contributors: oskarhane
 Tags: auth, two factor auth, login, security, authenticate
 Requires at least: 3.0.1
