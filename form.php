@@ -1,5 +1,5 @@
 <?php
-login_header('Enter Two Factor Login Code', '<p style="margin: 20px 0 20px 10px"><strong>Two Factor Login is activated.</strong><br>Check your email for your code.</p>');
+login_header('Enter Two Factor Login Code', '<p style="'.($is_activated_for_user ? '' : 'display:none;').'margin: 20px 0 20px 10px"><strong>Two Factor Login is activated.</strong><br>Check your email for your code.</p>');
 
 $html = '
 <form action="" method="post">
@@ -13,7 +13,7 @@ $html = '
 			<input type="password" name="pwd" id="user_pass" class="input" value="" size="20">
 		</label>
 	</p>
-	<p>
+	<p style="'.($is_activated_for_user ? '' : 'display:none').'">
 		<label for"two_factor_code">One time code (check your email)<br>
 			<input type="text" autocomplete="off" class="input" style="text-transform: uppercase; background: white url('.plugin_dir_url(__FILE__).'/email_16.gif) no-repeat 4px 10px; color:green; text-indent:20px;" name="two_factor_code">
 		</label>
