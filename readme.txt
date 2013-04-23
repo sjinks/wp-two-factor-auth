@@ -48,7 +48,6 @@ See http://oskarhane.com/plugin-two-factor-auth-for-wordpress/ for more info.
 
 = Coming Soon =
 * Option to override "Remember me" cookie.
-* Choose which user roles that will have this plugin activated.
 
 == Installation ==
 
