@@ -7,7 +7,7 @@ Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Add extra security to your WordPress login with this two factor auth. Users will be prompted with a page to enter a one time code that was emailed to them.
+Secure your WordPress login with this two factor auth. Users will be prompted with a page to enter a one time code that was emailed to them.
 
 == Description ==
 
