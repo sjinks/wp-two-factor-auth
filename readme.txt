@@ -32,7 +32,7 @@ When you are about to login, a one time password is sent to your email account a
 A bit more work to get logged in, but a whole lot more secure!
 
 
-= Is the really Two Factor Auth? =
+= Is this really Two Factor Auth? =
 Well, it depends on how you define ["Something the user has"](http://en.wikipedia.org/wiki/Multi-factor_authentication#Possession_factors:_.22something_the_user_has.22) 
 The principle as getting a text message to your phone and getting an email is the same, with the exception that you can get access to a mail account from anywhere but you have to actually have the physical phone to read a text message.
 Having to have physical access to something is, of course, even more secure. It also makes it more difficult for users to register, verify phone numer, change phone number etc.
