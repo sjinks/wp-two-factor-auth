@@ -17,12 +17,12 @@ Users can have common or weak passwords that lets hackers/bots brute-force your 
 Just like happend not that long ago: [Article on TechCrunch](http://techcrunch.com/2013/04/12/hackers-point-large-botnet-at-wordpress-sites-to-steal-admin-passwords-and-gain-server-access/)
 
 If all sites would have used this plugin, this would never happend.
-It doesn't matter how weak your users passwords are, noone can gain access to your WordPress site without already having access to the user accounts email inbox as well.
+It doesn't matter how weak your users passwords are, no one can gain access to your WordPress site without already having access to the user accounts email inbox as well.
 
 
 = How Does It Work =
 The technology behind this is simple. It uses one time codes that are email to you when you're about to log in.
-That means that noone can just guess/sniff/break your real password and gain access, they'll need to guess this one time code as well. 
+That means that no one can just guess/sniff/break your real password and gain access, they'll need to guess this one time code as well. 
 And they only have one shot. After the first attempt, a new one time code is generated and emailed to you.
 
 
