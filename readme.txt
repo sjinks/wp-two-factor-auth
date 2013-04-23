@@ -31,6 +31,15 @@ Just install this plugin and you're all set. There's really nothing more to it.
 When you are about to login, a one time password is sent to your email account and you just enter it on the login in page.
 A bit more work to get logged in, but a whole lot more secure!
 
+
+= Is the really Two Factor Auth? =
+Well, it depends on how you define ["Something the user has"](http://en.wikipedia.org/wiki/Multi-factor_authentication#Possession_factors:_.22something_the_user_has.22) 
+The principle as getting a text message to your phone and getting an email is the same, with the exception that you can get access to a mail account from anywhere but you have to actually have the physical phone to read a text message.
+Having to have physical access to something is, of course, even more secure. It also makes it more difficult for users to register, verify phone numer, change phone number etc.
+
+I, for sure, find this email solution secure and no automated login attemps will ever get passed it.
+
+
 XMLRPC users will not be affected, this is just for the login to admin pages.
 
 Notice that right now the "Remember me" cookie overrides this which means that you will still be auto logged in if you click that checkbox.
@@ -57,11 +66,11 @@ or
 == Frequently Asked Questions ==
 
 = If I can't reach my email account, can I bypass this plugin and log in anyway? =
-Nope. If you have access to the database you can look in the table *user_meta* for meta_key = *two_factor_login_code* and look at the meta_vaule.
+Nope.
 
 == Screenshots ==
 
-1. The normal login page where the password field is removed.
+1. The normal login page where the password field is removed. Don't mind the language on this screenshot, the plugin is all in english.
 2. After the first login in page, this is shown and an email with the code is sent to the users email.
 
 == Changelog ==
