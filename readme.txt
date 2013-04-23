@@ -3,7 +3,7 @@ Contributors: oskarhane
 Tags: auth, two factor auth, login, security, authenticate, password
 Requires at least: 3.0.1
 Tested up to: 3.5.1
-Stable tag: 1.1
+Stable tag: 2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -72,8 +72,12 @@ Nope.
 
 1. The normal login page where the password field is removed. Don't mind the language on this screenshot, the plugin is all in english.
 2. After the first login in page, this is shown and an email with the code is sent to the users email.
+3. Admin settings page. Again, the button is localized so don't mind the language.
 
 == Changelog ==
+
+= 2.0 =
+* Admin settings menu where you can choose which user roles that will have this activated. There will still be a second screen where the not activated user roles enter their password, but the one time code field is hidden.
 
 = 1.1 =
 * Removed password field from regular login page and added it to the second page where the user now enters both the emailed code and the password.
@@ -82,6 +86,9 @@ Nope.
 * Initial release
 
 == Upgrade Notice ==
+
+= 2.0 =
+Nothing special to consider. Just upgrade as usual.
 
 = 1.1 =
 Nothing special to consider. Just upgrade as usual.
