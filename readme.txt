@@ -3,7 +3,7 @@ Contributors: oskarhane
 Tags: auth, two factor auth, login, security, authenticate, password
 Requires at least: 3.0.1
 Tested up to: 3.5.1
-Stable tag: 2.0
+Stable tag: 2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Secure your WordPress login with this two factor auth. Users will be prompted wi
 == Description ==
 
 
-= Why you need this =
+= Why You Need This =
 Users can have common or weak passwords that lets hackers/bots brute-force your WordPress site and gain access to your files and place malware there.
 Just like happend not that long ago: [Article on TechCrunch](http://techcrunch.com/2013/04/12/hackers-point-large-botnet-at-wordpress-sites-to-steal-admin-passwords-and-gain-server-access/)
 
@@ -20,7 +20,7 @@ If all sites would have used this plugin, this would never happend.
 It doesn't matter how weak your users passwords are, no one can gain access to your WordPress site without already having access to the user accounts email inbox as well.
 
 
-= How Does It Work =
+= How Does It Work? =
 The technology behind this is simple. It uses one time codes that are email to you when you're about to log in.
 That means that no one can just guess/sniff/break your real password and gain access, they'll need to guess this one time code as well. 
 And they only have one shot. After the first attempt, a new one time code is generated and emailed to you.
@@ -46,8 +46,6 @@ Notice that right now the "Remember me" cookie overrides this which means that y
 
 See http://oskarhane.com/plugin-two-factor-auth-for-wordpress/ for more info.
 
-= Coming Soon =
-* Option to override "Remember me" cookie.
 
 == Installation ==
 
@@ -65,7 +63,7 @@ or
 == Frequently Asked Questions ==
 
 = If I can't reach my email account, can I bypass this plugin and log in anyway? =
-Nope.
+If you have access to the databse you can look for the code there. Otherwise, no.
 
 == Screenshots ==
 
@@ -74,6 +72,12 @@ Nope.
 3. Admin settings page. Again, the button is localized so don't mind the language.
 
 == Changelog ==
+
+= 2.1 =
+* Fixed warning message on admin settings page (thanks Joi)
+* Hooks into a filter now so other plugins like Better WP Security, Limit Login Attemps etc. get a chance to log a failed login
+* Error message are now displayed when the entered code was wrong
+* Code length is not fixed any more. It can be 5 or 6 characters. Removed som easy to mix charaters as well (1 and I).
 
 = 2.0 =
 * Admin settings menu where you can choose which user roles that will have this activated. There will still be a second screen where the not activated user roles enter their password, but the one time code field is hidden.
@@ -85,6 +89,9 @@ Nope.
 * Initial release
 
 == Upgrade Notice ==
+
+= 2.1 =
+A few bugs fixed and changed how the plugin behaves when a wrong code was entered.
 
 = 2.0 =
 Nothing special to consider. Just upgrade as usual.

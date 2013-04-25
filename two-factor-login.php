@@ -5,7 +5,7 @@ Plugin URI: http://oskarhane.com/plugin-two-factor-auth-for-wordpress
 Description: Secure your WordPress login with this two factor auth. Users will be prompted with a page to enter a one time code that was emailed to them.
 Author: Oskar Hane
 Author URI: http://oskarhane.com
-Version: 2.0
+Version: 2.1
 License: GPLv2 or later
 */
 //error_reporting(E_ALL);
@@ -35,12 +35,19 @@ add_action('wp_authenticate', 'breakAuth');
 
 function tfaVerifyCodeAndUser($user, $username, $password)
 {
+	//If already failed, we don't bother to check the code
+	if(is_wp_error($user))
+		return $user;
+		
 	$params = $_POST;
 	$code_ok = checkTwoFactorCode($params);
 	
 	if(!$code_ok)
 		return new WP_Error('authentication_failed', __('<strong>ERROR</strong>: The Two Factor Code you entered was incorrect.'));
-
+	
+	if($user)
+		return $user;
+		
 	return wp_authenticate_username_password(null, $username, $password);
 }
 add_filter('authenticate', 'tfaVerifyCodeAndUser', 99999999999, 3);//We want to be the last filter that runs.
