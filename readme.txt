@@ -74,7 +74,7 @@ If you have access to the databse you can look for the code there. Otherwise, no
 == Changelog ==
 
 = 2.1 =
-* Fixed warning message on admin settings page
+* Fixed warning message on admin settings page (thanks Joi)
 * Hooks into a filter now so other plugins like Better WP Security, Limit Login Attemps etc. get a chance to log a failed login
 * Error message are now displayed when the entered code was wrong
 * Code length is not fixed any more. It can be 5 or 6 characters. Removed som easy to mix charaters as well (1 and I).
@@ -91,7 +91,7 @@ If you have access to the databse you can look for the code there. Otherwise, no
 == Upgrade Notice ==
 
 = 2.1 =
-Just click upgrade.
+A few bugs fixed and changed how the plugin behaves when a wrong code was entered.
 
 = 2.0 =
 Nothing special to consider. Just upgrade as usual.

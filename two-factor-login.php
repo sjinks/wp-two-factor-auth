@@ -44,7 +44,10 @@ function tfaVerifyCodeAndUser($user, $username, $password)
 	
 	if(!$code_ok)
 		return new WP_Error('authentication_failed', __('<strong>ERROR</strong>: The Two Factor Code you entered was incorrect.'));
-
+	
+	if($user)
+		return $user;
+		
 	return wp_authenticate_username_password(null, $username, $password);
 }
 add_filter('authenticate', 'tfaVerifyCodeAndUser', 99999999999, 3);//We want to be the last filter that runs.
