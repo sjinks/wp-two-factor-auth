@@ -8,7 +8,8 @@ Author URI: http://oskarhane.com
 Version: 2.0
 License: GPLv2 or later
 */
-
+//error_reporting(E_ALL);
+//ini_set("display_errors", true);
 
 function showAdminSettingsPage()
 {
@@ -27,10 +28,23 @@ function breakAuth($log)
 	
 	if(!$params['two_factor_code_submitted'])
 		loadTwoFactorForm($params);
-	else
-		checkTwoFactorCode($params);
 }
 add_action('wp_authenticate', 'breakAuth');
+
+
+
+function tfaVerifyCodeAndUser($user, $username, $password)
+{
+	$params = $_POST;
+	$code_ok = checkTwoFactorCode($params);
+	
+	if(!$code_ok)
+		return new WP_Error('authentication_failed', __('<strong>ERROR</strong>: The Two Factor Code you entered was incorrect.'));
+
+	return wp_authenticate_username_password(null, $username, $password);
+}
+add_filter('authenticate', 'tfaVerifyCodeAndUser', 99999999999, 3);//We want to be the last filter that runs.
+
 
 
 function loadTwoFactorForm($params)
@@ -105,7 +119,7 @@ function checkTwoFactorCode($params)
 	$user_ID = $wpdb->get_var($query);
 	
 	if(!$user_ID)
-		sendBackToLogin();
+		return true;
 	
 	$code = get_user_meta($user_ID, 'two_factor_login_code', true);
 	
@@ -113,14 +127,17 @@ function checkTwoFactorCode($params)
 	delete_user_meta($user_ID, 'two_factor_login_code');
 	
 	if(!tfaIsActivatedForUser($user_ID))
-		return;
+		return true;
 	
 	if(!$code)
-		sendBackToLogin();
+		return false;
 
 	if($code != strtoupper($params['two_factor_code']))
-		sendBackToLogin();
+		return false;
+		
+	return true;
 }
+
 
 
 function sendTwoFactorEmail($email, $code)
@@ -129,19 +146,12 @@ function sendTwoFactorEmail($email, $code)
 }
 
 
-function sendBackToLogin()
+function generateTwoFactorCode()
 {
-	header('Location: '.$_SERVER['REQUEST_URI']);
-	exit;
-}
-
-
-function generateTwoFactorCode($len = 5)
-{
-	$chars = '123456789QWERTYUIPASDFGHJKLZXCVBNM';
+	$chars = '23456789QWERTYUPASDFGHJKLZXCVBNM';
 	$chars = str_split($chars);
 	shuffle($chars);
-	$code = implode('', array_splice($chars, 0, $len));
+	$code = implode('', array_splice($chars, 0, rand(5,6)));
 	
 	return $code;
 }

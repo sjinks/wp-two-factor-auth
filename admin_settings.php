@@ -5,7 +5,6 @@
 	<form method="post" action="options.php" style="margin-top: 80px">
 	<?php
 		settings_fields('tfa_user_roles_group');
-		do_settings_fields('tfa-user-roles');
 	?>
 		<h3>User Roles</h3>
 		Choose which User Roles that will have <em>Two Factor Auth</em> activated.
