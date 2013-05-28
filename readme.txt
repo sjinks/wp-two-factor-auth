@@ -3,7 +3,7 @@ Contributors: oskarhane
 Tags: auth, two factor auth, login, security, authenticate, password
 Requires at least: 3.0.1
 Tested up to: 3.5.1
-Stable tag: 3.0
+Stable tag: 3.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,9 @@ If you have access to the databse you can look for the code there. If you have p
 6. Admin settings page.
 
 == Changelog ==
+= 3.0.1 =
+Fixed so users get alerted of they don't enter a username before clicking the OTC button on the login page.
+
 = 3.0 =
 * Added TOTP as the OTC generator. Compatible with Google Authenticator and other third party auth apps.
 * Added user settings page where they can activate usage of third party apps instead of email delivery of code.
@@ -109,6 +112,9 @@ If you have access to the databse you can look for the code there. If you have p
 * Initial release
 
 == Upgrade Notice ==
+= 3.0.1 =
+Fixed so users get alerted of they don't enter a username before clicking the OTC button on the login page.
+
 = 3.0 =
 Major changes. See changelog for more info.
 
