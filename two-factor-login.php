@@ -5,7 +5,7 @@ Plugin URI: http://oskarhane.com/plugin-two-factor-auth-for-wordpress
 Description: Secure your WordPress login with this two factor auth. Users will be prompted with a page to enter a one time code that was emailed to them.
 Author: Oskar Hane
 Author URI: http://oskarhane.com
-Version: 3.0
+Version: 3.0.1
 License: GPLv2 or later
 */
 //error_reporting(E_ALL);
@@ -103,7 +103,7 @@ function hideAndEmptyPasswordField()
 		var otp_btn = document.createElement('button');
 		otp_btn.id = 'otp-button';
 		otp_btn.className = 'button button-large';
-		otp_btn.onclick = function(){ tfaChangeToInput(); };
+		otp_btn.onclick = function(){ return tfaChangeToInput(); };
 		
 		var btn_text = document.createTextNode("Click to enter One Time Code");
 		otp_btn.appendChild(btn_text);
@@ -118,6 +118,13 @@ function hideAndEmptyPasswordField()
 		
 		function tfaChangeToInput()
 		{
+			//Check so a username is entered.
+			if(document.getElementById('user_login').value.length < 1)
+			{
+				alert('You have to enter a username first.');
+				return false;
+			}
+			
 			//Generate call to send OTP if the user has email delivery
 			var script_call = document.createElement('script');
 			script_call.type = 'text/javascript';
