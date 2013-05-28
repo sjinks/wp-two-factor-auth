@@ -5,40 +5,21 @@ Plugin URI: http://oskarhane.com/plugin-two-factor-auth-for-wordpress
 Description: Secure your WordPress login with this two factor auth. Users will be prompted with a page to enter a one time code that was emailed to them.
 Author: Oskar Hane
 Author URI: http://oskarhane.com
-Version: 2.1
+Version: 3.0
 License: GPLv2 or later
 */
 //error_reporting(E_ALL);
 //ini_set("display_errors", true);
 
-function showAdminSettingsPage()
-{
-	include 'admin_settings.php';
-}
-
-
-function breakAuth($log)
-{
-	$params = $_POST;
-	
-	if(!$params)
-		return;
-	if(!$params['log'])
-		return;
-	
-	if(!$params['two_factor_code_submitted'])
-		loadTwoFactorForm($params);
-}
-add_action('wp_authenticate', 'breakAuth');
-
-
+include_once 'hotp-php-master/hotp.php';
+include_once 'Base32/Base32.php';
 
 function tfaVerifyCodeAndUser($user, $username, $password)
 {
 	//If already failed, we don't bother to check the code
 	if(is_wp_error($user))
 		return $user;
-		
+
 	$params = $_POST;
 	$code_ok = checkTwoFactorCode($params);
 	
@@ -54,13 +35,13 @@ add_filter('authenticate', 'tfaVerifyCodeAndUser', 99999999999, 3);//We want to 
 
 
 
-function loadTwoFactorForm($params)
+function tfaPrepareTwoFactorAuth($params)
 {
 	global $wpdb;
 	$query = $wpdb->prepare("SELECT ID, user_email from ".$wpdb->users." WHERE user_login=%s", $params['log']);
 	$user = $wpdb->get_row($query);
-		
-	$code = generateTwoFactorCode();
+	
+	$tfa_priv_key = get_user_meta($user->ID, 'tfa_priv_key', true);
 	
 	//So we show full form for users that dont exist
 	$is_activated_for_user = true;
@@ -72,16 +53,23 @@ function loadTwoFactorForm($params)
 		
 		if($is_activated_for_user)
 		{
-			delete_user_meta($user->ID, 'two_factor_login_code');
-			add_user_meta($user->ID, 'two_factor_login_code', $code);
-			sendTwoFactorEmail($user->user_email, $code);
+			$delivery_type = get_user_meta($user->ID, 'tfa_delivery_type', true);
+			
+			//Default is email
+			if(!$delivery_type || $delivery_type == 'email')
+			{
+				//No private key yet, generate one.
+				//This is safe to do since the code is emailed to the user.
+				//Not safe to do if the user has disabled email.
+				if(!$tfa_priv_key)
+					$tfa_priv_key = addTFAPrivKey($user->ID);
+					
+				$code = generateTwoFactorCode($tfa_priv_key);
+				sendTwoFactorEmail($user->user_email, $code);
+			}
 		}
 	}
-	
-	include 'form.php';
-	
-	
-	exit;
+	return true;
 }
 
 
@@ -104,14 +92,65 @@ function tfaIsActivatedForUser($user_id)
 
 function hideAndEmptyPasswordField()
 {
-	if($_POST['log'] && !$_POST['two_factor_code_submitted'])
-		return;
-	
 	?>
 	<script type="text/javascript">
-		var pw_field = document.getElementsByName('pwd')[0];
-		pw_field.value = '';
-		pw_field.parentNode.parentNode.style.display = 'none';
+		var user_field = document.getElementById('user_login');
+		var pw_field = document.getElementById('user_pass');
+		var submit_btn = document.getElementById('wp-submit');
+		var remember_me = document.getElementById('rememberme');
+		submit_btn.disabled = true;
+		
+		var otp_btn = document.createElement('button');
+		otp_btn.id = 'otp-button';
+		otp_btn.className = 'button button-large';
+		otp_btn.onclick = function(){ tfaChangeToInput(); };
+		
+		var btn_text = document.createTextNode("Click to enter One Time Code");
+		otp_btn.appendChild(btn_text);
+		otp_btn.style.width = '100%';
+		
+		var p = document.createElement('p');
+		p.id = 'tfa_holder';
+		p.style.marginBottom = '15px';
+		
+		p.appendChild(otp_btn);
+		tfaAddToForm(p);
+		
+		function tfaChangeToInput()
+		{
+			//Generate call to send OTP if the user has email delivery
+			var script_call = document.createElement('script');
+			script_call.type = 'text/javascript';
+			script_call.src = '<?php print plugin_dir_url(__FILE__); ?>prepare_otp.php?rand=' + parseInt(Math.random()*1000+1) + '&user=' + encodeURIComponent(document.getElementById('user_login').value);
+			document.body.appendChild(script_call);
+			
+			var p = document.getElementById('tfa_holder');
+			var lbl = document.createElement('label');
+			lbl.for = 'two_factor_auth';
+			var lbl_text = document.createTextNode("One Time Code");
+			lbl.appendChild(lbl_text);
+			
+			var tfa_field = document.createElement('input');
+			tfa_field.type = 'text';
+			tfa_field.id = 'two_factor_auth';
+			tfa_field.name = 'two_factor_code';
+			lbl.appendChild(tfa_field);
+			
+			//Remove button
+			p.removeChild(document.getElementById('otp-button'));
+			
+			//Add text and input field
+			p.appendChild(lbl);
+			tfa_field.focus();
+			
+			//Enable regular submit button
+			document.getElementById('wp-submit').disabled = false;
+		}
+		
+		function tfaAddToForm(p)
+		{
+			document.getElementById('loginform').insertBefore(p, document.getElementById('rememberme').parentNode.parentNode);
+		}
 	</script>
 	<?php
 }
@@ -124,25 +163,48 @@ function checkTwoFactorCode($params)
 	global $wpdb;
 	$query = $wpdb->prepare("SELECT ID from ".$wpdb->users." WHERE user_login=%s", $params['log']);
 	$user_ID = $wpdb->get_var($query);
+	$user_code = trim(@$params['two_factor_code']);
 	
 	if(!$user_ID)
 		return true;
 	
-	$code = get_user_meta($user_ID, 'two_factor_login_code', true);
-	
-	//Remove code after one guess
-	delete_user_meta($user_ID, 'two_factor_login_code');
-	
 	if(!tfaIsActivatedForUser($user_ID))
 		return true;
+	$tfa_priv_key = get_user_meta($user_ID, 'tfa_priv_key', true);
 	
-	if(!$code)
-		return false;
+	//Give the user 1,5 minutes time span to enter/retrieve the code
+	$codes = HOTP::generateByTimeWindow($tfa_priv_key, 30, -2, 0);
 
-	if($code != strtoupper($params['two_factor_code']))
-		return false;
+	$match = false;
+	foreach($codes as $code)
+	{
+		if($code->toHotp(6) == $user_code)
+		{
+			$match = true;
+			break;
+		}
+	}
+	
+	//Check panic codes
+	if(!$match)
+	{
+		$panic_codes = get_user_meta($user_ID, 'tfa_panic_codes');
 		
-	return true;
+		if(!@$panic_codes[0])
+			return $match;
+			
+		$panic_codes = current($panic_codes);
+		$in_array = array_search($user_code, $panic_codes);
+		$match = $in_array !== false;
+		
+		if($match)//Remove panic code
+		{
+			array_splice($panic_codes, $in_array, 1);
+			update_user_meta($user_ID, 'tfa_panic_codes', $panic_codes);
+		}
+	}
+	
+	return $match;
 }
 
 
@@ -153,22 +215,44 @@ function sendTwoFactorEmail($email, $code)
 }
 
 
-function generateTwoFactorCode()
+function generateTwoFactorCode($tfa_priv_key)
+{
+	$otp_res = HOTP::generateByTime($tfa_priv_key, 30);
+	$code = $otp_res->toHotp(6);
+	
+	return $code;
+}
+
+function tfaGeneratePrivateKey($len = 6)
 {
 	$chars = '23456789QWERTYUPASDFGHJKLZXCVBNM';
 	$chars = str_split($chars);
 	shuffle($chars);
-	$code = implode('', array_splice($chars, 0, rand(5,6)));
+	$code = implode('', array_splice($chars, 0, $len));
+	
+	return $code;
+}
+
+function addTFAPrivKey($user_ID)
+{
+	//Generate a private key for the user. 
+	//To work with Google Authenticator it has to be 10 bytes = 16 chars in base32
+	$code = strtoupper(tfaGeneratePrivateKey(10));
+	
+	//Add private key to users meta
+	add_user_meta($user_ID, 'tfa_priv_key', $code);
+	
+	//Add some panic codes as well
+	add_user_meta($user_ID, 'tfa_panic_codes', array(tfaGeneratePrivateKey(8), tfaGeneratePrivateKey(8), tfaGeneratePrivateKey(8)));
 	
 	return $code;
 }
 
 
-
 /**
 * For Admin menu and settings
 */
-function registerTwoFactorAuthSettings()
+function tfaRegisterTwoFactorAuthSettings()
 {
 	global $wp_roles;
 	if (!isset($wp_roles))
@@ -177,6 +261,24 @@ function registerTwoFactorAuthSettings()
 	foreach($wp_roles->role_names as $id => $name)
 	{
 		register_setting('tfa_user_roles_group', 'tfa_'.$id);
+	}
+	
+}
+
+
+function tfaListDeliveryRadios($user_id)
+{
+	if(!$user_id)
+		return;
+		
+	$types = array('email' => 'Email', 'third-party-apps' => 'Third party apps (Google Authenticator etc)'); 
+	
+	foreach($types as $id => $name)
+	{	
+		$setting = get_user_meta($user_id, 'tfa_delivery_type', true);
+		$setting = $setting === false || !$setting ? 'email' : $setting;
+		
+		print '<input type="radio" name="tfa_delivery_type" value="'.$id.'" '.($setting == $id ? 'checked="checked"' :'').'> '.$name."<br>\n";
 	}
 	
 }
@@ -197,10 +299,30 @@ function tfaListUserRolesCheckboxes()
 	
 }
 
+function tfaShowAdminSettingsPage()
+{
+	global $wp_roles;
+	include 'admin_settings.php';
+}
+
+function tfaShowUserSettingsPage()
+{
+	global $current_user;
+	include 'user_settings.php';
+}
+
+add_action('admin_menu', 'tfaAddUserSettingsMenu');
+
+function tfaAddUserSettingsMenu() 
+{
+	add_users_page('Two Factor Auth', 'Two Factor Auth', 'read', 'two-factor-auth-user', 'tfaShowUserSettingsPage');
+}
+
+
 function addTwoFactorAuthAdminMenu()
 {
-	add_action( 'admin_init', 'registerTwoFactorAuthSettings' );
-	add_options_page('Two Factor Auth', 'Two Factor Auth', 'manage_options', 'two-factor-auth', 'showAdminSettingsPage');
+	add_action( 'admin_init', 'tfaRegisterTwoFactorAuthSettings' );
+	add_options_page('Two Factor Auth', 'Two Factor Auth', 'manage_options', 'two-factor-auth', 'tfaShowAdminSettingsPage');
 }
 
 function addPluginSettingsLink($links)
@@ -210,8 +332,34 @@ function addPluginSettingsLink($links)
 	return $links;
 }
 
+function tfaSaveSettings()
+{
+	global $current_user;
+	if(@$_GET['tfa_change_to_email'] && @$_GET['tfa_user_id'])
+	{
+	
+		if(is_admin())
+			update_user_meta($_GET['tfa_user_id'], 'tfa_delivery_type', 'email');
+	
+		$goto = site_url().remove_query_arg(array('tfa_user_id', 'tfa_change_to_email'));
+		wp_safe_redirect($goto);
+		exit;
+	}
+	
+	if(@$_GET['tfa_priv_key_reset'])
+	{
+		delete_user_meta($current_user->ID, 'tfa_priv_key');
+		delete_user_meta($current_user->ID, 'tfa_panic_codes');
+		wp_safe_redirect(site_url().remove_query_arg('tfa_priv_key_reset'));
+		exit;
+	}
+}
+
 if(is_admin())
 {
+	//Save settings
+	add_action('admin_init', 'tfaSaveSettings');
+	
 	//Add to Settings menu
 	add_action('admin_menu', 'addTwoFactorAuthAdminMenu');
 	
