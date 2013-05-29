@@ -3,14 +3,15 @@ Contributors: oskarhane
 Tags: auth, two factor auth, login, security, authenticate, password
 Requires at least: 3.0.1
 Tested up to: 3.5.1
-Stable tag: 2.1
+Stable tag: 3.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Secure your WordPress login with this two factor auth. Users will be prompted with a page to enter a one time code that was emailed to them.
+Secure WordPress login with this two factor auth. Users will have to enter an One Time Code when they log in.
 
 == Description ==
 
+Secure WordPress login with this two factor auth. Users will have to enter an One Time Code when they log in.
 
 = Why You Need This =
 Users can have common or weak passwords that lets hackers/bots brute-force your WordPress site and gain access to your files and place malware there.
@@ -21,14 +22,19 @@ It doesn't matter how weak your users passwords are, no one can gain access to y
 
 
 = How Does It Work? =
-The technology behind this is simple. It uses one time codes that are email to you when you're about to log in.
-That means that no one can just guess/sniff/break your real password and gain access, they'll need to guess this one time code as well. 
-And they only have one shot. After the first attempt, a new one time code is generated and emailed to you.
+This plugin uses the industry standard algorithm [TOTP](http://en.wikipedia.org/wiki/Time-based_One-time_Password_Algorithm) for creating One Time Codes.
+A OTC is valid for a certain time and after that a new code has to be entered.
+
+You can now choose to use third party apps like [Google Authenticator](http://code.google.com/p/google-authenticator/) which is available for most mobile platforms. You can really use any 
+third party app that supports TOTP. Or, as before, you can choose to get your One Time Codes by email.
+
+Since you have to enter a secret code to third party apps, email is the default way of delivering One Time Codes. Your 
+users will have to activate delivery by third party apps themselves.
 
 
 = Easy To Use =
 Just install this plugin and you're all set. There's really nothing more to it. 
-When you are about to login, a one time password is sent to your email account and you just enter it on the login in page.
+If you want to use a third party app, goto Users -> Two Factor Auth and activate it and set up your app.
 A bit more work to get logged in, but a whole lot more secure!
 
 
@@ -37,12 +43,10 @@ Well, it depends on how you define ["Something the user has"](http://en.wikipedi
 The principle as getting a text message to your phone and getting an email is the same, with the exception that you can get access to a mail account from anywhere but you have to actually have the physical phone to read a text message.
 Having to have physical access to something is, of course, even more secure. It also makes it more difficult for users to register, verify phone numer, change phone number etc.
 
-I, for sure, find this email solution secure and no automated login attemps will ever get passed it.
+Since version 3.0 you can have real two factor auth if you activate the Third Party Apps delivery type.
 
 
 XMLRPC users will not be affected, this is just for the login to admin pages.
-
-Notice that right now the "Remember me" cookie overrides this which means that you will still be auto logged in if you click that checkbox.
 
 See http://oskarhane.com/plugin-two-factor-auth-for-wordpress/ for more info.
 
@@ -62,16 +66,35 @@ or
 
 == Frequently Asked Questions ==
 
+= Can I have real Two Factor Auth? =
+Yes, since version 3.0 you can activate real Two Factor Auth by activating third party apps option under "Users" -> "Two Factor Auth". Don't forget to set up your app with the secret key.
+
+= Oops, I lost my phone. What to do? =
+Hopefully you saved the three Panic Codes when you activated third party apps. Use one of them.
+
 = If I can't reach my email account, can I bypass this plugin and log in anyway? =
-If you have access to the databse you can look for the code there. Otherwise, no.
+If you have access to the databse you can look for the code there. If you have panic codes, you can use them. Otherwise, no.
 
 == Screenshots ==
 
-1. The normal login page where the password field is removed. Don't mind the language on this screenshot, the plugin is all in english.
-2. After the first login in page, this is shown and an email with the code is sent to the users email.
-3. Admin settings page. Again, the button is localized so don't mind the language.
+1. The admin login page.
+2. The admin login page when One Time Code button is clicked.
+3. User settings page where they choose delivery type.
+4. User key info on settings page.
+5. User setting page with Google Authenticator QR Code and OTC to test.
+6. Admin settings page.
 
 == Changelog ==
+= 3.0.1 =
+Fixed so users get alerted of they don't enter a username before clicking the OTC button on the login page.
+
+= 3.0 =
+* Added TOTP as the OTC generator. Compatible with Google Authenticator and other third party auth apps.
+* Added user settings page where they can activate usage of third party apps instead of email delivery of code.
+* Added OTC field to standard login form instead of a middle page.
+* Added Panic Codes which users can use if they loose their phone, change email etc.
+* Removed second login screen.
+* Updated admin settings page. Admins can now change user delivery of codes back to email if users loose their phone etc.
 
 = 2.1 =
 * Fixed warning message on admin settings page (thanks Joi)
@@ -89,6 +112,11 @@ If you have access to the databse you can look for the code there. Otherwise, no
 * Initial release
 
 == Upgrade Notice ==
+= 3.0.1 =
+Fixed so users get alerted of they don't enter a username before clicking the OTC button on the login page.
+
+= 3.0 =
+Major changes. See changelog for more info.
 
 = 2.1 =
 A few bugs fixed and changed how the plugin behaves when a wrong code was entered.
