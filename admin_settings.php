@@ -70,9 +70,9 @@ if(!is_admin())
 		?>
 	</p>
 	<hr>
-	<h2>Rate of you like it!</h2>
+	<h2>Rate it if you like it!</h2>
 	<p>
-		Please, rate this plugin with 5 starts if you like it so more users can take advantage of a more secure login 
+		Please, rate this plugin with ✭✭✭✭✭ if you like it so more users can take advantage of a more secure login 
 		without having third party dependencies.
 		<br>
 		<br>

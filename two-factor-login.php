@@ -10,9 +10,21 @@ License: GPLv2 or later
 */
 //error_reporting(E_ALL);
 //ini_set("display_errors", true);
+define('TFA_MAIN_PLUGIN_PATH', dirname( __FILE__ ));
 
-include_once 'hotp-php-master/hotp.php';
-include_once 'Base32/Base32.php';
+include_once TFA_MAIN_PLUGIN_PATH.'/hotp-php-master/hotp.php';
+include_once TFA_MAIN_PLUGIN_PATH.'/Base32/Base32.php';
+
+
+function tfaInitLogin()
+{		
+	tfaPrepareTwoFactorAuth(array('log' => $_POST['user']));
+	print json_encode(array('status' => true));
+	exit;
+}
+add_action( 'wp_ajax_nopriv_tfa-init-otp', 'tfaInitLogin');
+
+
 
 function tfaVerifyCodeAndUser($user, $username, $password)
 {
@@ -88,80 +100,6 @@ function tfaIsActivatedForUser($user_id)
 	
 	return false;
 }
-
-
-function hideAndEmptyPasswordField()
-{
-	?>
-	<script type="text/javascript">
-		var user_field = document.getElementById('user_login');
-		var pw_field = document.getElementById('user_pass');
-		var submit_btn = document.getElementById('wp-submit');
-		var remember_me = document.getElementById('rememberme');
-		submit_btn.disabled = true;
-		
-		var otp_btn = document.createElement('button');
-		otp_btn.id = 'otp-button';
-		otp_btn.className = 'button button-large';
-		otp_btn.onclick = function(){ return tfaChangeToInput(); };
-		
-		var btn_text = document.createTextNode("Click to enter One Time Code");
-		otp_btn.appendChild(btn_text);
-		otp_btn.style.width = '100%';
-		
-		var p = document.createElement('p');
-		p.id = 'tfa_holder';
-		p.style.marginBottom = '15px';
-		
-		p.appendChild(otp_btn);
-		tfaAddToForm(p);
-		
-		function tfaChangeToInput()
-		{
-			//Check so a username is entered.
-			if(document.getElementById('user_login').value.length < 1)
-			{
-				alert('You have to enter a username first.');
-				return false;
-			}
-			
-			//Generate call to send OTP if the user has email delivery
-			var script_call = document.createElement('script');
-			script_call.type = 'text/javascript';
-			script_call.src = '<?php print plugin_dir_url(__FILE__); ?>prepare_otp.php?rand=' + parseInt(Math.random()*1000+1) + '&user=' + encodeURIComponent(document.getElementById('user_login').value);
-			document.body.appendChild(script_call);
-			
-			var p = document.getElementById('tfa_holder');
-			var lbl = document.createElement('label');
-			lbl.for = 'two_factor_auth';
-			var lbl_text = document.createTextNode("One Time Code");
-			lbl.appendChild(lbl_text);
-			
-			var tfa_field = document.createElement('input');
-			tfa_field.type = 'text';
-			tfa_field.id = 'two_factor_auth';
-			tfa_field.name = 'two_factor_code';
-			lbl.appendChild(tfa_field);
-			
-			//Remove button
-			p.removeChild(document.getElementById('otp-button'));
-			
-			//Add text and input field
-			p.appendChild(lbl);
-			tfa_field.focus();
-			
-			//Enable regular submit button
-			document.getElementById('wp-submit').disabled = false;
-		}
-		
-		function tfaAddToForm(p)
-		{
-			document.getElementById('loginform').insertBefore(p, document.getElementById('rememberme').parentNode.parentNode);
-		}
-	</script>
-	<?php
-}
-add_action('login_footer', 'hideAndEmptyPasswordField');
 
 
 
@@ -309,13 +247,13 @@ function tfaListUserRolesCheckboxes()
 function tfaShowAdminSettingsPage()
 {
 	global $wp_roles;
-	include 'admin_settings.php';
+	include TFA_MAIN_PLUGIN_PATH.'/admin_settings.php';
 }
 
 function tfaShowUserSettingsPage()
 {
 	global $current_user;
-	include 'user_settings.php';
+	include TFA_MAIN_PLUGIN_PATH.'/user_settings.php';
 }
 
 add_action('admin_menu', 'tfaAddUserSettingsMenu');
@@ -361,6 +299,15 @@ function tfaSaveSettings()
 		exit;
 	}
 }
+
+function tfaAddJSToLogin()
+{
+	wp_enqueue_script( 'tfa-ajax-request', plugin_dir_url( __FILE__ ) . 'tfa.js', array( 'jquery' ) );
+	wp_localize_script( 'tfa-ajax-request', 'tfaSettings', array(
+		'ajaxurl' => admin_url('admin-ajax.php')
+	));
+}
+add_action('login_enqueue_scripts', 'tfaAddJSToLogin');
 
 if(is_admin())
 {
