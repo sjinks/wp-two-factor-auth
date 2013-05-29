@@ -3,7 +3,7 @@ Contributors: oskarhane
 Tags: auth, two factor auth, login, security, authenticate, password
 Requires at least: 3.0.1
 Tested up to: 3.5.1
-Stable tag: 3.0.1
+Stable tag: 3.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,10 @@ If you have access to the databse you can look for the code there. If you have p
 6. Admin settings page.
 
 == Changelog ==
+= 3.0.2 =
+* Fixed a bug where emails for some installations didn't work. Thanks to Matías at [http://www.periodicoellatino.es](http://www.periodicoellatino.es) for the help.
+* Change to jQuery for making a POST request because of easier cross browser support.
+
 = 3.0.1 =
 Fixed so users get alerted of they don't enter a username before clicking the OTC button on the login page.
 
@@ -112,6 +116,9 @@ Fixed so users get alerted of they don't enter a username before clicking the OT
 * Initial release
 
 == Upgrade Notice ==
+= 3.0.2 =
+Fixed a bug where som users email never got sent.
+
 = 3.0.1 =
 Fixed so users get alerted of they don't enter a username before clicking the OTC button on the login page.
 
