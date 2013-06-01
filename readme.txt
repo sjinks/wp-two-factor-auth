@@ -1,17 +1,17 @@
 === Two Factor Auth ===
 Contributors: oskarhane
-Tags: auth, two factor auth, login, security, authenticate, password
+Tags: auth, two factor auth, login, security, authenticate, password, hacking, security plugin, secure
 Requires at least: 3.0.1
 Tested up to: 3.5.1
 Stable tag: 3.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Secure WordPress login with this two factor auth. Users will have to enter an One Time Code when they log in.
+Secure WordPress login with this two factor auth. Users will have to enter an One Time Password when they log in.
 
 == Description ==
 
-Secure WordPress login with this two factor auth. Users will have to enter an One Time Code when they log in.
+Secure WordPress login with this two factor auth. Users will have to enter an One Time Password when they log in.
 
 = Why You Need This =
 Users can have common or weak passwords that lets hackers/bots brute-force your WordPress site and gain access to your files and place malware there.
@@ -22,13 +22,14 @@ It doesn't matter how weak your users passwords are, no one can gain access to y
 
 
 = How Does It Work? =
-This plugin uses the industry standard algorithm [TOTP](http://en.wikipedia.org/wiki/Time-based_One-time_Password_Algorithm) for creating One Time Codes.
-A OTC is valid for a certain time and after that a new code has to be entered.
+This plugin uses the industry standard algorithm [TOTP](http://en.wikipedia.org/wiki/Time-based_One-time_Password_Algorithm) for creating One Time Passwords.
+A OTP is valid for a certain time and after that a new code has to be entered.
 
 You can now choose to use third party apps like [Google Authenticator](http://code.google.com/p/google-authenticator/) which is available for most mobile platforms. You can really use any 
-third party app that supports TOTP. Or, as before, you can choose to get your One Time Codes by email.
+third party app that supports TOTP that generates 6 digits OTP's. 
+Or, as before, you can choose to get your One Time Passwords by email.
 
-Since you have to enter a secret code to third party apps, email is the default way of delivering One Time Codes. Your 
+Since you have to enter a secret code to third party apps, email is the default way of delivering One Time Passwords. Your 
 users will have to activate delivery by third party apps themselves.
 
 
@@ -40,10 +41,9 @@ A bit more work to get logged in, but a whole lot more secure!
 
 = Is this really Two Factor Auth? =
 Well, it depends on how you define ["Something the user has"](http://en.wikipedia.org/wiki/Multi-factor_authentication#Possession_factors:_.22something_the_user_has.22) 
+Since version 3.0 you can have real two factor auth if you activate the Third Party Apps delivery type.
 The principle as getting a text message to your phone and getting an email is the same, with the exception that you can get access to a mail account from anywhere but you have to actually have the physical phone to read a text message.
 Having to have physical access to something is, of course, even more secure. It also makes it more difficult for users to register, verify phone numer, change phone number etc.
-
-Since version 3.0 you can have real two factor auth if you activate the Third Party Apps delivery type.
 
 
 XMLRPC users will not be affected, this is just for the login to admin pages.
@@ -78,10 +78,10 @@ If you have access to the databse you can look for the code there. If you have p
 == Screenshots ==
 
 1. The admin login page.
-2. The admin login page when One Time Code button is clicked.
+2. The admin login page when One Time Password button is clicked.
 3. User settings page where they choose delivery type.
 4. User key info on settings page.
-5. User setting page with Google Authenticator QR Code and OTC to test.
+5. User setting page with Google Authenticator QR Code and OTP to test.
 6. Admin settings page.
 
 == Changelog ==
@@ -90,12 +90,12 @@ If you have access to the databse you can look for the code there. If you have p
 * Change to jQuery for making a POST request because of easier cross browser support.
 
 = 3.0.1 =
-Fixed so users get alerted of they don't enter a username before clicking the OTC button on the login page.
+Fixed so users get alerted of they don't enter a username before clicking the OTP button on the login page.
 
 = 3.0 =
-* Added TOTP as the OTC generator. Compatible with Google Authenticator and other third party auth apps.
+* Added TOTP as the OTP generator. Compatible with Google Authenticator and other third party auth apps.
 * Added user settings page where they can activate usage of third party apps instead of email delivery of code.
-* Added OTC field to standard login form instead of a middle page.
+* Added OTP field to standard login form instead of a middle page.
 * Added Panic Codes which users can use if they loose their phone, change email etc.
 * Removed second login screen.
 * Updated admin settings page. Admins can now change user delivery of codes back to email if users loose their phone etc.
@@ -107,7 +107,7 @@ Fixed so users get alerted of they don't enter a username before clicking the OT
 * Code length is not fixed any more. It can be 5 or 6 characters. Removed som easy to mix charaters as well (1 and I).
 
 = 2.0 =
-* Admin settings menu where you can choose which user roles that will have this activated. There will still be a second screen where the not activated user roles enter their password, but the one time code field is hidden.
+* Admin settings menu where you can choose which user roles that will have this activated. There will still be a second screen where the not activated user roles enter their password, but the One Time Password field is hidden.
 
 = 1.1 =
 * Removed password field from regular login page and added it to the second page where the user now enters both the emailed code and the password.
@@ -120,7 +120,7 @@ Fixed so users get alerted of they don't enter a username before clicking the OT
 Fixed a bug where som users email never got sent.
 
 = 3.0.1 =
-Fixed so users get alerted of they don't enter a username before clicking the OTC button on the login page.
+Fixed so users get alerted of they don't enter a username before clicking the OTP button on the login page.
 
 = 3.0 =
 Major changes. See changelog for more info.

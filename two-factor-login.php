@@ -116,9 +116,17 @@ function checkTwoFactorCode($params)
 	if(!tfaIsActivatedForUser($user_ID))
 		return true;
 	$tfa_priv_key = get_user_meta($user_ID, 'tfa_priv_key', true);
+	$tfa_last_login = get_user_meta($user_ID, 'tfa_last_login', true);
+	$current_time_window = intval(time()/30);
 	
 	//Give the user 1,5 minutes time span to enter/retrieve the code
 	$codes = HOTP::generateByTimeWindow($tfa_priv_key, 30, -2, 0);
+
+
+	//Limit to one successful login per time window
+	if($current_time_window == $tfa_last_login)
+		return false;
+
 
 	$match = false;
 	foreach($codes as $code)
@@ -148,7 +156,11 @@ function checkTwoFactorCode($params)
 			update_user_meta($user_ID, 'tfa_panic_codes', $panic_codes);
 		}
 	}
-	
+	else
+	{
+		//Save the time window when the last successful login took place
+		update_user_meta($user_ID, 'tfa_last_login', $current_time_window);
+	}
 	return $match;
 }
 
