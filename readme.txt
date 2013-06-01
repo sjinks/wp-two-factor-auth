@@ -3,7 +3,7 @@ Contributors: oskarhane
 Tags: auth, two factor auth, login, security, authenticate, password, hacking, security plugin, secure
 Requires at least: 3.0.1
 Tested up to: 3.5.1
-Stable tag: 3.0.3
+Stable tag: 3.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,11 +40,10 @@ A bit more work to get logged in, but a whole lot more secure!
 
 
 = Is this really Two Factor Auth? =
-Well, it depends on how you define ["Something the user has"](http://en.wikipedia.org/wiki/Multi-factor_authentication#Possession_factors:_.22something_the_user_has.22) 
+Before version 3.0 this plugin had 'kind of' two factor auth where the OTP was delivered to an email address. 
 Since version 3.0 you can have real two factor auth if you activate the Third Party Apps delivery type.
-The principle as getting a text message to your phone and getting an email is the same, with the exception that you can get access to a mail account from anywhere but you have to actually have the physical phone to read a text message.
-Having to have physical access to something is, of course, even more secure. It also makes it more difficult for users to register, verify phone numer, change phone number etc.
 
+Read more about [what two factor auth means >>](http://oskarhane.com/two-factor-auth-explained/).
 
 XMLRPC users will not be affected, this is just for the login to admin pages.
 
@@ -85,6 +84,12 @@ If you have access to the databse you can look for the code there. If you have p
 6. Admin settings page.
 
 == Changelog ==
+= 3.0.4 =
+Fixed a bug where a OTP could be used twice.
+
+= 3.0.3 =
+* Added limitation to one login per time window (30 seconds).
+
 = 3.0.2 =
 * Fixed a bug where emails for some installations didn't work. Thanks to Matías at [http://www.periodicoellatino.es](http://www.periodicoellatino.es) for the help.
 * Change to jQuery for making a POST request because of easier cross browser support.
@@ -116,6 +121,12 @@ Fixed so users get alerted of they don't enter a username before clicking the OT
 * Initial release
 
 == Upgrade Notice ==
+= 3.0.4 =
+Fixed a bug where a OTP could be used twice.
+
+= 3.0.3 =
+Added limitation to one login per time window.
+
 = 3.0.2 =
 Fixed a bug where som users email never got sent.
 
