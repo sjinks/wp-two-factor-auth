@@ -117,6 +117,9 @@ function checkTwoFactorCode($params)
 		return true;
 	$tfa_priv_key = get_user_meta($user_ID, 'tfa_priv_key', true);
 	$tfa_last_login = get_user_meta($user_ID, 'tfa_last_login', true);
+	$tfa_last_pws_arr = get_user_meta($user_ID, 'tfa_last_pws', true);
+	$tfa_last_pws = @$tfa_last_pws_arr ? $tfa_last_pws_arr : array();
+	
 	$current_time_window = intval(time()/30);
 	
 	//Give the user 1,5 minutes time span to enter/retrieve the code
@@ -127,6 +130,10 @@ function checkTwoFactorCode($params)
 	if($current_time_window == $tfa_last_login)
 		return false;
 
+	//A recently used code was entered.
+	//Not ok
+	if(in_array(md5($user_code), $tfa_last_pws))
+		return false;
 
 	$match = false;
 	foreach($codes as $code)
@@ -160,6 +167,15 @@ function checkTwoFactorCode($params)
 	{
 		//Save the time window when the last successful login took place
 		update_user_meta($user_ID, 'tfa_last_login', $current_time_window);
+		
+		//Add the used code as well so it cant be used again
+		//Keep the two last codes
+		$tfa_last_pws[] = md5($user_code);
+		
+		if(count($tfa_last_pws) > 2)
+			array_splice($tfa_last_pws, 0, 1);
+			
+		update_user_meta($user_ID, 'tfa_last_pws', $tfa_last_pws);
 	}
 	return $match;
 }
