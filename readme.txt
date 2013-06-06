@@ -79,9 +79,7 @@ If you have access to the databse you can look for the code there. If you have p
 1. The admin login page.
 2. The admin login page when One Time Password button is clicked.
 3. User settings page where they choose delivery type.
-4. User key info on settings page.
-5. User setting page with Google Authenticator QR Code and OTP to test.
-6. Admin settings page.
+4. Admin settings page.
 
 == Changelog ==
 = 3.0.4 =

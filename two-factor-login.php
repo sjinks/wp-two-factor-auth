@@ -234,4 +234,11 @@ if(is_admin())
 	add_filter("plugin_action_links_".$plugin, 'addPluginSettingsLink' );
 }
 
+function installTFA()
+{
+	$tfa = getTFAClass();
+	$tfa->upgrade();
+}
+register_activation_hook(__FILE__, 'installTFA');
+
 ?>
