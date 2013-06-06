@@ -3,11 +3,22 @@
 if(!is_admin())
 	exit;
 
+if(@$_GET['upgrade_done'] == 'true')
+{
+	?>
+		<div id="setting-error-settings_updated" class="updated settings-error"> 
+			<p>
+				<strong>Your upgrade was successful, Two Factor Auth is now enabled.</strong>
+			</p>
+		</div>
+	<?php
+}
+
 ?><div class="wrap">
 	<?php screen_icon(); ?>
 	<h2>Two Factor Auth Settings</h2>
 	<div>
-		<img style="margin-top: 10px" src="<?php print plugin_dir_url(__FILE__); ?>tfa_header.png">
+		<img style="margin-top: 10px" src="<?php print plugin_dir_url(__FILE__); ?>img/tfa_header.png">
 	</div>
 	<form method="post" action="options.php" style="margin-top: 40px">
 	<?php
@@ -27,7 +38,7 @@ if(!is_admin())
 	<hr>
 	<h2>Change User Settings</h2>
 	<p>
-		If some of your users loose their phone and don't have access to their panic codes, you can reset their 
+		If some of your users lose their phone and don't have access to their panic codes, you can reset their 
 		delivery type here and change it to email so they can login again and add a new phone.
 		<br>
 		Click on the "Change to email" button to change the delivery settings for that user.

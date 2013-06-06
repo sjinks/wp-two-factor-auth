@@ -10,7 +10,7 @@ jQuery(document).ready(function() {
 	otp_btn.className = 'button button-large';
 	otp_btn.onclick = function(){ return tfaChangeToInput(); };
 	
-	var btn_text = document.createTextNode("Click to enter One Time Code");
+	var btn_text = document.createTextNode("Click to enter One Time Password");
 	otp_btn.appendChild(btn_text);
 	otp_btn.style.width = '100%';
 	
@@ -43,7 +43,7 @@ jQuery(document).ready(function() {
 		var p = document.getElementById('tfa_holder');
 		var lbl = document.createElement('label');
 		lbl.for = 'two_factor_auth';
-		var lbl_text = document.createTextNode("One Time Code");
+		var lbl_text = document.createTextNode("One Time Password");
 		lbl.appendChild(lbl_text);
 		
 		var tfa_field = document.createElement('input');

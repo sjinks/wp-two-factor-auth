@@ -12,13 +12,22 @@ License: GPLv2 or later
 //ini_set("display_errors", true);
 define('TFA_MAIN_PLUGIN_PATH', dirname( __FILE__ ));
 
-include_once TFA_MAIN_PLUGIN_PATH.'/hotp-php-master/hotp.php';
-include_once TFA_MAIN_PLUGIN_PATH.'/Base32/Base32.php';
-
+function getTFAClass()
+{
+	include_once TFA_MAIN_PLUGIN_PATH.'/hotp-php-master/hotp.php';
+	include_once TFA_MAIN_PLUGIN_PATH.'/Base32/Base32.php';
+	include_once TFA_MAIN_PLUGIN_PATH.'/class.TFA.php';
+	
+	$tfa = new TFA(new Base32\Base32(), new HOTP());
+	
+	return $tfa;
+}
 
 function tfaInitLogin()
-{		
-	tfaPrepareTwoFactorAuth(array('log' => $_POST['user']));
+{			
+	$tfa = getTFAClass();
+	$tfa->preAuth(array('log' => $_POST['user']));
+
 	print json_encode(array('status' => true));
 	exit;
 }
@@ -28,12 +37,18 @@ add_action( 'wp_ajax_nopriv_tfa-init-otp', 'tfaInitLogin');
 
 function tfaVerifyCodeAndUser($user, $username, $password)
 {
-	//If already failed, we don't bother to check the code
+	$installed_version = get_option('tfa_version');
+	if($installed_version < 4)
+		return $user;
+		
+	$tfa = getTFAClass();
+	
 	if(is_wp_error($user))
 		return $user;
 
 	$params = $_POST;
-	$code_ok = checkTwoFactorCode($params);
+	$code_ok = $tfa->authUserFromLogin($params);
+
 	
 	if(!$code_ok)
 		return new WP_Error('authentication_failed', __('<strong>ERROR</strong>: The Two Factor Code you entered was incorrect.'));
@@ -47,184 +62,34 @@ add_filter('authenticate', 'tfaVerifyCodeAndUser', 99999999999, 3);//We want to 
 
 
 
-function tfaPrepareTwoFactorAuth($params)
-{
-	global $wpdb;
-	$query = $wpdb->prepare("SELECT ID, user_email from ".$wpdb->users." WHERE user_login=%s", $params['log']);
-	$user = $wpdb->get_row($query);
-	
-	$tfa_priv_key = get_user_meta($user->ID, 'tfa_priv_key', true);
-	
-	//So we show full form for users that dont exist
-	$is_activated_for_user = true;
-
-	//Render form anyway so we don't reveal if the username exists or not
-	if($user)
-	{
-		$is_activated_for_user = tfaIsActivatedForUser($user->ID);
-		
-		if($is_activated_for_user)
-		{
-			$delivery_type = get_user_meta($user->ID, 'tfa_delivery_type', true);
-			
-			//Default is email
-			if(!$delivery_type || $delivery_type == 'email')
-			{
-				//No private key yet, generate one.
-				//This is safe to do since the code is emailed to the user.
-				//Not safe to do if the user has disabled email.
-				if(!$tfa_priv_key)
-					$tfa_priv_key = addTFAPrivKey($user->ID);
-					
-				$code = generateTwoFactorCode($tfa_priv_key);
-				sendTwoFactorEmail($user->user_email, $code);
-			}
-		}
-	}
-	return true;
-}
-
-
-function tfaIsActivatedForUser($user_id)
-{
-	$user = new WP_User($user_id);
-
-	foreach($user->roles as $role)
-	{
-		$db_val = get_option('tfa_'.$role);
-		$db_val = $db_val === false || $db_val ? 1 : 0; //Nothing saved or > 0 returns 1;
-		
-		if($db_val)
-			return true;
-	}
-	
-	return false;
-}
-
-
-
-function checkTwoFactorCode($params)
-{
-	global $wpdb;
-	$query = $wpdb->prepare("SELECT ID from ".$wpdb->users." WHERE user_login=%s", $params['log']);
-	$user_ID = $wpdb->get_var($query);
-	$user_code = trim(@$params['two_factor_code']);
-	
-	if(!$user_ID)
-		return true;
-	
-	if(!tfaIsActivatedForUser($user_ID))
-		return true;
-	$tfa_priv_key = get_user_meta($user_ID, 'tfa_priv_key', true);
-	$tfa_last_login = get_user_meta($user_ID, 'tfa_last_login', true);
-	$tfa_last_pws_arr = get_user_meta($user_ID, 'tfa_last_pws', true);
-	$tfa_last_pws = @$tfa_last_pws_arr ? $tfa_last_pws_arr : array();
-	
-	$current_time_window = intval(time()/30);
-	
-	//Give the user 1,5 minutes time span to enter/retrieve the code
-	$codes = HOTP::generateByTimeWindow($tfa_priv_key, 30, -2, 0);
-
-
-	//Limit to one successful login per time window
-	if($current_time_window == $tfa_last_login)
-		return false;
-
-	//A recently used code was entered.
-	//Not ok
-	if(in_array(md5($user_code), $tfa_last_pws))
-		return false;
-
-	$match = false;
-	foreach($codes as $code)
-	{
-		if($code->toHotp(6) == $user_code)
-		{
-			$match = true;
-			break;
-		}
-	}
-	
-	//Check panic codes
-	if(!$match)
-	{
-		$panic_codes = get_user_meta($user_ID, 'tfa_panic_codes');
-		
-		if(!@$panic_codes[0])
-			return $match;
-			
-		$panic_codes = current($panic_codes);
-		$in_array = array_search($user_code, $panic_codes);
-		$match = $in_array !== false;
-		
-		if($match)//Remove panic code
-		{
-			array_splice($panic_codes, $in_array, 1);
-			update_user_meta($user_ID, 'tfa_panic_codes', $panic_codes);
-		}
-	}
-	else
-	{
-		//Save the time window when the last successful login took place
-		update_user_meta($user_ID, 'tfa_last_login', $current_time_window);
-		
-		//Add the used code as well so it cant be used again
-		//Keep the two last codes
-		$tfa_last_pws[] = md5($user_code);
-		
-		if(count($tfa_last_pws) > 2)
-			array_splice($tfa_last_pws, 0, 1);
-			
-		update_user_meta($user_ID, 'tfa_last_pws', $tfa_last_pws);
-	}
-	return $match;
-}
-
-
-
-function sendTwoFactorEmail($email, $code)
-{
-	wp_mail( $email, 'Login Code for '.get_bloginfo('name'), "\n\nEnter this code to log in: ".$code."\n\n\n".site_url(), "Content-Type: text/plain");
-}
-
-
-function generateTwoFactorCode($tfa_priv_key)
-{
-	$otp_res = HOTP::generateByTime($tfa_priv_key, 30);
-	$code = $otp_res->toHotp(6);
-	
-	return $code;
-}
-
-function tfaGeneratePrivateKey($len = 6)
-{
-	$chars = '23456789QWERTYUPASDFGHJKLZXCVBNM';
-	$chars = str_split($chars);
-	shuffle($chars);
-	$code = implode('', array_splice($chars, 0, $len));
-	
-	return $code;
-}
-
-function addTFAPrivKey($user_ID)
-{
-	//Generate a private key for the user. 
-	//To work with Google Authenticator it has to be 10 bytes = 16 chars in base32
-	$code = strtoupper(tfaGeneratePrivateKey(10));
-	
-	//Add private key to users meta
-	add_user_meta($user_ID, 'tfa_priv_key', $code);
-	
-	//Add some panic codes as well
-	add_user_meta($user_ID, 'tfa_panic_codes', array(tfaGeneratePrivateKey(8), tfaGeneratePrivateKey(8), tfaGeneratePrivateKey(8)));
-	
-	return $code;
-}
-
-
 /**
 * For Admin menu and settings
 */
+
+function tfaPushForUpgrade() {
+	if(!current_user_can('install_plugins'))
+		return;
+		
+	$installed_version = get_option('tfa_version');
+	if($installed_version >= 4)
+		return;
+	
+    ?>
+    <div class="updated">
+    	<h3>Database changes needed!</h3>
+        <p>
+        	You need to initialize changes to the database for <strong>Two Factor Auth</strong> to work with the current version.
+        	<br>
+        	This is safe and will only have effect on values added by the <strong>Two Factor Auth</strong> plugin.
+        	<br><br>
+        	<a href="options-general.php?page=two-factor-auth&tfa_upgrade_script=yes" class="button">Click here to upgrade</a>
+        </p>
+    </div>
+    <?php
+}
+add_action( 'admin_notices', 'tfaPushForUpgrade' );
+
+
 function tfaRegisterTwoFactorAuthSettings()
 {
 	global $wp_roles;
@@ -244,14 +109,14 @@ function tfaListDeliveryRadios($user_id)
 	if(!$user_id)
 		return;
 		
-	$types = array('email' => 'Email', 'third-party-apps' => 'Third party apps (Google Authenticator etc)'); 
+	$types = array('email' => 'Email', 'third-party-apps' => 'Third party apps (Duo Mobile, Google Authenticator etc)'); 
 	
 	foreach($types as $id => $name)
 	{	
 		$setting = get_user_meta($user_id, 'tfa_delivery_type', true);
 		$setting = $setting === false || !$setting ? 'email' : $setting;
 		
-		print '<input type="radio" name="tfa_delivery_type" value="'.$id.'" '.($setting == $id ? 'checked="checked"' :'').'> '.$name."<br>\n";
+		print '<input type="radio" name="tfa_delivery_type" value="'.$id.'" '.($setting == $id ? 'checked="checked"' :'').'> - '.$name."<br>\n";
 	}
 	
 }
@@ -274,23 +139,30 @@ function tfaListUserRolesCheckboxes()
 
 function tfaShowAdminSettingsPage()
 {
+	$tfa = getTFAClass();
 	global $wp_roles;
 	include TFA_MAIN_PLUGIN_PATH.'/admin_settings.php';
 }
 
 function tfaShowUserSettingsPage()
 {
+	$tfa = getTFAClass();
 	global $current_user;
 	include TFA_MAIN_PLUGIN_PATH.'/user_settings.php';
 }
 
-add_action('admin_menu', 'tfaAddUserSettingsMenu');
 
 function tfaAddUserSettingsMenu() 
 {
-	add_users_page('Two Factor Auth', 'Two Factor Auth', 'read', 'two-factor-auth-user', 'tfaShowUserSettingsPage');
+	global $current_user;
+	$tfa = getTFAClass();
+	
+	if(!$tfa->isActivatedForUser($current_user->ID))
+		return;
+	
+	add_menu_page('Two Factor Auth', 'Two Factor Auth', 'read', 'two-factor-auth-user', 'tfaShowUserSettingsPage', plugin_dir_url(__FILE__).'img/tfa_admin_icon_16x16.png', 72);
 }
-
+add_action('admin_menu', 'tfaAddUserSettingsMenu');
 
 function addTwoFactorAuthAdminMenu()
 {
@@ -321,16 +193,28 @@ function tfaSaveSettings()
 	
 	if(@$_GET['tfa_priv_key_reset'])
 	{
-		delete_user_meta($current_user->ID, 'tfa_priv_key');
-		delete_user_meta($current_user->ID, 'tfa_panic_codes');
+		delete_user_meta($current_user->ID, 'tfa_priv_key_64');
+		delete_user_meta($current_user->ID, 'tfa_panic_codes_64');
 		wp_safe_redirect(site_url().remove_query_arg('tfa_priv_key_reset'));
+		exit;
+	}
+	
+	if(@$_GET['tfa_upgrade_script'])
+	{
+		$tfa = getTFAClass();
+		$tfa->upgrade();
+		wp_safe_redirect(site_url().remove_query_arg('tfa_upgrade_script').'&upgrade_done=true');
 		exit;
 	}
 }
 
 function tfaAddJSToLogin()
 {
-	wp_enqueue_script( 'tfa-ajax-request', plugin_dir_url( __FILE__ ) . 'tfa.js', array( 'jquery' ) );
+	$installed_version = get_option('tfa_version');
+	if($installed_version < 4)
+		return;
+		
+	wp_enqueue_script( 'tfa-ajax-request', plugin_dir_url( __FILE__ ) . 'tfa_v4.js', array( 'jquery' ) );
 	wp_localize_script( 'tfa-ajax-request', 'tfaSettings', array(
 		'ajaxurl' => admin_url('admin-ajax.php')
 	));

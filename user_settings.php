@@ -7,93 +7,144 @@ if(@$_POST['tfa_delivery_type'] && @$_GET['settings-updated'] == 'true')
 
 
 ?>
+<style>
+	#icon-tfa-plugin {
+    	background: transparent url('<?php print plugin_dir_url(__FILE__); ?>img/tfa_admin_icon_32x32.png' ) no-repeat;
+	}
+	.inside > h3, .normal {
+		cursor: default;
+		margin-top: 20px;
+	}
+</style>
 <div class="wrap">
-	<?php screen_icon(); ?>
+
+			
+
+	<?php screen_icon('tfa-plugin'); ?>
 	<h2>Two Factor Auth Settings</h2>
-	<div>
-		<img style="margin-top: 10px" src="<?php print plugin_dir_url(__FILE__); ?>tfa_header.png">
+	
+		<div id="sm_rebuild" class="postbox">
+		<h3 class="hndle" style="padding: 10px; cursor: default;"><span style="cursor: default;">Important Notes</span></h3>
+		<div class="inside">
+			<p>
+				This is your personal settings for the Two Factor Auth. Nothing you change here will have any effect on other 
+				users.
+			</p>
+			<p>
+				<span style="color:red">IMPORTANT</span>: If you choose the third-party-apps version (which is more safe and real Two Factor Auth) you 
+				have to make sure you scan the QR-code (or enter your private key manually). 
+				<br>Verify with the One Time Password at the bottom of this page.<br>
+				If the code in your app and the one at the bottom of this page do not match, deactivate Third Party Apps and enable 
+				email again and contact your site administrator.
+				<br>
+				<strong>If the One Time Passwords do not match, you can't log in to this site any more.</strong>
+			</p>
+		</div>
 	</div>
-	<h2 style="margin-top: 20px">Important Notes</h2>
-	<p>
-		Here you can choose how you want your One Time Codes delivered.
-		<br>
-		<strong style="color:red">IMPORTANT</strong>: If you choose the third-party-apps version (which is more safe and real Two Factor Auth) you 
-		have to make sure you enter your private key (or scan the QR-code). Verify with the One Time Password 
-		at the <strong>bottom of this page</strong>.<br>
-		<strong>If you do not, you can't log in to this site any more.</strong>
-		<br><br>
-		If the code in your app and the one at the bottom of this page do not match, deactivate Third Party Apps and enable 
-		email again and contact your site administrator.
-	</p>
-	<p>
-		Some third party apps want's the code on base32 encoding (like Google Authenticator) and some wants it 
-		in plain text, thats why both are listed. The QR-Code has the key in base32.
-	</p>
-	<hr>
+
+	
+	
+	
+	
 	<form method="post" action="<?php print add_query_arg('settings-updated', 'true', $_SERVER['REQUEST_URI']); ?>">
 		<h2>Delivery type</h2>
-		Choose how you want your <em>One Time Codes</em> delivered.
+		Choose how you want your <em>One Time Passwords</em> delivered.
 		<p>
 		<?php
 			tfaListDeliveryRadios($current_user->ID);
 		?></p>
 		<?php submit_button(); ?>
-		<em>After you save, scroll down to see your settings and how to set up your apps.</em>	
 	</form>
-	<hr>
 	<?php
 	
 	$setting = get_user_meta($current_user->ID, 'tfa_delivery_type', true);
-	if($setting == 'third-party-apps' && @$_GET['settings-updated'] == 'true')
+	if($setting == 'third-party-apps')
 	{
 		$url = site_url();
-		$tfa_priv_key = get_user_meta($current_user->ID, 'tfa_priv_key', true);
-		if(!$tfa_priv_key)
-			$tfa_priv_key = addTFAPrivKey($current_user->ID);
+		$tfa_priv_key_64 = get_user_meta($current_user->ID, 'tfa_priv_key_64', true);
 		
-		$panic = get_user_meta($current_user->ID, 'tfa_panic_codes');
-		$panic_str = $panic[0] ? implode(", ", $panic[0]) : '<em>No panic codes left. Sorry.</em>';
+		if(!$tfa_priv_key_64)
+			$tfa_priv_key_64 = $tfa->addPrivateKey($current_user->ID);
+
+		$tfa_priv_key = trim($tfa->getPrivateKeyPlain($tfa_priv_key_64, $current_user->ID));
+			
+		$panics = get_user_meta($current_user->ID, 'tfa_panic_codes_64');
+		$panic_str = $tfa->getPanicCodesString($panics[0], $current_user->ID);
+		
+		
 		?>
-		<h2>Panic Codes</h2>
-		<p>
-			You have three panic codes that can be used if you loose your phone and can't get your One Time Codes. These 
-			can only be used one time and you cannot generate new ones.
-			<br>Keep them in a safe place.
-			<br><br>
-			<strong>Your panic codes are</strong>: <?php print $panic_str; ?>
-		</p>
-		<hr>
-		<h2>Private Key Info</h2>
-		<h3>Algorithm Used</h3>
-		<p>
-			The Algorithm used is TOTP / Time based.
-		</p>
-		<br>
-		<h3>Plain</h3>
-		<p>
-			<strong>Your private key is</strong>: <?php print $tfa_priv_key; ?> (
-				<a href="javascript:if(confirm('WARNING: If you reset this key you will have to update\nyour apps with the new one.\n\nAre you sure you want this?')){ window.location = '<?php print add_query_arg(array('tfa_priv_key_reset' => 1,'settings-updated' => 'true')) ?>'; }">reset</a>
-			)
-		</p>
-		<br>
-		<h3>Base32</h3>
-		<p>Base32 is used by some third party apps like Google Authenticator.</p>
-		<p><strong>Your private key in base32 is</strong>: <?php print Base32\Base32::encode($tfa_priv_key); ?></p>
-		<hr>
-		<h2>Google Authenticator QR-Code</h2>
-		<p>
-			Scan this code with Google Authenticator or other app.
-		</p>
-		<p>
-			<img src="https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=otpauth://totp/<?php print urlencode($current_user->user_login).'@'.$url; ?>%3Fsecret%3D<?php print Base32\Base32::encode($tfa_priv_key); ?>">
-		</p>
-		<hr>
-		<h2>Current One Time Password</h2>
-		<p>Reload every now and then and double check with you third party app.</p>
-		<p>The current code is: 
-			<br><br>
-			<strong style="font-size: 3em;"><?php print generateTwoFactorCode($tfa_priv_key); ?></strong>
-		</p>
+		<h2>Third Party Apps Set Up</h2>
+		<div id="sm_rebuild" class="postbox">
+			<h3 class="hndle" style="padding: 10px; cursor: default;">
+				<span style="cursor: default;">Third Party App QR-Code</span>
+			</h3>
+			<div class="inside">
+				<p>
+					Scan this code with Duo Mobile, Google Authenticator or other app that supports 6 digit OTP's.
+				</p>
+				<p>
+					<img src="https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=otpauth://totp/<?php print urlencode($current_user->user_login).'@'.$url; ?>%3Fsecret%3D<?php print Base32\Base32::encode($tfa_priv_key); ?>">
+				</p>
+			</div>
+		</div>
+
+		<div id="sm_rebuild" class="postbox">
+			<h3 class="hndle" style="padding: 10px; cursor: default;">
+				<span style="cursor: default;">Panic Codes</span>
+			</h3>
+			<div class="inside">
+				<p>
+					You have three panic codes that can be used if you lose your phone and can't get your One Time Passwords. These 
+					can only be used one time and you cannot generate new ones.
+					<br>Keep them in a safe place.
+					<br><br>
+					<strong>Your panic codes are</strong>: <?php print $panic_str; ?>
+				</p>
+			</div>
+		</div>
+		
+		<div id="sm_rebuild" class="postbox">
+			<h3 class="hndle" style="padding: 10px; cursor: default;">
+				<span style="cursor: default;">Current One Time Password</span>
+			</h3>
+			<div class="inside">
+				<p>Reload every now and then and double check with you third party app.</p>
+				<p>The current code is: 
+					<br><br>
+					<strong style="font-size: 3em;"><?php print $tfa->generateOTP($current_user->ID, $tfa_priv_key_64); ?></strong>
+				</p>
+			</div>
+		</div>
+		
+		<h2>Advanced</h2>
+		<a href="javascript:void(0)" onclick="jQuery('#tfa_advanced_box').slideToggle()" class="button">
+			&darr; Show advanced info &darr;
+		</a>
+		<div id="tfa_advanced_box" class="postbox" style="margin-top: 20px; display:none">
+			<h3 class="hndle" style="padding: 10px; cursor: default;">
+				<span style="cursor: default;">Private Key Info</span>
+			</h3>
+			<div class="inside">
+				<h3 class="normal" style="cursor: default">Private Key in Plain Text</h3>
+				<p>
+					This key is your secret. Never give it to anyone.<br>
+					<strong>Your private key is</strong>: <?php print $tfa_priv_key; ?> (
+						<a href="javascript:if(confirm('WARNING: If you reset this key you will have to update\nyour apps with the new one.\n\nAre you sure you want this?')){ window.location = '<?php print add_query_arg(array('tfa_priv_key_reset' => 1,'settings-updated' => 'true')) ?>'; }">reset</a>
+					)
+				</p>
+				<h3 class="normal" style="cursor: default">Base32</h3>
+				<p>Base32 is used by some third party apps like Google Authenticator.
+					This is just as secret as the key in plain text.
+				</p>
+				<p><strong>Your private key in base32 is</strong>: <?php print Base32\Base32::encode($tfa_priv_key); ?></p>
+				<h3 class="normal" style="cursor: default">Algorithm Used</h3>
+				<p>
+					The Algorithm used is TOTP / Time based.
+				</p>
+			</div>
+		</div>
+
+		
 		<?php
 	}
 	
