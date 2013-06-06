@@ -5,42 +5,50 @@ Plugin URI: http://oskarhane.com/plugin-two-factor-auth-for-wordpress
 Description: Secure your WordPress login with this two factor auth. Users will be prompted with a page to enter a one time code that was emailed to them.
 Author: Oskar Hane
 Author URI: http://oskarhane.com
-Version: 2.1
+Version: 3.0.4
 License: GPLv2 or later
 */
 //error_reporting(E_ALL);
 //ini_set("display_errors", true);
+define('TFA_MAIN_PLUGIN_PATH', dirname( __FILE__ ));
 
-function showAdminSettingsPage()
+function getTFAClass()
 {
-	include 'admin_settings.php';
+	include_once TFA_MAIN_PLUGIN_PATH.'/hotp-php-master/hotp.php';
+	include_once TFA_MAIN_PLUGIN_PATH.'/Base32/Base32.php';
+	include_once TFA_MAIN_PLUGIN_PATH.'/class.TFA.php';
+	
+	$tfa = new TFA(new Base32\Base32(), new HOTP());
+	
+	return $tfa;
 }
 
+function tfaInitLogin()
+{			
+	$tfa = getTFAClass();
+	$tfa->preAuth(array('log' => $_POST['user']));
 
-function breakAuth($log)
-{
-	$params = $_POST;
-	
-	if(!$params)
-		return;
-	if(!$params['log'])
-		return;
-	
-	if(!$params['two_factor_code_submitted'])
-		loadTwoFactorForm($params);
+	print json_encode(array('status' => true));
+	exit;
 }
-add_action('wp_authenticate', 'breakAuth');
+add_action( 'wp_ajax_nopriv_tfa-init-otp', 'tfaInitLogin');
 
 
 
 function tfaVerifyCodeAndUser($user, $username, $password)
 {
-	//If already failed, we don't bother to check the code
-	if(is_wp_error($user))
+	$installed_version = get_option('tfa_version');
+	if($installed_version < 4)
 		return $user;
 		
+	$tfa = getTFAClass();
+	
+	if(is_wp_error($user))
+		return $user;
+
 	$params = $_POST;
-	$code_ok = checkTwoFactorCode($params);
+	$code_ok = $tfa->authUserFromLogin($params);
+
 	
 	if(!$code_ok)
 		return new WP_Error('authentication_failed', __('<strong>ERROR</strong>: The Two Factor Code you entered was incorrect.'));
@@ -54,121 +62,35 @@ add_filter('authenticate', 'tfaVerifyCodeAndUser', 99999999999, 3);//We want to 
 
 
 
-function loadTwoFactorForm($params)
-{
-	global $wpdb;
-	$query = $wpdb->prepare("SELECT ID, user_email from ".$wpdb->users." WHERE user_login=%s", $params['log']);
-	$user = $wpdb->get_row($query);
-		
-	$code = generateTwoFactorCode();
-	
-	//So we show full form for users that dont exist
-	$is_activated_for_user = true;
-
-	//Render form anyway so we don't reveal if the username exists or not
-	if($user)
-	{
-		$is_activated_for_user = tfaIsActivatedForUser($user->ID);
-		
-		if($is_activated_for_user)
-		{
-			delete_user_meta($user->ID, 'two_factor_login_code');
-			add_user_meta($user->ID, 'two_factor_login_code', $code);
-			sendTwoFactorEmail($user->user_email, $code);
-		}
-	}
-	
-	include 'form.php';
-	
-	
-	exit;
-}
-
-
-function tfaIsActivatedForUser($user_id)
-{
-	$user = new WP_User($user_id);
-
-	foreach($user->roles as $role)
-	{
-		$db_val = get_option('tfa_'.$role);
-		$db_val = $db_val === false || $db_val ? 1 : 0; //Nothing saved or > 0 returns 1;
-		
-		if($db_val)
-			return true;
-	}
-	
-	return false;
-}
-
-
-function hideAndEmptyPasswordField()
-{
-	if($_POST['log'] && !$_POST['two_factor_code_submitted'])
-		return;
-	
-	?>
-	<script type="text/javascript">
-		var pw_field = document.getElementsByName('pwd')[0];
-		pw_field.value = '';
-		pw_field.parentNode.parentNode.style.display = 'none';
-	</script>
-	<?php
-}
-add_action('login_footer', 'hideAndEmptyPasswordField');
-
-
-
-function checkTwoFactorCode($params)
-{
-	global $wpdb;
-	$query = $wpdb->prepare("SELECT ID from ".$wpdb->users." WHERE user_login=%s", $params['log']);
-	$user_ID = $wpdb->get_var($query);
-	
-	if(!$user_ID)
-		return true;
-	
-	$code = get_user_meta($user_ID, 'two_factor_login_code', true);
-	
-	//Remove code after one guess
-	delete_user_meta($user_ID, 'two_factor_login_code');
-	
-	if(!tfaIsActivatedForUser($user_ID))
-		return true;
-	
-	if(!$code)
-		return false;
-
-	if($code != strtoupper($params['two_factor_code']))
-		return false;
-		
-	return true;
-}
-
-
-
-function sendTwoFactorEmail($email, $code)
-{
-	wp_mail( $email, 'Login Code for '.get_bloginfo('name'), "\n\nEnter this code to log in: ".$code."\n\n\n".site_url(), "Content-Type: text/plain");
-}
-
-
-function generateTwoFactorCode()
-{
-	$chars = '23456789QWERTYUPASDFGHJKLZXCVBNM';
-	$chars = str_split($chars);
-	shuffle($chars);
-	$code = implode('', array_splice($chars, 0, rand(5,6)));
-	
-	return $code;
-}
-
-
-
 /**
 * For Admin menu and settings
 */
-function registerTwoFactorAuthSettings()
+
+function tfaPushForUpgrade() {
+	if(!current_user_can('install_plugins'))
+		return;
+		
+	$installed_version = get_option('tfa_version');
+	if($installed_version >= 4)
+		return;
+	
+    ?>
+    <div class="updated">
+    	<h3>Database changes needed!</h3>
+        <p>
+        	You need to initialize changes to the database for <strong>Two Factor Auth</strong> to work with the current version.
+        	<br>
+        	This is safe and will only have effect on values added by the <strong>Two Factor Auth</strong> plugin.
+        	<br><br>
+        	<a href="options-general.php?page=two-factor-auth&tfa_upgrade_script=yes" class="button">Click here to upgrade</a>
+        </p>
+    </div>
+    <?php
+}
+add_action( 'admin_notices', 'tfaPushForUpgrade' );
+
+
+function tfaRegisterTwoFactorAuthSettings()
 {
 	global $wp_roles;
 	if (!isset($wp_roles))
@@ -177,6 +99,24 @@ function registerTwoFactorAuthSettings()
 	foreach($wp_roles->role_names as $id => $name)
 	{
 		register_setting('tfa_user_roles_group', 'tfa_'.$id);
+	}
+	
+}
+
+
+function tfaListDeliveryRadios($user_id)
+{
+	if(!$user_id)
+		return;
+		
+	$types = array('email' => 'Email', 'third-party-apps' => 'Third party apps (Duo Mobile, Google Authenticator etc)'); 
+	
+	foreach($types as $id => $name)
+	{	
+		$setting = get_user_meta($user_id, 'tfa_delivery_type', true);
+		$setting = $setting === false || !$setting ? 'email' : $setting;
+		
+		print '<input type="radio" name="tfa_delivery_type" value="'.$id.'" '.($setting == $id ? 'checked="checked"' :'').'> - '.$name."<br>\n";
 	}
 	
 }
@@ -197,10 +137,37 @@ function tfaListUserRolesCheckboxes()
 	
 }
 
+function tfaShowAdminSettingsPage()
+{
+	$tfa = getTFAClass();
+	global $wp_roles;
+	include TFA_MAIN_PLUGIN_PATH.'/admin_settings.php';
+}
+
+function tfaShowUserSettingsPage()
+{
+	$tfa = getTFAClass();
+	global $current_user;
+	include TFA_MAIN_PLUGIN_PATH.'/user_settings.php';
+}
+
+
+function tfaAddUserSettingsMenu() 
+{
+	global $current_user;
+	$tfa = getTFAClass();
+	
+	if(!$tfa->isActivatedForUser($current_user->ID))
+		return;
+	
+	add_menu_page('Two Factor Auth', 'Two Factor Auth', 'read', 'two-factor-auth-user', 'tfaShowUserSettingsPage', plugin_dir_url(__FILE__).'img/tfa_admin_icon_16x16.png', 72);
+}
+add_action('admin_menu', 'tfaAddUserSettingsMenu');
+
 function addTwoFactorAuthAdminMenu()
 {
-	add_action( 'admin_init', 'registerTwoFactorAuthSettings' );
-	add_options_page('Two Factor Auth', 'Two Factor Auth', 'manage_options', 'two-factor-auth', 'showAdminSettingsPage');
+	add_action( 'admin_init', 'tfaRegisterTwoFactorAuthSettings' );
+	add_options_page('Two Factor Auth', 'Two Factor Auth', 'manage_options', 'two-factor-auth', 'tfaShowAdminSettingsPage');
 }
 
 function addPluginSettingsLink($links)
@@ -210,8 +177,55 @@ function addPluginSettingsLink($links)
 	return $links;
 }
 
+function tfaSaveSettings()
+{
+	global $current_user;
+	if(@$_GET['tfa_change_to_email'] && @$_GET['tfa_user_id'])
+	{
+	
+		if(is_admin())
+			update_user_meta($_GET['tfa_user_id'], 'tfa_delivery_type', 'email');
+	
+		$goto = site_url().remove_query_arg(array('tfa_user_id', 'tfa_change_to_email'));
+		wp_safe_redirect($goto);
+		exit;
+	}
+	
+	if(@$_GET['tfa_priv_key_reset'])
+	{
+		delete_user_meta($current_user->ID, 'tfa_priv_key_64');
+		delete_user_meta($current_user->ID, 'tfa_panic_codes_64');
+		wp_safe_redirect(site_url().remove_query_arg('tfa_priv_key_reset'));
+		exit;
+	}
+	
+	if(@$_GET['tfa_upgrade_script'])
+	{
+		$tfa = getTFAClass();
+		$tfa->upgrade();
+		wp_safe_redirect(site_url().remove_query_arg('tfa_upgrade_script').'&upgrade_done=true');
+		exit;
+	}
+}
+
+function tfaAddJSToLogin()
+{
+	$installed_version = get_option('tfa_version');
+	if($installed_version < 4)
+		return;
+		
+	wp_enqueue_script( 'tfa-ajax-request', plugin_dir_url( __FILE__ ) . 'tfa_v4.js', array( 'jquery' ) );
+	wp_localize_script( 'tfa-ajax-request', 'tfaSettings', array(
+		'ajaxurl' => admin_url('admin-ajax.php')
+	));
+}
+add_action('login_enqueue_scripts', 'tfaAddJSToLogin');
+
 if(is_admin())
 {
+	//Save settings
+	add_action('admin_init', 'tfaSaveSettings');
+	
 	//Add to Settings menu
 	add_action('admin_menu', 'addTwoFactorAuthAdminMenu');
 	
