@@ -3,7 +3,7 @@ Contributors: oskarhane
 Tags: auth, two factor auth, login, security, authenticate, password, hacking, security plugin, secure
 Requires at least: 3.0.1
 Tested up to: 3.5.1
-Stable tag: 3.0.4
+Stable tag: 4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,7 +35,9 @@ users will have to activate delivery by third party apps themselves.
 
 = Easy To Use =
 Just install this plugin and you're all set. There's really nothing more to it. 
-If you want to use a third party app, goto Users -> Two Factor Auth and activate it and set up your app.
+If you want to use a third party app, goto Two Factor Auth in the admin menu and activate it and set up your app.
+General settings can be found uner Settings -> Two Factor Auth in admin menu. Settings for each individual user 
+can be found at the root level of the admin menu,in Two Factor Auth. 
 A bit more work to get logged in, but a whole lot more secure!
 
 
@@ -66,13 +68,13 @@ or
 == Frequently Asked Questions ==
 
 = Can I have real Two Factor Auth? =
-Yes, since version 3.0 you can activate real Two Factor Auth by activating third party apps option under "Users" -> "Two Factor Auth". Don't forget to set up your app with the secret key.
+Yes, since version 3.0 you can activate real Two Factor Auth by activating third party apps option under "Two Factor Auth" in admin menu. Don't forget to set up your app with the secret key.
 
 = Oops, I lost my phone. What to do? =
 Hopefully you saved the three Panic Codes when you activated third party apps. Use one of them.
 
 = If I can't reach my email account, can I bypass this plugin and log in anyway? =
-If you have access to the databse you can look for the code there. If you have panic codes, you can use them. Otherwise, no.
+If you have Panic Codes, you can use them. Otherwise, no.
 
 == Screenshots ==
 
@@ -82,6 +84,15 @@ If you have access to the databse you can look for the code there. If you have p
 4. Admin settings page.
 
 == Changelog ==
+= 4.0 =
+* All keys and panic codes are now encrypted in the database, as they should be.
+* Panic codes are now based on your key.
+* Users find their settings in root level of the admin menu.
+* Only user roles with TFA activated see the admin menu item.
+* Nicer/cleaner UI for users.
+* Upgrade script for older installations. Must be executed by admin right after plugin update. Manually.
+* Refactored all code and made it class based.
+
 = 3.0.4 =
 Fixed a bug where a OTP could be used twice.
 
@@ -119,6 +130,9 @@ Fixed so users get alerted of they don't enter a username before clicking the OT
 * Initial release
 
 == Upgrade Notice ==
+= 4.0 =
+You must run database change script after upgrade. The script encrypts the keys in the database. You will be prompted with a button to run it. Until you do, TFA won't be active.
+
 = 3.0.4 =
 Fixed a bug where a OTP could be used twice.
 
