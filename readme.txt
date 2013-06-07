@@ -3,7 +3,7 @@ Contributors: oskarhane
 Tags: auth, two factor auth, login, security, authenticate, password, hacking, security plugin, secure
 Requires at least: 3.0.1
 Tested up to: 3.5.1
-Stable tag: 4.0
+Stable tag: 4.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,7 +18,8 @@ Users can have common or weak passwords that lets hackers/bots brute-force your 
 Just like happend not that long ago: [Article on TechCrunch](http://techcrunch.com/2013/04/12/hackers-point-large-botnet-at-wordpress-sites-to-steal-admin-passwords-and-gain-server-access/)
 
 If all sites would have used this plugin, this would never happend.
-It doesn't matter how weak your users passwords are, no one can gain access to your WordPress site without already having access to the user accounts email inbox as well.
+It doesn't matter how weak your users passwords are, no one can gain access to your WordPress site 
+without already having access to the users mobile phone or email inbox (depending on how the user gets his OTP).
 
 
 = How Does It Work? =
@@ -37,7 +38,7 @@ users will have to activate delivery by third party apps themselves.
 Just install this plugin and you're all set. There's really nothing more to it. 
 If you want to use a third party app, goto Two Factor Auth in the admin menu and activate it and set up your app.
 General settings can be found uner Settings -> Two Factor Auth in admin menu. Settings for each individual user 
-can be found at the root level of the admin menu,in Two Factor Auth. 
+can be found at the root level of the admin menu, in Two Factor Auth. 
 A bit more work to get logged in, but a whole lot more secure!
 
 
@@ -84,6 +85,10 @@ If you have Panic Codes, you can use them. Otherwise, no.
 4. Admin settings page.
 
 == Changelog ==
+= 4.0.1 =
+* Made the button on the login page blue so it's more clear that it's a button.
+* Fixed some typos.
+
 = 4.0 =
 * All keys and panic codes are now encrypted in the database, as they should be.
 * Panic codes are now based on your key.
@@ -130,6 +135,9 @@ Fixed so users get alerted of they don't enter a username before clicking the OT
 * Initial release
 
 == Upgrade Notice ==
+= 4.0.1 =
+Button on login page is now blue to be more clear. Some types fixed as well.
+
 = 4.0 =
 You must run database change script after upgrade. The script encrypts the keys in the database. You will be prompted with a button to run it. Until you do, TFA won't be active.
 
