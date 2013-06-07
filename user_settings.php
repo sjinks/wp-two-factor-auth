@@ -109,7 +109,7 @@ if(@$_POST['tfa_delivery_type'] && @$_GET['settings-updated'] == 'true')
 			</h3>
 			<div class="inside">
 				<p>Reload every now and then and double check with you third party app.</p>
-				<p>The current code is: 
+				<p>The current One Time Password is: 
 					<br><br>
 					<strong style="font-size: 3em;"><?php print $tfa->generateOTP($current_user->ID, $tfa_priv_key_64); ?></strong>
 				</p>

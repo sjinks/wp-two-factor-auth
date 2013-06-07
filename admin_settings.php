@@ -27,7 +27,7 @@ if(@$_GET['upgrade_done'] == 'true')
 		<h2>User Roles</h2>
 		Choose which User Roles that will have <em>Two Factor Auth</em> activated.
 		<br>
-		The users will default to have their One Time Codes delivered by email since they need to add their private 
+		The users will default to have their One Time Passwords delivered by email since they need to add their private 
 		key to third party apps themselves.
 		<p>
 	<?php
@@ -43,7 +43,7 @@ if(@$_GET['upgrade_done'] == 'true')
 		<br>
 		Click on the "Change to email" button to change the delivery settings for that user.
 		<br>
-		Users can change their own settings on Users -> Two Factor Auth when they're logged in.
+		Users can change their own settings via the menu "Two Factor Auth" when they're logged in.
 	<p>
 		<?php
 		

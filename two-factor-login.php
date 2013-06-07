@@ -214,7 +214,7 @@ function tfaAddJSToLogin()
 	if($installed_version < 4)
 		return;
 		
-	wp_enqueue_script( 'tfa-ajax-request', plugin_dir_url( __FILE__ ) . 'tfa_v4.js', array( 'jquery' ) );
+	wp_enqueue_script( 'tfa-ajax-request', plugin_dir_url( __FILE__ ) . 'tfa_v4.0.1.js', array( 'jquery' ) );
 	wp_localize_script( 'tfa-ajax-request', 'tfaSettings', array(
 		'ajaxurl' => admin_url('admin-ajax.php')
 	));

@@ -7,8 +7,9 @@ jQuery(document).ready(function() {
 	
 	var otp_btn = document.createElement('button');
 	otp_btn.id = 'otp-button';
-	otp_btn.className = 'button button-large';
+	otp_btn.className = 'button button-large button-primary';
 	otp_btn.onclick = function(){ return tfaChangeToInput(); };
+	otp_btn.style.float = 'none';
 	
 	var btn_text = document.createTextNode("Click to enter One Time Password");
 	otp_btn.appendChild(btn_text);
