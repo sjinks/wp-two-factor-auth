@@ -3,7 +3,7 @@ Contributors: oskarhane
 Tags: auth, two factor auth, login, security, authenticate, password, hacking, security plugin, secure
 Requires at least: 3.0.1
 Tested up to: 3.5.1
-Stable tag: 4.0.1
+Stable tag: 4.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,11 @@ If you have Panic Codes, you can use them. Otherwise, no.
 4. Admin settings page.
 
 == Changelog ==
+= 4.0.2 =
+* Added PHP 5.3 check at activation
+* Added mcrypt support check at activation
+* Removed namespace in the Base32 class for better PHP support.
+
 = 4.0.1 =
 * Made the button on the login page blue so it's more clear that it's a button.
 * Fixed some typos.
@@ -135,6 +140,9 @@ Fixed so users get alerted of they don't enter a username before clicking the OT
 * Initial release
 
 == Upgrade Notice ==
+= 4.0.2 =
+Added PHP version and mcrypt support checks at activation.
+
 = 4.0.1 =
 Button on login page is now blue to be more clear. Some types fixed as well.
 
