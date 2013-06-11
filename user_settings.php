@@ -83,7 +83,7 @@ if(@$_POST['tfa_delivery_type'] && @$_GET['settings-updated'] == 'true')
 					Scan this code with Duo Mobile, Google Authenticator or other app that supports 6 digit OTP's.
 				</p>
 				<p>
-					<img src="https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=otpauth://totp/<?php print urlencode($current_user->user_login).'@'.$url; ?>%3Fsecret%3D<?php print Base32\Base32::encode($tfa_priv_key); ?>">
+					<img src="https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=otpauth://totp/<?php print urlencode($current_user->user_login).'@'.$url; ?>%3Fsecret%3D<?php print Base32::encode($tfa_priv_key); ?>">
 				</p>
 			</div>
 		</div>
@@ -136,7 +136,7 @@ if(@$_POST['tfa_delivery_type'] && @$_GET['settings-updated'] == 'true')
 				<p>Base32 is used by some third party apps like Google Authenticator.
 					This is just as secret as the key in plain text.
 				</p>
-				<p><strong>Your private key in base32 is</strong>: <?php print Base32\Base32::encode($tfa_priv_key); ?></p>
+				<p><strong>Your private key in base32 is</strong>: <?php print Base32::encode($tfa_priv_key); ?></p>
 				<h3 class="normal" style="cursor: default">Algorithm Used</h3>
 				<p>
 					The Algorithm used is TOTP / Time based.

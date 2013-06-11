@@ -18,7 +18,7 @@ function getTFAClass()
 	include_once TFA_MAIN_PLUGIN_PATH.'/Base32/Base32.php';
 	include_once TFA_MAIN_PLUGIN_PATH.'/class.TFA.php';
 	
-	$tfa = new TFA(new Base32\Base32(), new HOTP());
+	$tfa = new TFA(new Base32(), new HOTP());
 	
 	return $tfa;
 }
@@ -236,6 +236,24 @@ if(is_admin())
 
 function installTFA()
 {
+	$error = false;
+	if (version_compare(PHP_VERSION, '5.3', '<' ))
+	{
+		$error = true;
+		$flag = 'PHP version 5.3 or higher.';
+	}
+	elseif(!function_exists('mcrypt_get_iv_size'))
+	{
+		$error = true;
+		$flag = 'that PHP mcrypt installed. See <a href="http://www.php.net/manual/en/mcrypt.installation.php" target="_blank">PHP.net mcrypt >></a> for more info.';
+	}
+	
+	if($error)
+	{
+		deactivate_plugins( basename( __FILE__ ) );
+		die('<p>The <strong>Two Factor Auth</strong> plugin requires '.$flag.'</p>');
+	}
+	
 	$tfa = getTFAClass();
 	$tfa->upgrade();
 }

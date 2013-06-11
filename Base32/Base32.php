@@ -1,5 +1,5 @@
 <?php
-namespace Base32;
+//namespace Base32;
 
 /**
  * Base32 encoder and decoder
