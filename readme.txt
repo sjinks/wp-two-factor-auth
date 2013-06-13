@@ -1,7 +1,7 @@
 === Two Factor Auth ===
 Contributors: oskarhane
 Tags: auth, two factor auth, login, security, authenticate, password, hacking, security plugin, secure
-Requires at least: 3.0.1
+Requires at least: 3.1.0
 Tested up to: 3.5.1
 Stable tag: 4.0.2
 License: GPLv2 or later
@@ -85,6 +85,10 @@ If you have Panic Codes, you can use them. Otherwise, no.
 4. Admin settings page.
 
 == Changelog ==
+= 4.1 =
+* Added language/localization support. Please send me your translations .po-files
+* get_users needs WP 3.1.0. Changing the requirements for the plugin.
+
 = 4.0.2 =
 * Added PHP 5.3 check at activation
 * Added mcrypt support check at activation
@@ -140,6 +144,9 @@ Fixed so users get alerted of they don't enter a username before clicking the OT
 * Initial release
 
 == Upgrade Notice ==
+= 4.1 =
+Language supprt and WP 3.1.0 needed.
+
 = 4.0.2 =
 Added PHP version and mcrypt support checks at activation.
 

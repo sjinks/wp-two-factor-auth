@@ -8,7 +8,7 @@ if(@$_GET['upgrade_done'] == 'true')
 	?>
 		<div id="setting-error-settings_updated" class="updated settings-error"> 
 			<p>
-				<strong>Your upgrade was successful, Two Factor Auth is now enabled.</strong>
+				<strong><?php _e('Your upgrade was successful, Two Factor Auth is now enabled.', TFA_TEXT_DOMAIN); ?></strong>
 			</p>
 		</div>
 	<?php
@@ -16,7 +16,7 @@ if(@$_GET['upgrade_done'] == 'true')
 
 ?><div class="wrap">
 	<?php screen_icon(); ?>
-	<h2>Two Factor Auth Settings</h2>
+	<h2>Two Factor Auth <?php _e('Settings', TFA_TEXT_DOMAIN); ?></h2>
 	<div>
 		<img style="margin-top: 10px" src="<?php print plugin_dir_url(__FILE__); ?>img/tfa_header.png">
 	</div>
@@ -24,11 +24,10 @@ if(@$_GET['upgrade_done'] == 'true')
 	<?php
 		settings_fields('tfa_user_roles_group');
 	?>
-		<h2>User Roles</h2>
-		Choose which User Roles that will have <em>Two Factor Auth</em> activated.
+		<h2><?php _e('User Roles', TFA_TEXT_DOMAIN); ?></h2>
+		<?php _e('Choose which User Roles that will have', TFA_TEXT_DOMAIN); ?> <em>Two Factor Auth</em> <?php _e('activated', TFA_TEXT_DOMAIN); ?>.
 		<br>
-		The users will default to have their One Time Passwords delivered by email since they need to add their private 
-		key to third party apps themselves.
+		<?php _e('The users will default to have their One Time Passwords delivered by email since they need to add their private key to third party apps themselves.', TFA_TEXT_DOMAIN); ?>
 		<p>
 	<?php
 		tfaListUserRolesCheckboxes();
@@ -36,14 +35,13 @@ if(@$_GET['upgrade_done'] == 'true')
 	<?php submit_button(); ?>
 	</form>
 	<hr>
-	<h2>Change User Settings</h2>
+	<h2><?php _e('Change User Settings', TFA_TEXT_DOMAIN); ?></h2>
 	<p>
-		If some of your users lose their phone and don't have access to their panic codes, you can reset their 
-		delivery type here and change it to email so they can login again and add a new phone.
+		<?php _e("If some of your users lose their phone and don't have access to their panic codes, you can reset their delivery type here and change it to email so they can login again and add a new phone.", TFA_TEXT_DOMAIN); ?>
 		<br>
-		Click on the "Change to email" button to change the delivery settings for that user.
+		<?php _e('Click on the "Change to email" button to change the delivery settings for that user.', TFA_TEXT_DOMAIN); ?>
 		<br>
-		Users can change their own settings via the menu "Two Factor Auth" when they're logged in.
+		<?php _e("Users can change their own settings via the menu <strong>Two Factor Auth</string> when they're logged in.", TFA_TEXT_DOMAIN); ?>
 	<p>
 		<?php
 		
@@ -71,14 +69,23 @@ if(@$_GET['upgrade_done'] == 'true')
 				$tfa_type = get_user_meta($user->ID, 'tfa_delivery_type', true);
 				print '<span style="font-size: 1.2em">'.esc_attr( $userdata->user_nicename ).'</span>';
 				if(!$tfa_type || $tfa_type == 'email')
-					print ' - Email';
+					print ' - '.__('Email', TFA_TEXT_DOMAIN);
 				else
-					print ' - <a class="button" href="'.add_query_arg(array('tfa_change_to_email' => 1, 'tfa_user_id' => $user->ID)).'">Change to email</a>';
+					print ' - <a class="button" href="'.add_query_arg(array('tfa_change_to_email' => 1, 'tfa_user_id' => $user->ID)).'">'.__('Change to email', TFA_TEXT_DOMAIN).'</a>';
 				print '<br>';
 			}
 		}
 		
 		?>
+	</p>
+	<hr>
+	<h2><?php _e('Translations', TFA_TEXT_DOMAIN); ?></h2>
+	<p>
+		<?php _e('If you translate this plugin, please send the translations .po-file to me so I can include it in future releases.', TFA_TEXT_DOMAIN); ?>
+		<br>
+		<?php _e('I can recommend the plugin', TFA_TEXT_DOMAIN); ?> <a href="http://wordpress.org/plugins/codestyling-localization/" target="_blank">Codestyling Localization</a> <?php _e('for adding and editing translations of plugins.', TFA_TEXT_DOMAIN); ?>
+		<br><br>
+		<?php _e('Email your translations .po-file to', TFA_TEXT_DOMAIN); ?>: <a href="mailto:tfa.translation@oskarhane.com">tfa.translation@oskarhane.com</a>.
 	</p>
 	<hr>
 	<h2>Rate it if you like it!</h2>

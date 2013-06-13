@@ -5,11 +5,13 @@ Plugin URI: http://oskarhane.com/plugin-two-factor-auth-for-wordpress
 Description: Secure your WordPress login with this two factor auth. Users will be prompted with a page to enter a one time code that was emailed to them.
 Author: Oskar Hane
 Author URI: http://oskarhane.com
-Version: 4.0.2
+Version: 4.1
 License: GPLv2 or later
 */
 //error_reporting(E_ALL);
 //ini_set("display_errors", true);
+define('TFA_TEXT_DOMAIN', 'two-factor-auth');
+$my_translator_is_setup = 0;
 define('TFA_MAIN_PLUGIN_PATH', dirname( __FILE__ ));
 
 function getTFAClass()
@@ -37,6 +39,8 @@ add_action( 'wp_ajax_nopriv_tfa-init-otp', 'tfaInitLogin');
 
 function tfaVerifyCodeAndUser($user, $username, $password)
 {
+	
+	
 	$installed_version = get_option('tfa_version');
 	if($installed_version < 4)
 		return $user;
@@ -51,7 +55,7 @@ function tfaVerifyCodeAndUser($user, $username, $password)
 
 	
 	if(!$code_ok)
-		return new WP_Error('authentication_failed', __('<strong>ERROR</strong>: The Two Factor Code you entered was incorrect.'));
+		return new WP_Error('authentication_failed', __('<strong>ERROR</strong>: The Two Factor Code you entered was incorrect.', TFA_TEXT_DOMAIN));
 	
 	if($user)
 		return $user;
@@ -108,8 +112,9 @@ function tfaListDeliveryRadios($user_id)
 {
 	if(!$user_id)
 		return;
-		
-	$types = array('email' => 'Email', 'third-party-apps' => 'Third party apps (Duo Mobile, Google Authenticator etc)'); 
+	
+			
+	$types = array('email' => __('Email', TFA_TEXT_DOMAIN), 'third-party-apps' => __('Third party apps', TFA_TEXT_DOMAIN).' (Duo Mobile, Google Authenticator etc)'); 
 	
 	foreach($types as $id => $name)
 	{	
@@ -172,7 +177,8 @@ function addTwoFactorAuthAdminMenu()
 
 function addPluginSettingsLink($links)
 {
-	$link = '<a href="options-general.php?page=two-factor-auth">'.__('Settings').'</a>';
+	
+	$link = '<a href="options-general.php?page=two-factor-auth">'.__('Settings', TFA_TEXT_DOMAIN).'</a>';
 	array_unshift($links, $link);
 	return $links;
 }
@@ -210,13 +216,17 @@ function tfaSaveSettings()
 
 function tfaAddJSToLogin()
 {
+	
 	$installed_version = get_option('tfa_version');
 	if($installed_version < 4)
 		return;
 		
-	wp_enqueue_script( 'tfa-ajax-request', plugin_dir_url( __FILE__ ) . 'tfa_v4.0.1.js', array( 'jquery' ) );
+	wp_enqueue_script( 'tfa-ajax-request', plugin_dir_url( __FILE__ ) . 'tfa_v4.1.js', array( 'jquery' ) );
 	wp_localize_script( 'tfa-ajax-request', 'tfaSettings', array(
-		'ajaxurl' => admin_url('admin-ajax.php')
+		'ajaxurl' => admin_url('admin-ajax.php'),
+		'click_to_enter_otp' => __("Click to enter One Time Password", TFA_TEXT_DOMAIN),
+		'enter_username_first' => __('You have to enter a username first.', TFA_TEXT_DOMAIN),
+		'otp' => __("One Time Password", TFA_TEXT_DOMAIN)
 	));
 }
 add_action('login_enqueue_scripts', 'tfaAddJSToLogin');
@@ -258,5 +268,21 @@ function installTFA()
 	$tfa->upgrade();
 }
 register_activation_hook(__FILE__, 'installTFA');
+
+
+function tfaSetLanguages()
+{
+	global $my_translator_is_setup;
+	
+	if($my_translator_is_setup)
+		return;
+	
+	load_plugin_textdomain(
+		TFA_TEXT_DOMAIN,
+		false,
+		dirname( plugin_basename( __FILE__ ) ) . '/languages/'
+	);
+}
+tfaSetLanguages();
 
 ?>

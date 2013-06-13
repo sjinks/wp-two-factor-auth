@@ -11,7 +11,7 @@ jQuery(document).ready(function() {
 	otp_btn.onclick = function(){ return tfaChangeToInput(); };
 	otp_btn.style.float = 'none';
 	
-	var btn_text = document.createTextNode("Click to enter One Time Password");
+	var btn_text = document.createTextNode(tfaSettings.click_to_enter_otp);
 	otp_btn.appendChild(btn_text);
 	otp_btn.style.width = '100%';
 	
@@ -27,7 +27,7 @@ jQuery(document).ready(function() {
 		//Check so a username is entered.
 		if(jQuery('#user_login').val().length < 1)
 		{
-			alert('You have to enter a username first.');
+			alert(tfaSettings.enter_username_first);
 			return false;
 		}
 		
@@ -44,7 +44,7 @@ jQuery(document).ready(function() {
 		var p = document.getElementById('tfa_holder');
 		var lbl = document.createElement('label');
 		lbl.for = 'two_factor_auth';
-		var lbl_text = document.createTextNode("One Time Password");
+		var lbl_text = document.createTextNode(tfaSettings.otp);
 		lbl.appendChild(lbl_text);
 		
 		var tfa_field = document.createElement('input');
