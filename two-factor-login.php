@@ -220,7 +220,10 @@ function tfaAddJSToLogin()
 	$installed_version = get_option('tfa_version');
 	if($installed_version < 4)
 		return;
-		
+	
+	if(isset($_GET['action']) && $_GET['action'] != 'logout' && $_GET['action'] != 'login')
+		return;
+	
 	wp_enqueue_script( 'tfa-ajax-request', plugin_dir_url( __FILE__ ) . 'tfa_v4.1.js', array( 'jquery' ) );
 	wp_localize_script( 'tfa-ajax-request', 'tfaSettings', array(
 		'ajaxurl' => admin_url('admin-ajax.php'),
