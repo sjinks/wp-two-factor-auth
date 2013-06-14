@@ -1,0 +1,304 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Two Factor Auth v4.1.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2013-06-14 20:04:12+0000\n"
+"Last-Translator: michaelschwark <michael.schwark@googlemail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: CSL v1.x\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: admin_settings.php:11
+#@ two-factor-auth
+msgid "Your upgrade was successful, Two Factor Auth is now enabled."
+msgstr "Dein Upgrade war erfolgreich. Die Zwei-Faktor-Authentifizierung ist aktiviert."
+
+#: admin_settings.php:19
+#: two-factor-login.php:181
+#: user_settings.php:24
+#@ two-factor-auth
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: admin_settings.php:27
+#@ two-factor-auth
+msgid "User Roles"
+msgstr "Benutzergruppen"
+
+#: admin_settings.php:28
+#@ two-factor-auth
+msgid "Choose which User Roles that will have"
+msgstr "Wähle aus, für welche Nutzergruppen"
+
+#: admin_settings.php:28
+#@ two-factor-auth
+msgid "activated"
+msgstr "aktiviert werden soll."
+
+#: admin_settings.php:30
+#@ two-factor-auth
+msgid "The users will default to have their One Time Passwords delivered by email since they need to add their private key to third party apps themselves."
+msgstr "Anwender müssen ihr temporäres Passwort erstmalig per E-Mail erhalten, bevor sie in ihren Einstellungen Anwendungen von Drittanbietern aktivieren können."
+
+#: admin_settings.php:38
+#@ two-factor-auth
+msgid "Change User Settings"
+msgstr "Benutzereinstellungen ändern"
+
+#: admin_settings.php:40
+#@ two-factor-auth
+msgid "If some of your users lose their phone and don't have access to their panic codes, you can reset their delivery type here and change it to email so they can login again and add a new phone."
+msgstr "Sollten einzelne Nutzer ihre Telefone verlieren, kannst Du hier in den Modus des E-Mail-Versands wechseln. So können diese Nutzer das Feature mit einem neuen Telefon reaktivieren."
+
+#: admin_settings.php:42
+#@ two-factor-auth
+msgid "Click on the \"Change to email\" button to change the delivery settings for that user."
+msgstr "Klicke den Button, um den Versand-Modus für den jeweiligen Nutzer zu ändern."
+
+#: admin_settings.php:44
+#@ two-factor-auth
+msgid "Users can change their own settings via the menu <strong>Two Factor Auth</string> when they're logged in."
+msgstr "Benutzer können in den eigenen Einstellungen individuelle Anpassungen vornehmen."
+
+#: admin_settings.php:72
+#: two-factor-login.php:117
+#@ two-factor-auth
+msgid "Email"
+msgstr "E-Mail"
+
+#: admin_settings.php:74
+#@ two-factor-auth
+msgid "Change to email"
+msgstr "E-Mail-Modus aktivieren"
+
+#: admin_settings.php:82
+#@ two-factor-auth
+msgid "Translations"
+msgstr "Übersetzungen"
+
+#: admin_settings.php:84
+#@ two-factor-auth
+msgid "If you translate this plugin, please send the translations .po-file to me so I can include it in future releases."
+msgstr "Wenn Du das Plugin übersetzt, maile mir bitte die .po-Datei, damit ich das Plugin einer großen Zahl von Nutzern zugänglich machen kann. Danke schön!"
+
+#: admin_settings.php:86
+#@ two-factor-auth
+msgid "I can recommend the plugin"
+msgstr "Ich empfehle dieses Plugin"
+
+#: admin_settings.php:86
+#@ two-factor-auth
+msgid "for adding and editing translations of plugins."
+msgstr "Ubersetzungen zu bearbeiten und zu aktivieren."
+
+#: admin_settings.php:88
+#@ two-factor-auth
+msgid "Email your translations .po-file to"
+msgstr "Maile mir deine Übersetungen:"
+
+#: two-factor-login.php:58
+#@ two-factor-auth
+msgid "<strong>ERROR</strong>: The Two Factor Code you entered was incorrect."
+msgstr "<strong>Zugang verweigert</strong>: Dein temporäres Passwort ist falsch."
+
+#: two-factor-login.php:117
+#@ two-factor-auth
+msgid "Third party apps"
+msgstr "Anwendungen von Drittanbietern"
+
+#: two-factor-login.php:230
+#@ two-factor-auth
+msgid "Click to enter One Time Password"
+msgstr "Temporäres Passwort"
+
+#: two-factor-login.php:231
+#@ two-factor-auth
+msgid "You have to enter a username first."
+msgstr "Gib zuerst einen Benutzernamen ein."
+
+#: two-factor-login.php:232
+#@ two-factor-auth
+msgid "One Time Password"
+msgstr "Temporäres Passwort"
+
+#: user_settings.php:27
+#@ two-factor-auth
+msgid "Important Notes"
+msgstr "Wichtige Anmerkungen"
+
+#: user_settings.php:30
+#@ two-factor-auth
+msgid "This is your personal settings for the Two Factor Auth. Nothing you change here will have any effect on other users."
+msgstr "Das sind deine individuellen Einstellungen für die 2-Faktor-Authentifizierung. Sie haben keinerlei Auswirkungen auf die globalen Einstellungen."
+
+#: user_settings.php:33
+#@ two-factor-auth
+msgid "IMPORTANT"
+msgstr "WICHTIG"
+
+#: user_settings.php:34
+#@ two-factor-auth
+msgid ""
+"If you choose the third-party-apps version (which is more safe and real Two Factor Auth) you \n"
+"\t\t\t\thave to make sure you scan the QR-code (or enter your private key manually)."
+msgstr "Wenn Du Anwednungen von Drittanbietern verwendest (z.B. Google Auth), was ich ausdrücklich empfehle, musst Du unbedingt den QR-Code scannen oder deinen privaten Schlüssel manuell eingeben."
+
+#: user_settings.php:36
+#@ two-factor-auth
+msgid "Verify with the One Time Password at the bottom of this page"
+msgstr "Vergleiche dein temporäres Passwort auf dem Bildschirm deines Telefons mit dem temporären Passwort unten auf dieser Seite."
+
+#: user_settings.php:37
+#@ two-factor-auth
+msgid ""
+"If the code in your app and the one at the bottom of this page do not match, deactivate Third Party Apps and enable \n"
+"\t\t\t\temail again and contact your site administrator."
+msgstr "Wenn die temporären Passworte nicht übereinstimmen, schalte bitte auf E-Mail-Modus um und kontaktiere deinen Administrator."
+
+#: user_settings.php:40
+#@ two-factor-auth
+msgid "If the One Time Passwords do not match, you can't log in to this site any more."
+msgstr "Stimmen die temporären Passwörter nicht überein, kannst du dich nicht mehr einloggen."
+
+#: user_settings.php:50
+#@ two-factor-auth
+msgid "Delivery type"
+msgstr "Versand-Typ"
+
+#: user_settings.php:51
+#@ two-factor-auth
+msgid "Choose how you want your"
+msgstr "Bitte wähle, wie Du deine"
+
+#: user_settings.php:51
+#@ two-factor-auth
+msgid "One Time Passwords"
+msgstr " temporären Passwörter"
+
+#: user_settings.php:51
+#@ two-factor-auth
+msgid "delivered"
+msgstr "übermitteln möchtest."
+
+#: user_settings.php:76
+#@ two-factor-auth
+msgid "Third Party Apps Set Up"
+msgstr "Konfiguration von Drittanbieter-Anwendungen."
+
+#: user_settings.php:79
+#@ two-factor-auth
+msgid "Third Party App QR-Code"
+msgstr "QR-Code"
+
+#: user_settings.php:83
+#@ two-factor-auth
+msgid "Scan this code with"
+msgstr "Scanne diesen Code"
+
+#: user_settings.php:83
+#@ two-factor-auth
+msgid "or other app that supports 6 digit OTP's"
+msgstr "oder anderen Anwendungen, die sechstellige OTPs unterstützen."
+
+#: user_settings.php:93
+#@ two-factor-auth
+msgid "Panic Codes"
+msgstr "Panik-Codes"
+
+#: user_settings.php:97
+#@ two-factor-auth
+msgid "You have three panic codes that can be used if you lose your phone and can't get your One Time Passwords. These can only be used one time and you cannot generate new ones."
+msgstr "Drei Panik-Codes stehen zu deiner Verfügung. Wenn Du dein Telefon verlierst, kannst Du dich mit ihnen einloggen. Die Panik-Codes können jweils einmal verwendet werden und es besteht keine Möglichkeit, neue zu generieren."
+
+#: user_settings.php:98
+#@ two-factor-auth
+msgid "Keep them in a safe place."
+msgstr "Bewahre sie sicher auf!"
+
+#: user_settings.php:100
+#@ two-factor-auth
+msgid "Your panic codes are"
+msgstr "Deine Panik-Codes sind"
+
+#: user_settings.php:107
+#@ two-factor-auth
+msgid "Current One Time Password"
+msgstr "Aktuelles temporäres Passwort"
+
+#: user_settings.php:110
+#@ two-factor-auth
+msgid "Reload every now and then and double check with you third party app."
+msgstr "Du musst diese Seite neu laden, um einen sicheren Abgleich mit deinen Anwendungen wie Google Auth vorzunehmen."
+
+#: user_settings.php:111
+#@ two-factor-auth
+msgid "The current One Time Password is"
+msgstr "Dein aktuelles temporäres Passwort lautet"
+
+#: user_settings.php:118
+#@ two-factor-auth
+msgid "Advanced"
+msgstr "Erweiterte Optionen"
+
+#: user_settings.php:120
+#@ two-factor-auth
+msgid "Show advanced info"
+msgstr "Erweiterte Konfigurationsmöglichkeiten"
+
+#: user_settings.php:127
+#@ two-factor-auth
+msgid "Private Key in Plain Text"
+msgstr "Dein privater Schlüssel in Plain Text"
+
+#: user_settings.php:129
+#@ two-factor-auth
+msgid "This key is your secret. Never give it to anyone."
+msgstr "Dein privater Schlüssel ist geheim. Behandle ihn streng vertraulich."
+
+#: user_settings.php:130
+#@ two-factor-auth
+msgid "Your private key is"
+msgstr "Dein privater Schlüssel lautet"
+
+#: user_settings.php:131
+#@ two-factor-auth
+msgid "WARNING: If you reset this key you will have to update your apps with the new one. Are you sure you want this?"
+msgstr "ACHTUNG: wenn Du diesen Schlüssel zurücksetzt, musst Du alle deine Anwendungen rekonfigurieren. Bist Du sicher, dass Du fortfahren willst?"
+
+#: user_settings.php:135
+#@ two-factor-auth
+msgid "Base32 is used by some third party apps like Google Authenticator. This is just as secret as the key in plain text."
+msgstr "BASE32 wird von einigen Drittanbieteranwendungen unterstützt. Diesen Schlüssel musst Du vertraulich behandeln!"
+
+#: user_settings.php:137
+#@ two-factor-auth
+msgid "Your private key in base32 is"
+msgstr "Dein privater Schlüssel in BASE32 ist"
+
+#: user_settings.php:138
+#@ two-factor-auth
+msgid "Algorithm Used"
+msgstr "Benutzter Algorythmus"
+
+#: user_settings.php:140
+#@ two-factor-auth
+msgid "The Algorithm used is"
+msgstr "Der benutzte Algorythmus ist"
+
+#: user_settings.php:140
+#@ two-factor-auth
+msgid "Time based"
+msgstr "zeit-basiert."
+
