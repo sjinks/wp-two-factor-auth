@@ -9,7 +9,8 @@ jQuery(document).ready(function() {
 	otp_btn.id = 'otp-button';
 	otp_btn.className = 'button button-large button-primary';
 	otp_btn.onclick = function(){ return tfaChangeToInput(); };
-	otp_btn.style.float = 'none';
+	otp_btn.style.styleFloat = 'none';
+	otp_btn.style.cssFloat = 'none';
 	
 	var btn_text = document.createTextNode(tfaSettings.click_to_enter_otp);
 	otp_btn.appendChild(btn_text);
