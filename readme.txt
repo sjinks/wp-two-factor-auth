@@ -3,7 +3,7 @@ Contributors: oskarhane
 Tags: auth, two factor auth, login, security, authenticate, password, hacking, security plugin, secure
 Requires at least: 3.1.0
 Tested up to: 3.5.1
-Stable tag: 4.1.1
+Stable tag: 4.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,11 @@ If you have Panic Codes, you can use them. Otherwise, no.
 4. Admin settings page.
 
 == Changelog ==
+= 4.1.2 =
+* Added German translation (Thanks Michael Schwark)
+* Added Chilean Spanish translation (Thanks Michael Schwark)
+* Fixed css property bug on OTP button so it looks nice in all browsers.
+
 = 4.1.1 =
 * Fixed a bug where the button on the lost password page got disabled.
 
@@ -147,6 +152,9 @@ Fixed so users get alerted of they don't enter a username before clicking the OT
 * Initial release
 
 == Upgrade Notice ==
+= 4.1.2 =
+German and Chilean Spanish translations added and css bug on OTP button in some browsers (break the float) fixed.
+
 = 4.1.1 =
 Button on lost password page is now enabled.
 
