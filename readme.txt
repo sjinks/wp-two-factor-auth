@@ -3,7 +3,7 @@ Contributors: oskarhane
 Tags: auth, two factor auth, login, security, authenticate, password, hacking, security plugin, secure
 Requires at least: 3.1.0
 Tested up to: 3.5.1
-Stable tag: 4.1
+Stable tag: 4.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,9 @@ If you have Panic Codes, you can use them. Otherwise, no.
 4. Admin settings page.
 
 == Changelog ==
+= 4.1.1 =
+* Fixed a bug where the button on the lost password page got disabled.
+
 = 4.1 =
 * Added language/localization support. Please send me your translations .po-files
 * get_users needs WP 3.1.0. Changing the requirements for the plugin.
@@ -144,6 +147,9 @@ Fixed so users get alerted of they don't enter a username before clicking the OT
 * Initial release
 
 == Upgrade Notice ==
+= 4.1.1 =
+Button on lost password page is now enabled.
+
 = 4.1 =
 Language supprt and WP 3.1.0 needed.
 
