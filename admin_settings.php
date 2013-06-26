@@ -3,6 +3,8 @@
 if(!is_admin())
 	exit;
 
+$tfa->setUserHMACTypes();
+
 if(@$_GET['upgrade_done'] == 'true')
 {
 	?>
@@ -35,13 +37,27 @@ if(@$_GET['upgrade_done'] == 'true')
 	<?php submit_button(); ?>
 	</form>
 	<hr>
+	<form method="post" action="options.php" style="margin-top: 40px">
+	<?php
+		settings_fields('tfa_default_hmac_group');
+	?>
+		<h2><?php _e('Default Algorithm', TFA_TEXT_DOMAIN); ?></h2>
+		<?php _e('Choose which algorithm to be used as default. Your users can change this in their own settings if they want.', TFA_TEXT_DOMAIN); ?>
+		<p>
+		<?php
+			tfaListDefaultHMACRadios();
+		?></p>
+		<?php submit_button(); ?>
+	</form>
+	<hr>
+	<br><br>
 	<h2><?php _e('Change User Settings', TFA_TEXT_DOMAIN); ?></h2>
 	<p>
 		<?php _e("If some of your users lose their phone and don't have access to their panic codes, you can reset their delivery type here and change it to email so they can login again and add a new phone.", TFA_TEXT_DOMAIN); ?>
 		<br>
 		<?php _e('Click on the "Change to email" button to change the delivery settings for that user.', TFA_TEXT_DOMAIN); ?>
 		<br>
-		<?php _e("Users can change their own settings via the menu <strong>Two Factor Auth</string> when they're logged in.", TFA_TEXT_DOMAIN); ?>
+		<?php _e("Users can change their own settings via the menu <strong>Two Factor Auth</strong> when they're logged in.", TFA_TEXT_DOMAIN); ?>
 	<p>
 		<?php
 		

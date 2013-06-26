@@ -4,8 +4,17 @@ if(@$_POST['tfa_delivery_type'] && @$_GET['settings-updated'] == 'true')
 {
 	update_user_meta($current_user->ID, 'tfa_delivery_type', $_POST['tfa_delivery_type']);
 }
-
-
+elseif(@$_POST['tfa_algorithm_type'] && @$_GET['settings-updated'] == 'true')
+{
+	$old_algorithm = $tfa->getUserAlgorithm($current_user->ID);
+	
+	if($old_algorithm != $_POST['tfa_algorithm_type'])
+		$tfa->changeUserAlgorithmTo($current_user->ID, $_POST['tfa_algorithm_type']);
+}
+if($_GET['warning_button_clicked'] == 1)
+{
+	delete_user_meta($current_user->ID, 'tfa_hotp_off_sync');
+}
 ?>
 <style>
 	#icon-tfa-plugin {
@@ -31,11 +40,9 @@ if(@$_POST['tfa_delivery_type'] && @$_GET['settings-updated'] == 'true')
 			</p>
 			<p>
 				<span style="color:red"><?php _e('IMPORTANT', TFA_TEXT_DOMAIN); ?></span>: 
-				<?php _e('If you choose the third-party-apps version (which is more safe and real Two Factor Auth) you 
-				have to make sure you scan the QR-code (or enter your private key manually).', TFA_TEXT_DOMAIN); ?>
+				<?php _e('If you choose the third-party-apps version (which is more safe and real Two Factor Auth) you have to make sure you scan the QR-code (or enter your private key manually).', TFA_TEXT_DOMAIN); ?>
 				<br><?php _e('Verify with the One Time Password at the bottom of this page', TFA_TEXT_DOMAIN); ?>.<br>
-				<?php _e('If the code in your app and the one at the bottom of this page do not match, deactivate Third Party Apps and enable 
-				email again and contact your site administrator.', TFA_TEXT_DOMAIN); ?>
+				<?php _e('If the code in your app and the one at the bottom of this page do not match, deactivate Third Party Apps and enable email again and contact your site administrator.', TFA_TEXT_DOMAIN); ?>
 				<br>
 				<strong><?php _e("If the One Time Passwords do not match, you can't log in to this site any more.", TFA_TEXT_DOMAIN); ?></strong>
 			</p>
@@ -60,7 +67,8 @@ if(@$_POST['tfa_delivery_type'] && @$_GET['settings-updated'] == 'true')
 	$setting = get_user_meta($current_user->ID, 'tfa_delivery_type', true);
 	if($setting == 'third-party-apps')
 	{
-		$url = site_url();
+		$url = preg_replace('/^https?:\/\//', '', site_url());
+		
 		$tfa_priv_key_64 = get_user_meta($current_user->ID, 'tfa_priv_key_64', true);
 		
 		if(!$tfa_priv_key_64)
@@ -71,6 +79,7 @@ if(@$_POST['tfa_delivery_type'] && @$_GET['settings-updated'] == 'true')
 		$panics = get_user_meta($current_user->ID, 'tfa_panic_codes_64');
 		$panic_str = $tfa->getPanicCodesString($panics[0], $current_user->ID);
 		
+		$algorithm_type = $tfa->getUserAlgorithm($current_user->ID);
 		
 		?>
 		<h2><?php _e('Third Party Apps Set Up', TFA_TEXT_DOMAIN); ?></h2>
@@ -81,9 +90,11 @@ if(@$_POST['tfa_delivery_type'] && @$_GET['settings-updated'] == 'true')
 			<div class="inside">
 				<p>
 					<?php _e('Scan this code with', TFA_TEXT_DOMAIN); ?> Duo Mobile, Google Authenticator <?php _e("or other app that supports 6 digit OTP's", TFA_TEXT_DOMAIN); ?>.
+					<br>
+					<?php _e('You are currently using', TFA_TEXT_DOMAIN); ?> <?php print strtoupper($algorithm_type).' ('.($algorithm_type == 'totp' ? __('a time based', TFA_TEXT_DOMAIN) : __('an event based', TFA_TEXT_DOMAIN)).')'; ?> <?php _e('algorithm, if the app asks for that info', TFA_TEXT_DOMAIN); ?>.
 				</p>
 				<p>
-					<img src="https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=otpauth://totp/<?php print urlencode($current_user->user_login).'@'.$url; ?>%3Fsecret%3D<?php print Base32::encode($tfa_priv_key); ?>">
+					<img src="https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=otpauth://<?php print $algorithm_type; ?>/<?php print $url; ?>:%2520<?php print urlencode($current_user->user_login); ?>%3Fsecret%3D<?php print Base32::encode($tfa_priv_key); ?>%26issuer=<?php print $url; ?>%26counter=<?php print $tfa->getUserCounter($current_user->ID); ?>">
 				</p>
 			</div>
 		</div>
@@ -136,9 +147,23 @@ if(@$_POST['tfa_delivery_type'] && @$_GET['settings-updated'] == 'true')
 				</p>
 				<p><strong><?php _e('Your private key in base32 is', TFA_TEXT_DOMAIN); ?></strong>: <?php print Base32::encode($tfa_priv_key); ?></p>
 				<h3 class="normal" style="cursor: default"><?php _e('Algorithm Used', TFA_TEXT_DOMAIN); ?></h3>
-				<p>
-					<?php _e('The Algorithm used is', TFA_TEXT_DOMAIN); ?> TOTP / <?php _e('Time based', TFA_TEXT_DOMAIN); ?>.
-				</p>
+				
+				<form method="post" action="<?php print add_query_arg('settings-updated', 'true', $_SERVER['REQUEST_URI']); ?>">
+					<h2><?php _e('Choose Algorithm', TFA_TEXT_DOMAIN); ?></h2>
+					<?php _e('Choose which algorithm for', TFA_TEXT_DOMAIN); ?> <em><?php _e('One Time Passwords', TFA_TEXT_DOMAIN); ?></em> <?php _e('you want', TFA_TEXT_DOMAIN); ?>.
+					<p>
+					<?php
+						tfaListAlgorithmRadios($current_user->ID);
+						if($algorithm_type == 'hotp')
+						{
+							$counter = $tfa->getUserCounter($current_user->ID);
+							print '<br>'.__('Your counter on the server is currently on', TFA_TEXT_DOMAIN).': '.$counter;
+						}
+					?>
+					
+					</p>
+					<?php submit_button(); ?>
+				</form>
 			</div>
 		</div>
 

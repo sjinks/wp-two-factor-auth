@@ -5,7 +5,7 @@ Plugin URI: http://oskarhane.com/plugin-two-factor-auth-for-wordpress
 Description: Secure your WordPress login with this two factor auth. Users will be prompted with a page to enter a one time code that was emailed to them.
 Author: Oskar Hane
 Author URI: http://oskarhane.com
-Version: 4.1.2
+Version: 4.2
 License: GPLv2 or later
 */
 //error_reporting(E_ALL);
@@ -105,6 +105,7 @@ function tfaRegisterTwoFactorAuthSettings()
 		register_setting('tfa_user_roles_group', 'tfa_'.$id);
 	}
 	
+	register_setting('tfa_default_hmac_group', 'tfa_default_hmac');
 }
 
 
@@ -116,14 +117,27 @@ function tfaListDeliveryRadios($user_id)
 			
 	$types = array('email' => __('Email', TFA_TEXT_DOMAIN), 'third-party-apps' => __('Third party apps', TFA_TEXT_DOMAIN).' (Duo Mobile, Google Authenticator etc)'); 
 	
-	foreach($types as $id => $name)
-	{	
-		$setting = get_user_meta($user_id, 'tfa_delivery_type', true);
-		$setting = $setting === false || !$setting ? 'email' : $setting;
+	$setting = get_user_meta($user_id, 'tfa_delivery_type', true);
+	$setting = $setting === false || !$setting ? 'email' : $setting;
 		
+	foreach($types as $id => $name)
 		print '<input type="radio" name="tfa_delivery_type" value="'.$id.'" '.($setting == $id ? 'checked="checked"' :'').'> - '.$name."<br>\n";
-	}
 	
+}
+
+function tfaListAlgorithmRadios($user_id)
+{
+	if(!$user_id)
+		return;
+	
+			
+	$types = array('totp' => __('TOTP (time based)', TFA_TEXT_DOMAIN), 'hotp' => __('HOTP (event based)', TFA_TEXT_DOMAIN)); 
+	
+	$setting = get_user_meta($user_id, 'tfa_algorithm_type', true);
+	$setting = $setting === false || !$setting ? 'totp' : $setting;
+
+	foreach($types as $id => $name)
+		print '<input type="radio" name="tfa_algorithm_type" value="'.$id.'" '.($setting == $id ? 'checked="checked"' :'').'> - '.$name."<br>\n";
 }
 
 function tfaListUserRolesCheckboxes()
@@ -140,6 +154,18 @@ function tfaListUserRolesCheckboxes()
 		print '<input type="checkbox" name="tfa_'.$id.'" value="1" '.($setting ? 'checked="checked"' :'').'> '.$name."<br>\n";
 	}
 	
+}
+
+function tfaListDefaultHMACRadios()
+{
+	$tfa = getTFAClass();
+	$setting = get_option('tfa_default_hmac');
+	$setting = $setting === false || !$setting ? $tfa->default_hmac : $setting;
+	
+	$types = array('totp' => __('TOTP (time based)', TFA_TEXT_DOMAIN), 'hotp' => __('HOTP (event based)', TFA_TEXT_DOMAIN));
+	
+	foreach($types as $id => $name)
+		print '<input type="radio" name="tfa_default_hmac" value="'.$id.'" '.($setting == $id ? 'checked="checked"' :'').'> - '.$name."<br>\n";
 }
 
 function tfaShowAdminSettingsPage()
@@ -234,6 +260,33 @@ function tfaAddJSToLogin()
 }
 add_action('login_enqueue_scripts', 'tfaAddJSToLogin');
 
+function tfaShowHOTPOffSyncMessage()
+{
+	global $current_user;
+	$is_off_sync = get_user_meta($current_user->ID, 'tfa_hotp_off_sync', true);
+	if(!$is_off_sync)
+		return;
+	
+	?>
+	<div class="error">
+    	<h3>Two Factor Auth re-sync needed</h3>
+        <p>
+        	You need to resync your mobile app for <strong>Two Factor Auth</strong> since the OTP you last used is many steps ahead 
+        	of the server.
+        	<br>
+        	Please re-sync or you might not be able to log in if you generate more OTP:s without logging in.
+        	<br><br>
+        	<a href="admin.php?page=two-factor-auth-user&warning_button_clicked=1" class="button">Click here and re-scan the QR-Code</a>
+        </p>
+    </div>
+	
+	<?php
+	
+}
+//Show off sync message for hotp
+add_action('admin_notices', 'tfaShowHOTPOffSyncMessage');
+
+	
 if(is_admin())
 {
 	//Save settings
@@ -285,6 +338,7 @@ function tfaSetLanguages()
 		false,
 		dirname( plugin_basename( __FILE__ ) ) . '/languages/'
 	);
+	$my_translator_is_setup = true;
 }
 tfaSetLanguages();
 

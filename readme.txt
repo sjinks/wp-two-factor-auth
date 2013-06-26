@@ -7,7 +7,7 @@ Stable tag: 4.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Secure WordPress login with this two factor auth. Users will have to enter an One Time Password when they log in.
+Secure WordPress login with Two Factor Auth. Users will have to enter an One Time Password when they log in.
 
 == Description ==
 
@@ -23,11 +23,11 @@ without already having access to the users mobile phone or email inbox (dependin
 
 
 = How Does It Work? =
-This plugin uses the industry standard algorithm [TOTP](http://en.wikipedia.org/wiki/Time-based_One-time_Password_Algorithm) for creating One Time Passwords.
+This plugin uses the industry standard algorithm [TOTP](http://en.wikipedia.org/wiki/Time-based_One-time_Password_Algorithm) or [HOTP](http://en.wikipedia.org/wiki/HMAC-based_One-time_Password_Algorithm) for creating One Time Passwords.
 A OTP is valid for a certain time and after that a new code has to be entered.
 
 You can now choose to use third party apps like [Google Authenticator](http://code.google.com/p/google-authenticator/) which is available for most mobile platforms. You can really use any 
-third party app that supports TOTP that generates 6 digits OTP's. 
+third party app that supports TOTP/HOTP that generates 6 digits OTP's. 
 Or, as before, you can choose to get your One Time Passwords by email.
 
 Since you have to enter a secret code to third party apps, email is the default way of delivering One Time Passwords. Your 
@@ -85,6 +85,11 @@ If you have Panic Codes, you can use them. Otherwise, no.
 4. Admin settings page.
 
 == Changelog ==
+= 4.2 =
+* Added support for HOTP!
+* If HOTP is going close to off sync, the user is noticed.
+* Fixed an unclosed <strong> on admin settings page.
+
 = 4.1.2 =
 * Added German translation (Thanks Michael Schwark)
 * Added Chilean Spanish translation (Thanks Michael Schwark)
@@ -152,6 +157,9 @@ Fixed so users get alerted of they don't enter a username before clicking the OT
 * Initial release
 
 == Upgrade Notice ==
+= 4.2 =
+Support for HOTP added. You can choose if HOTP or TOTP should be used as default.
+
 = 4.1.2 =
 German and Chilean Spanish translations added and css bug on OTP button in some browsers (break the float) fixed.
 

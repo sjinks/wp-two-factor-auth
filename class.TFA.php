@@ -12,20 +12,35 @@ private $pw_prefix;
 		$this->otp_helper = $otp_helper;
 		$this->time_window_size = 30;
 		$this->check_back_time_windows = 2;
+		$this->check_forward_counter_window = 20;
 		$this->otp_length = 6;
 		$this->panic_codes_length = 8;
 		$this->salt_prefix = AUTH_SALT;
 		$this->pw_prefix = AUTH_KEY;
+		$this->default_hmac = 'totp';
 	}
 
-	public function generateOTP($user_ID, $key_b64, $length = 6, $time = false)
+	public function generateOTP($user_ID, $key_b64, $length = 6, $counter = false)
 	{
-		//time() is supposed to be UTC
-		$time = $time ? $time : time();
+		
 		$length = $length ? (int)$length : 6;
 		
 		$key = $this->decryptString($key_b64, $user_ID);
-		$otp_res = $this->otp_helper->generateByTime($key, $this->time_window_size, $time);
+		$alg = $this->getUserAlgorithm($user_ID);
+		
+		if($alg == 'hotp')
+		{
+			$db_counter = $this->getUserCounter($user_ID);
+			
+			$counter = $counter ? $counter : $db_counter;
+			$otp_res = $this->otp_helper->generateByCounter($key, $counter);
+		}
+		else
+		{
+			//time() is supposed to be UTC
+			$time = $counter ? $counter : time();
+			$otp_res = $this->otp_helper->generateByTime($key, $this->time_window_size, $time);
+		}
 		$code = $otp_res->toHotp($length);
 		
 		return $code;
@@ -34,8 +49,18 @@ private $pw_prefix;
 	public function generateOTPsForLoginCheck($user_ID, $key_b64)
 	{
 		$key = trim($this->decryptString($key_b64, $user_ID));
-		$otp_res = $this->otp_helper->generateByTimeWindow($key, $this->time_window_size, -1*$this->check_back_time_windows, 0);
+		$alg = $this->getUserAlgorithm($user_ID);
 		
+		if($alg == 'totp')
+			$otp_res = $this->otp_helper->generateByTimeWindow($key, $this->time_window_size, -1*$this->check_back_time_windows, 0);
+		elseif($alg == 'hotp')
+		{
+			$counter = $this->getUserCounter($user_ID);
+			
+			$otp_res = array();
+			for($i = 0; $i < $this->check_forward_counter_window; $i++)
+				$otp_res[] = $this->otp_helper->generateByCounter($key, ($counter+$i));
+		}
 		return $otp_res;
 	}
 	
@@ -52,12 +77,27 @@ private $pw_prefix;
 		//Add private key to users meta
 		update_user_meta($user_ID, 'tfa_priv_key_64', $code);
 		
-		//Add some panic codes as well. Take 8 digits from time window 1,2,3
-		update_user_meta($user_ID, 'tfa_panic_codes_64', array(
-									$this->encryptString($this->generateOTP($user_ID, $code, 8, 1), $user_ID), 
-									$this->encryptString($this->generateOTP($user_ID, $code, 8, $this->time_window_size+1), $user_ID), 
-									$this->encryptString($this->generateOTP($user_ID, $code, 8, $this->time_window_size*2+1), $user_ID)
-								));
+		$alg = $this->getUserAlgorithm($user_ID);
+		
+		if($alg == 'hotp')
+		{
+			//Add some panic codes as well. Take 8 digits from events 1,2,3
+			update_user_meta($user_ID, 'tfa_panic_codes_64', array(
+										$this->encryptString($this->generateOTP($user_ID, $code, 8, 1), $user_ID), 
+										$this->encryptString($this->generateOTP($user_ID, $code, 8, 2), $user_ID), 
+										$this->encryptString($this->generateOTP($user_ID, $code, 8, 3), $user_ID)
+									));
+		}
+		else
+		{
+			//Add some panic codes as well. Take 8 digits from time window 1,2,3
+			update_user_meta($user_ID, 'tfa_panic_codes_64', array(
+										$this->encryptString($this->generateOTP($user_ID, $code, 8, 1), $user_ID), 
+										$this->encryptString($this->generateOTP($user_ID, $code, 8, $this->time_window_size+1), $user_ID), 
+										$this->encryptString($this->generateOTP($user_ID, $code, 8, $this->time_window_size*2+1), $user_ID)
+									));
+		}
+		$this->changeUserAlgorithmTo($user_ID, $alg);
 		
 		return $code;
 	}
@@ -114,7 +154,7 @@ private $pw_prefix;
 					//Not safe to do if the user has disabled email.
 					if(!$tfa_priv_key)
 						$tfa_priv_key = $this->addPrivateKey($user->ID);
-						
+					
 					$code = $this->generateOTP($user->ID, $tfa_priv_key);
 					$this->sendOTPEmail($user->user_email, $code);
 				}
@@ -142,16 +182,13 @@ private $pw_prefix;
 		$tfa_last_login = get_user_meta($user_ID, 'tfa_last_login', true);
 		$tfa_last_pws_arr = get_user_meta($user_ID, 'tfa_last_pws', true);
 		$tfa_last_pws = @$tfa_last_pws_arr ? $tfa_last_pws_arr : array();
+		$alg = $this->getUserAlgorithm($user_ID);
 		
 		$current_time_window = intval(time()/30);
 		
 		//Give the user 1,5 minutes time span to enter/retrieve the code
+		//Or check $this->check_forward_counter_window number of events if hotp
 		$codes = $this->generateOTPsForLoginCheck($user_ID, $tfa_priv_key);
-	
-	
-		//Limit to one successful login per time window
-		if($current_time_window == $tfa_last_login)
-			return false;
 	
 		//A recently used code was entered.
 		//Not ok
@@ -159,11 +196,12 @@ private $pw_prefix;
 			return false;
 	
 		$match = false;
-		foreach($codes as $code)
+		foreach($codes as $index => $code)
 		{
 			if(trim($code->toHotp(6)) == trim($user_code))
 			{
 				$match = true;
+				$found_index = $index;
 				break;
 			}
 		}
@@ -197,8 +235,9 @@ private $pw_prefix;
 			//Add the used code as well so it cant be used again
 			//Keep the two last codes
 			$tfa_last_pws[] = $this->hash($user_code, $user_ID);
+			$nr_of_old_to_save = $alg == 'hotp' ? $this->check_forward_counter_window : $this->check_back_time_windows;
 			
-			if(count($tfa_last_pws) > 2)
+			if(count($tfa_last_pws) > $nr_of_old_to_save)
 				array_splice($tfa_last_pws, 0, 1);
 				
 			update_user_meta($user_ID, 'tfa_last_pws', $tfa_last_pws);
@@ -208,12 +247,60 @@ private $pw_prefix;
 		{
 			//Save the time window when the last successful login took place
 			update_user_meta($user_ID, 'tfa_last_login', $current_time_window);
+			
+			//Update the counter if HOTP was used
+			if($alg == 'hotp')
+			{
+				$counter = $this->getUserCounter($user_ID);
+				
+				$enc_new_counter = $this->encryptString($counter+1, $user_ID);
+				update_user_meta($user_ID, 'tfa_hotp_counter', $enc_new_counter);
+				
+				if($found_index > 10)
+					update_user_meta($user_ID, 'tfa_hotp_off_sync', 1);
+			}
 		}
 		
 		return $match;
 		
 	}
 
+	public function getUserCounter($user_ID)
+	{
+		$enc_counter = get_user_meta($user_ID, 'tfa_hotp_counter', true);
+		
+		if($enc_counter)
+			$counter = $this->decryptString(trim($enc_counter), $user_ID);
+		else
+			return '';
+			
+		return trim($counter);
+	}
+	
+	public function changeUserAlgorithmTo($user_id, $new_algorithm)
+	{
+		update_user_meta($user_id, 'tfa_algorithm_type', $new_algorithm);
+		delete_user_meta($user_id, 'tfa_hotp_off_sync');
+		
+		$counter_start = rand(13, 999999999);
+		$enc_counter_start = $this->encryptString($counter_start, $user_id);
+		
+		if($new_algorithm == 'hotp')
+			update_user_meta($user_id, 'tfa_hotp_counter', $enc_counter_start);
+		else
+			delete_user_meta($user_id, 'tfa_hotp_counter');
+	}
+	
+	
+	public function getUserAlgorithm($user_id)
+	{
+		$setting = get_user_meta($user_id, 'tfa_algorithm_type', true);
+		$default_hmac = get_option('tfa_default_hmac');
+		$default_hmac = $default_hmac ? $default_hmac : $this->default_hmac;
+		
+		$setting = $setting === false || !$setting ? $default_hmac : $setting;
+		return $setting;
+	}
 	
 	public function isActivatedForUser($user_id)
 	{
@@ -288,6 +375,23 @@ private $pw_prefix;
 		$code = implode('', array_splice($chars, 0, $len));
 		
 		return $code;
+	}
+	
+	public function setUserHMACTypes()
+	{
+		//We need this because we dont want to change third party apps users algorithm
+		$users = get_users(array('meta_key' => 'tfa_delivery_type', 'meta_value' => 'third-party-apps'));
+		if(!empty($users))
+		{
+			foreach($users as $user)
+			{
+				$tfa_algorithm_type = get_user_meta($user->ID, 'tfa_algorithm_type', true);
+				if($tfa_algorithm_type)
+					continue;
+				
+				update_user_meta($user->ID, 'tfa_algorithm_type', $this->getUserAlgorithm($user->ID));
+			}
+		}
 	}
 	
 	public function upgrade()
