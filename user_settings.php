@@ -2,7 +2,7 @@
 
 if(@$_POST['tfa_delivery_type'] && @$_GET['settings-updated'] == 'true')
 {
-	update_user_meta($current_user->ID, 'tfa_delivery_type', $_POST['tfa_delivery_type']);
+	$tfa->changeUserDeliveryTypeTo($current_user->ID, $_POST['tfa_delivery_type']);
 }
 elseif(@$_POST['tfa_algorithm_type'] && @$_GET['settings-updated'] == 'true')
 {

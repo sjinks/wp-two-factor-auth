@@ -292,6 +292,17 @@ private $pw_prefix;
 	}
 	
 	
+	public function changeUserDeliveryTypeTo($user_id, $new_delivery_type)
+	{
+		$new_delivery_type = trim($new_delivery_type);
+		update_user_meta($user_id, 'tfa_delivery_type', $new_delivery_type);
+	
+		//Always use the site default algorithm for mail users
+		if($new_delivery_type== 'email')
+			delete_user_meta($user_id, 'tfa_algorithm_type');
+	}
+	
+	
 	public function getUserAlgorithm($user_id)
 	{
 		$setting = get_user_meta($user_id, 'tfa_algorithm_type', true);

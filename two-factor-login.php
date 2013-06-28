@@ -214,9 +214,10 @@ function tfaSaveSettings()
 	global $current_user;
 	if(@$_GET['tfa_change_to_email'] && @$_GET['tfa_user_id'])
 	{
-	
+		$tfa = getTFAClass();
+		
 		if(is_admin())
-			update_user_meta($_GET['tfa_user_id'], 'tfa_delivery_type', 'email');
+			$tfa->changeUserDeliveryTypeTo($_GET['tfa_user_id'], 'email');
 	
 		$goto = site_url().remove_query_arg(array('tfa_user_id', 'tfa_change_to_email'));
 		wp_safe_redirect($goto);
