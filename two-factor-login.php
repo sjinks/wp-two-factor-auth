@@ -2,7 +2,7 @@
 /*
 Plugin Name: Two Factor Auth
 Plugin URI: http://oskarhane.com/plugin-two-factor-auth-for-wordpress
-Description: Secure your WordPress login with this two factor auth. Users will be prompted with a page to enter a one time code that was emailed to them.
+Description: Secure your WordPress login with two factor auth. Users will be prompted with a page to enter a One Time Password when they login.
 Author: Oskar Hane
 Author URI: http://oskarhane.com
 Version: 4.2
