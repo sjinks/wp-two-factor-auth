@@ -2,8 +2,8 @@
 Contributors: oskarhane
 Tags: auth, two factor auth, login, security, authenticate, password, hacking, security plugin, secure
 Requires at least: 3.1.0
-Tested up to: 3.5.1
-Stable tag: 4.1.2
+Tested up to: 3.5.2
+Stable tag: 4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,17 @@ If you want to use a third party app, goto Two Factor Auth in the admin menu and
 General settings can be found uner Settings -> Two Factor Auth in admin menu. Settings for each individual user 
 can be found at the root level of the admin menu, in Two Factor Auth. 
 A bit more work to get logged in, but a whole lot more secure!
+
+= TOTP or HOTP =
+Which algorithm you and your users choose doesn't really matter. The time based TOTP is a bit more secure since a One Time 
+Password is valid only for a certain amount of time. But this requires the server time to be in sync the clients time (if 
+the isn't delivered by email). This is often hard to do with embedded clients and the event based HOTP is then a better choice. 
+If you have a somewhat slow email server and have chosen email delivery, you might not get the TOTP in time.
+
+Conslusion: Choose which ever you want. TOTP is a little bit safer since OTP:s only are valid for a short period.
+
+Note that email delivery users always uses the site default algorithm, which you can set on the settings page. Third party 
+apps users can choose which one they want.
 
 
 = Is this really Two Factor Auth? =
@@ -89,6 +100,7 @@ If you have Panic Codes, you can use them. Otherwise, no.
 * Added support for HOTP!
 * If HOTP is going close to off sync, the user is noticed.
 * Fixed an unclosed <strong> on admin settings page.
+* Email delivery users always use the site default algorithm.
 
 = 4.1.2 =
 * Added German translation (Thanks Michael Schwark)
