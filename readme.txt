@@ -41,6 +41,7 @@ General settings can be found uner Settings -> Two Factor Auth in admin menu. Se
 can be found at the root level of the admin menu, in Two Factor Auth. 
 A bit more work to get logged in, but a whole lot more secure!
 
+
 = TOTP or HOTP =
 Which algorithm you and your users choose doesn't really matter. The time based TOTP is a bit more secure since a One Time 
 Password is valid only for a certain amount of time. But this requires the server time to be in sync the clients time (if 
