@@ -100,7 +100,7 @@ If you have Panic Codes, you can use them. Otherwise, no.
 = 4.2 =
 * Added support for HOTP!
 * If HOTP is going close to off sync, the user is noticed.
-* Fixed an unclosed <strong> on admin settings page.
+* Fixed an unclosed &lt;strong&gt; on admin settings page.
 * Email delivery users always use the site default algorithm.
 
 = 4.1.2 =
