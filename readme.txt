@@ -45,7 +45,7 @@ A bit more work to get logged in, but a whole lot more secure!
 = TOTP or HOTP =
 Which algorithm you and your users choose doesn't really matter. The time based TOTP is a bit more secure since a One Time 
 Password is valid only for a certain amount of time. But this requires the server time to be in sync the clients time (if 
-the isn't delivered by email). This is often hard to do with embedded clients and the event based HOTP is then a better choice. 
+the OTP isn't delivered by email). This is often hard to do with embedded clients and the event based HOTP is then a better choice. 
 If you have a somewhat slow email server and have chosen email delivery, you might not get the TOTP in time.
 
 Conslusion: Choose which ever you want. TOTP is a little bit safer since OTP:s only are valid for a short period.
