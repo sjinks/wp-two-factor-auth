@@ -51,6 +51,7 @@ function tfaVerifyCodeAndUser($user, $username, $password)
 		return $user;
 
 	$params = $_POST;
+	$params['log'] = $username;
 	$code_ok = $tfa->authUserFromLogin($params);
 
 	
