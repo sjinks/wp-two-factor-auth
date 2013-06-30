@@ -3,7 +3,7 @@ Contributors: oskarhane
 Tags: auth, two factor auth, login, security, authenticate, password, hacking, security plugin, secure
 Requires at least: 3.1.0
 Tested up to: 3.5.2
-Stable tag: 4.2
+Stable tag: 4.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,10 @@ If you want to use a third party app, goto Two Factor Auth in the admin menu and
 General settings can be found uner Settings -> Two Factor Auth in admin menu. Settings for each individual user 
 can be found at the root level of the admin menu, in Two Factor Auth. 
 A bit more work to get logged in, but a whole lot more secure!
+
+If you use WooCommerce or other plugins that make custom login forms, you will not be able to login through those anymore. 
+I will be adding a plugin that puts a One Time Password field to WooCommerce. If you use some other plugin that needs 
+support for this, let me know in the support forum.
 
 
 = TOTP or HOTP =
@@ -97,6 +101,9 @@ If you have Panic Codes, you can use them. Otherwise, no.
 4. Admin settings page.
 
 == Changelog ==
+= 4.2.1 =
+* The plugin now checks all login forms, not depending on form field names.
+
 = 4.2 =
 * Added support for HOTP!
 * If HOTP is going close to off sync, the user is noticed.
@@ -170,6 +177,9 @@ Fixed so users get alerted of they don't enter a username before clicking the OT
 * Initial release
 
 == Upgrade Notice ==
+= 4.2.1 =
+This update will check for OTP:s regardless from where you login. Up to 4.2 custom login forms could bypass the TFA, but not anymore. If you use i.e. WooCommerce, your customers won't be able to login anymore. I will add a separate plugin to support other login forms.
+
 = 4.2 =
 Support for HOTP added. You can choose if HOTP or TOTP should be used as default.
 
