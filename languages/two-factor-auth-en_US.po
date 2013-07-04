@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Two Factor Auth v4.1.2\n"
+"Project-Id-Version: Two Factor Auth v4.2.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2013-06-26 20:41:35+0000\n"
+"PO-Revision-Date: 2013-07-04 08:40:09+0000\n"
 "Last-Translator: Oskar Hane <oh@oskarhane.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -20,110 +20,110 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Textdomain-Support: yes"
 
-#: admin_settings.php:11
+#: admin_settings.php:13
 #@ two-factor-auth
 msgid "Your upgrade was successful, Two Factor Auth is now enabled."
 msgstr "Your upgrade was successful, Two Factor Auth is now enabled."
 
-#: admin_settings.php:19
-#: two-factor-login.php:207
+#: admin_settings.php:21
+#: two-factor-login.php:225
 #: user_settings.php:33
 #@ two-factor-auth
 msgid "Settings"
 msgstr "Settings"
 
-#: admin_settings.php:27
+#: admin_settings.php:29
 #@ two-factor-auth
 msgid "User Roles"
 msgstr "User Roles"
 
-#: admin_settings.php:28
+#: admin_settings.php:30
 #@ two-factor-auth
 msgid "Choose which User Roles that will have"
 msgstr "Choose which User Roles that will have"
 
-#: admin_settings.php:28
+#: admin_settings.php:30
 #@ two-factor-auth
 msgid "activated"
 msgstr "activated"
 
-#: admin_settings.php:30
+#: admin_settings.php:32
 #@ two-factor-auth
 msgid "The users will default to have their One Time Passwords delivered by email since they need to add their private key to third party apps themselves."
 msgstr "The users will default to have their One Time Passwords delivered by email since they need to add their private key to third party apps themselves."
 
-#: admin_settings.php:52
+#: admin_settings.php:69
 #@ two-factor-auth
 msgid "Change User Settings"
 msgstr "Change User Settings"
 
-#: admin_settings.php:54
+#: admin_settings.php:71
 #@ two-factor-auth
 msgid "If some of your users lose their phone and don't have access to their panic codes, you can reset their delivery type here and change it to email so they can login again and add a new phone."
 msgstr "If some of your users lose their phone and don't have access to their panic codes, you can reset their delivery type here and change it to email so they can login again and add a new phone."
 
-#: admin_settings.php:56
+#: admin_settings.php:73
 #@ two-factor-auth
 msgid "Click on the \"Change to email\" button to change the delivery settings for that user."
 msgstr "Click on the \"Change to email\" button to change the delivery settings for that user."
 
-#: admin_settings.php:86
-#: two-factor-login.php:118
+#: admin_settings.php:103
+#: two-factor-login.php:122
 #@ two-factor-auth
 msgid "Email"
 msgstr "Email"
 
-#: admin_settings.php:88
+#: admin_settings.php:105
 #@ two-factor-auth
 msgid "Change to email"
 msgstr "Change to email"
 
-#: admin_settings.php:96
+#: admin_settings.php:113
 #@ two-factor-auth
 msgid "Translations"
 msgstr "Translations"
 
-#: admin_settings.php:98
+#: admin_settings.php:115
 #@ two-factor-auth
 msgid "If you translate this plugin, please send the translations .po-file to me so I can include it in future releases."
 msgstr "If you translate this plugin, please send the translations .po-file to me so I can include it in future releases."
 
-#: admin_settings.php:100
+#: admin_settings.php:117
 #@ two-factor-auth
 msgid "I can recommend the plugin"
 msgstr "I can recommend the plugin"
 
-#: admin_settings.php:100
+#: admin_settings.php:117
 #@ two-factor-auth
 msgid "for adding and editing translations of plugins."
 msgstr "for adding and editing translations of plugins."
 
-#: admin_settings.php:102
+#: admin_settings.php:119
 #@ two-factor-auth
 msgid "Email your translations .po-file to"
 msgstr "Email your translations .po-file to"
 
-#: two-factor-login.php:58
+#: two-factor-login.php:61
 #@ two-factor-auth
 msgid "<strong>ERROR</strong>: The Two Factor Code you entered was incorrect."
 msgstr "<strong>ERROR</strong>: The Two Factor Code you entered was incorrect."
 
-#: two-factor-login.php:118
+#: two-factor-login.php:122
 #@ two-factor-auth
 msgid "Third party apps"
 msgstr "Third party apps"
 
-#: two-factor-login.php:256
+#: two-factor-login.php:275
 #@ two-factor-auth
 msgid "Click to enter One Time Password"
 msgstr "Click to enter One Time Password"
 
-#: two-factor-login.php:257
+#: two-factor-login.php:276
 #@ two-factor-auth
 msgid "You have to enter a username first."
 msgstr "You have to enter a username first."
 
-#: two-factor-login.php:258
+#: two-factor-login.php:277
 #@ two-factor-auth
 msgid "One Time Password"
 msgstr "One Time Password"
@@ -274,29 +274,29 @@ msgstr "Your private key in base32 is"
 msgid "Algorithm Used"
 msgstr "Algorithm Used"
 
-#: admin_settings.php:42
+#: admin_settings.php:59
 #@ two-factor-auth
 msgid "Default Algorithm"
 msgstr "Default Algorithm"
 
-#: admin_settings.php:43
+#: admin_settings.php:60
 #@ two-factor-auth
 msgid "Choose which algorithm to be used as default. Your users can change this in their own settings if they want."
 msgstr "Choose which algorithm to be used as default. Your users can change this in their own settings if they want."
 
-#: admin_settings.php:58
+#: admin_settings.php:75
 #@ two-factor-auth
 msgid "Users can change their own settings via the menu <strong>Two Factor Auth</strong> when they're logged in."
 msgstr "Users can change their own settings via the menu <strong>Two Factor Auth</strong> when they're logged in."
 
-#: two-factor-login.php:134
-#: two-factor-login.php:165
+#: two-factor-login.php:138
+#: two-factor-login.php:169
 #@ two-factor-auth
 msgid "TOTP (time based)"
 msgstr "TOTP (time based)"
 
-#: two-factor-login.php:134
-#: two-factor-login.php:165
+#: two-factor-login.php:138
+#: two-factor-login.php:169
 #@ two-factor-auth
 msgid "HOTP (event based)"
 msgstr "HOTP (event based)"
@@ -350,4 +350,29 @@ msgstr "you want"
 #@ two-factor-auth
 msgid "Your counter on the server is currently on"
 msgstr "Your counter on the server is currently on"
+
+#: admin_settings.php:45
+#@ two-factor-auth
+msgid "XMLRPC Status"
+msgstr "XMLRPC Status"
+
+#: admin_settings.php:46
+#@ two-factor-auth
+msgid "Two Factor Auth for XMLRPC users is turned off by default since there exists no clients that supports it. Leave this to off if you don't have a custom XMLRPC client that supports it or you won't be able to publish posts via Wordpress XMLRPC API."
+msgstr "Two Factor Auth for XMLRPC users is turned off by default since there exists no clients that supports it. Leave this to off if you don't have a custom XMLRPC client that supports it or you won't be able to publish posts via Wordpress XMLRPC API."
+
+#: two-factor-login.php:182
+#@ two-factor-auth
+msgid "OFF"
+msgstr "OFF"
+
+#: two-factor-login.php:182
+#@ two-factor-auth
+msgid "ON"
+msgstr "ON"
+
+#: two-factor-login.php:278
+#@ two-factor-auth
+msgid "(check your email or OTP-app to get this password)"
+msgstr "(check your email or OTP-app to get this password)"
 
