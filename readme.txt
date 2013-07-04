@@ -64,8 +64,6 @@ Since version 3.0 you can have real two factor auth if you activate the Third Pa
 
 Read more about [what two factor auth means >>](http://oskarhane.com/two-factor-auth-explained/).
 
-XMLRPC users will not be affected, this is just for the login to admin pages.
-
 See http://oskarhane.com/plugin-two-factor-auth-for-wordpress/ for more info.
 
 
