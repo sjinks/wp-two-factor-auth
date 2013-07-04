@@ -101,6 +101,10 @@ If you have Panic Codes, you can use them. Otherwise, no.
 4. Admin settings page.
 
 == Changelog ==
+= 4.2.2 =
+* XMLRPC users are now availale to post again. Settings for this is in Settings->TFA.
+* Added a help text when the OTP-button on ligon page is clicked so people know that the OTP is coming to their email.
+
 = 4.2.1 =
 * The plugin now checks all login forms, not depending on form field names.
 
@@ -177,6 +181,9 @@ Fixed so users get alerted of they don't enter a username before clicking the OT
 * Initial release
 
 == Upgrade Notice ==
+= 4.2.2 =
+XMLRPC users wont be affected anymore. Settings for XMLRPC can be found in Settings->TFA.
+
 = 4.2.1 =
 This update will check for OTP:s regardless from where you login. Up to 4.2 custom login forms could bypass the TFA, but not anymore. If you use i.e. WooCommerce, your customers won't be able to login anymore. I will add a separate plugin to support other login forms.
 

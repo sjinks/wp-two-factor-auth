@@ -48,6 +48,15 @@ jQuery(document).ready(function() {
 		var lbl_text = document.createTextNode(tfaSettings.otp);
 		lbl.appendChild(lbl_text);
 		
+		var br = document.createElement('br');
+		lbl.appendChild(br);
+		
+		var small_lbl = document.createElement('span');
+		small_lbl.style.fontSize = '0.8em';
+		var small_lbl_text = document.createTextNode(tfaSettings.otp_login_help);
+		small_lbl.appendChild(small_lbl_text);
+		lbl.appendChild(small_lbl);
+		
 		var tfa_field = document.createElement('input');
 		tfa_field.type = 'text';
 		tfa_field.id = 'two_factor_auth';

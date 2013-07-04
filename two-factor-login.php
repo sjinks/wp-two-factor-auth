@@ -269,12 +269,13 @@ function tfaAddJSToLogin()
 	if(isset($_GET['action']) && $_GET['action'] != 'logout' && $_GET['action'] != 'login')
 		return;
 	
-	wp_enqueue_script( 'tfa-ajax-request', plugin_dir_url( __FILE__ ) . 'tfa_v4.1.2.js', array( 'jquery' ) );
+	wp_enqueue_script( 'tfa-ajax-request', plugin_dir_url( __FILE__ ) . 'tfa_v4.2.2.js', array( 'jquery' ) );
 	wp_localize_script( 'tfa-ajax-request', 'tfaSettings', array(
 		'ajaxurl' => admin_url('admin-ajax.php'),
 		'click_to_enter_otp' => __("Click to enter One Time Password", TFA_TEXT_DOMAIN),
 		'enter_username_first' => __('You have to enter a username first.', TFA_TEXT_DOMAIN),
-		'otp' => __("One Time Password", TFA_TEXT_DOMAIN)
+		'otp' => __("One Time Password", TFA_TEXT_DOMAIN),
+		'otp_login_help' => __('(check your email or OTP-app to get this password)', TFA_TEXT_DOMAIN)
 	));
 }
 add_action('login_enqueue_scripts', 'tfaAddJSToLogin');
