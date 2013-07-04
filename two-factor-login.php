@@ -52,6 +52,8 @@ function tfaVerifyCodeAndUser($user, $username, $password)
 
 	$params = $_POST;
 	$params['log'] = $username;
+	$params['caller'] = $_SERVER['PHP_SELF'] ? $_SERVER['PHP_SELF'] : $_SERVER['REQUEST_URI'];
+	
 	$code_ok = $tfa->authUserFromLogin($params);
 
 	
@@ -107,6 +109,7 @@ function tfaRegisterTwoFactorAuthSettings()
 	}
 	
 	register_setting('tfa_default_hmac_group', 'tfa_default_hmac');
+	register_setting('tfa_xmlrpc_status_group', 'tfa_xmlrpc_on');
 }
 
 
@@ -168,6 +171,20 @@ function tfaListDefaultHMACRadios()
 	foreach($types as $id => $name)
 		print '<input type="radio" name="tfa_default_hmac" value="'.$id.'" '.($setting == $id ? 'checked="checked"' :'').'> - '.$name."<br>\n";
 }
+
+
+function tfaListXMLRPCStatusRadios()
+{
+	$tfa = getTFAClass();
+	$setting = get_option('tfa_xmlrpc_on');
+	$setting = $setting === false || !$setting ? 0 : 1;
+	
+	$types = array('0' => __('OFF', TFA_TEXT_DOMAIN), '1' => __('ON', TFA_TEXT_DOMAIN));
+	
+	foreach($types as $id => $name)
+		print '<input type="radio" name="tfa_xmlrpc_on" value="'.$id.'" '.($setting == $id ? 'checked="checked"' :'').'> - '.$name."<br>\n";
+}
+
 
 function tfaShowAdminSettingsPage()
 {

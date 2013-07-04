@@ -36,6 +36,21 @@ if(@$_GET['upgrade_done'] == 'true')
 	?></p>
 	<?php submit_button(); ?>
 	</form>
+	
+	<hr>
+	<form method="post" action="options.php" style="margin-top: 40px">
+	<?php
+		settings_fields('tfa_xmlrpc_status_group');
+	?>
+		<h2><?php _e('XMLRPC Status', TFA_TEXT_DOMAIN); ?></h2>
+		<?php _e('Two Factor Auth for XMLRPC users is turned off by default since there exists no clients that supports it. Leave this to off if you don\'t have a custom XMLRPC client that supports it or you won\'t be able to publish posts via Wordpress XMLRPC API.', TFA_TEXT_DOMAIN); ?>
+		<p>
+		<?php
+			tfaListXMLRPCStatusRadios();
+		?></p>
+		<?php submit_button(); ?>
+	</form>
+	
 	<hr>
 	<form method="post" action="options.php" style="margin-top: 40px">
 	<?php

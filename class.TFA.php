@@ -168,6 +168,10 @@ private $pw_prefix;
 	{
 		
 		global $wpdb;
+		
+		if(!$this->isCallerActive($params))
+			return true;
+		
 		$query = $wpdb->prepare("SELECT ID from ".$wpdb->users." WHERE user_login=%s", $params['log']);
 		$user_ID = $wpdb->get_var($query);
 		$user_code = trim(@$params['two_factor_code']);
@@ -328,6 +332,26 @@ private $pw_prefix;
 		
 		return false;
 		
+	}
+
+	public function saveCallerStatus($caller_id, $status)
+	{
+		if($caller_id == 'xmlrpc')
+			set_option('tfa_xmlrpc_on', $status);
+	}
+
+	private function isCallerActive($params)
+	{
+
+		if(!preg_match('/(\/xmlrpc\.php)$/', trim($params['caller'])))
+			return true;
+
+		$saved_data = get_option('tfa_xmlrpc_on');
+		
+		if($saved_data)
+			return true;
+		
+		return false;
 	}
 
 	private function sendOTPEmail($email, $code)
