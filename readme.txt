@@ -2,8 +2,8 @@
 Contributors: oskarhane
 Tags: auth, two factor auth, login, security, authenticate, password, hacking, security plugin, secure
 Requires at least: 3.1.0
-Tested up to: 3.5.2
-Stable tag: 4.2.2
+Tested up to: 3.6
+Stable tag: 4.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -99,6 +99,9 @@ If you have Panic Codes, you can use them. Otherwise, no.
 4. Admin settings page.
 
 == Changelog ==
+= 4.2.3 =
+* Just updated the "Tested up to" tag in readme. It works fine.
+
 = 4.2.2 =
 * XMLRPC users are now availale to post again. Settings for this is in Settings->TFA.
 * Added a help text when the OTP-button on ligon page is clicked so people know that the OTP is coming to their email.
@@ -179,6 +182,9 @@ Fixed so users get alerted of they don't enter a username before clicking the OT
 * Initial release
 
 == Upgrade Notice ==
+= 4.2.3 =
+Successfully tested in WP 3.6.
+
 = 4.2.2 =
 XMLRPC users wont be affected anymore. Settings for XMLRPC can be found in Settings->TFA.
 
