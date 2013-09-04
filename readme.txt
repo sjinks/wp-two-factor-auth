@@ -71,6 +71,8 @@ See http://oskarhane.com/plugin-two-factor-auth-for-wordpress/ for more info.
 
 Easy installation.
 
+This plugin requires PHP version 5.3 or higher and support for [PHP mcrypt](http://www.php.net/manual/en/mcrypt.installation.php).
+
 1. Upload *two-factor-auth.zip* through the 'Plugins' menu in WordPress
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
