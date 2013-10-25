@@ -101,6 +101,10 @@ If you have Panic Codes, you can use them. Otherwise, no.
 4. Admin settings page.
 
 == Changelog ==
+= 4.3 =
+* All new layout on the login page. Now the OTP field and button won't be shown until an activated user has entered their login details. Users that belongs to non activated groups will not see any difference from a regular login form.
+* Fixed an error where a PHP NOTICE was shown on user settings page when WP_DEBUG was set to true. (thnx Thomas van der Beek)
+
 = 4.2.4 =
 Just added "Tested up to" tag in readme since it works fine in WP 3.7. Next version with some updates will come soon.
 
@@ -187,6 +191,9 @@ Fixed so users get alerted of they don't enter a username before clicking the OT
 * Initial release
 
 == Upgrade Notice ==
+= 4.3 =
+New login layout. The OTP field won't be visible until username and password is entered.
+
 = 4.2.4 =
 Successfully tested in WP 3.7.
 
