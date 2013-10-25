@@ -131,15 +131,11 @@ private $pw_prefix;
 		global $wpdb;
 		$query = $wpdb->prepare("SELECT ID, user_email from ".$wpdb->users." WHERE user_login=%s", $params['log']);
 		$user = $wpdb->get_row($query);
-		
-		$tfa_priv_key = get_user_meta($user->ID, 'tfa_priv_key_64', true);
-		
-		//So we show full form for users that dont exist
 		$is_activated_for_user = true;
-	
-		//Render form anyway so we don't reveal if the username exists or not
+		
 		if($user)
 		{
+			$tfa_priv_key = get_user_meta($user->ID, 'tfa_priv_key_64', true);
 			$is_activated_for_user = $this->isActivatedForUser($user->ID);
 			
 			if($is_activated_for_user)
@@ -158,7 +154,9 @@ private $pw_prefix;
 					$code = $this->generateOTP($user->ID, $tfa_priv_key);
 					$this->sendOTPEmail($user->user_email, $code);
 				}
+				return true;
 			}
+			return false;
 		}
 		return true;
 	}

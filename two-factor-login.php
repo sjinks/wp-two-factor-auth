@@ -28,9 +28,9 @@ function getTFAClass()
 function tfaInitLogin()
 {			
 	$tfa = getTFAClass();
-	$tfa->preAuth(array('log' => $_POST['user']));
+	$res = $tfa->preAuth(array('log' => $_POST['user']));
 
-	print json_encode(array('status' => true));
+	print json_encode(array('status' => $res));
 	exit;
 }
 add_action( 'wp_ajax_nopriv_tfa-init-otp', 'tfaInitLogin');
@@ -269,7 +269,7 @@ function tfaAddJSToLogin()
 	if(isset($_GET['action']) && $_GET['action'] != 'logout' && $_GET['action'] != 'login')
 		return;
 	
-	wp_enqueue_script( 'tfa-ajax-request', plugin_dir_url( __FILE__ ) . 'tfa_v4.2.2.js', array( 'jquery' ) );
+	wp_enqueue_script( 'tfa-ajax-request', plugin_dir_url( __FILE__ ) . 'tfa_v4.3.js', array( 'jquery' ) );
 	wp_localize_script( 'tfa-ajax-request', 'tfaSettings', array(
 		'ajaxurl' => admin_url('admin-ajax.php'),
 		'click_to_enter_otp' => __("Click to enter One Time Password", TFA_TEXT_DOMAIN),

@@ -11,7 +11,7 @@ elseif(@$_POST['tfa_algorithm_type'] && @$_GET['settings-updated'] == 'true')
 	if($old_algorithm != $_POST['tfa_algorithm_type'])
 		$tfa->changeUserAlgorithmTo($current_user->ID, $_POST['tfa_algorithm_type']);
 }
-if($_GET['warning_button_clicked'] == 1)
+if(isset($_GET['warning_button_clicked']) && $_GET['warning_button_clicked'] == 1)
 {
 	delete_user_meta($current_user->ID, 'tfa_hotp_off_sync');
 }
