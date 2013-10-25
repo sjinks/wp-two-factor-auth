@@ -3,7 +3,7 @@ Contributors: oskarhane
 Tags: auth, two factor auth, login, security, authenticate, password, hacking, security plugin, secure
 Requires at least: 3.1.0
 Tested up to: 3.7
-Stable tag: 4.2.3
+Stable tag: 4.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -101,6 +101,9 @@ If you have Panic Codes, you can use them. Otherwise, no.
 4. Admin settings page.
 
 == Changelog ==
+= 4.2.4 =
+Just added "Tested up to" tag in readme since it works fine in WP 3.7. Next version with some updates will come soon.
+
 = 4.2.3 =
 * Just updated the "Tested up to" tag in readme. It works fine.
 
@@ -184,6 +187,9 @@ Fixed so users get alerted of they don't enter a username before clicking the OT
 * Initial release
 
 == Upgrade Notice ==
+= 4.2.4 =
+Successfully tested in WP 3.7.
+
 = 4.2.3 =
 Successfully tested in WP 3.6.
 
