@@ -102,7 +102,7 @@ If you have Panic Codes, you can use them. Otherwise, no.
 
 == Changelog ==
 = 4.3.1 =
-* Sucessfully tested in WP 3.8
+* Successfully tested in WP 3.8
 
 = 4.3 =
 * All new layout on the login page. Now the OTP field and button won't be shown until an activated user has entered their login details. Users that belongs to non activated groups will not see any difference from a regular login form.
@@ -195,7 +195,7 @@ Fixed so users get alerted of they don't enter a username before clicking the OT
 
 == Upgrade Notice ==
 = 4.3.1 =
-Sucessfully tested in WP 3.8
+Successfully tested in WP 3.8
 
 = 4.3 =
 New login layout. The OTP field won't be visible until username and password is entered.
