@@ -2,8 +2,8 @@
 Contributors: oskarhane
 Tags: auth, two factor auth, login, security, authenticate, password, hacking, security plugin, secure
 Requires at least: 3.1.0
-Tested up to: 3.7
-Stable tag: 4.3
+Tested up to: 3.8
+Stable tag: 4.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -101,6 +101,9 @@ If you have Panic Codes, you can use them. Otherwise, no.
 4. Admin settings page.
 
 == Changelog ==
+= 4.3.1 =
+* Sucessfully tested in WP 3.8
+
 = 4.3 =
 * All new layout on the login page. Now the OTP field and button won't be shown until an activated user has entered their login details. Users that belongs to non activated groups will not see any difference from a regular login form.
 * Fixed an error where a PHP NOTICE was shown on user settings page when WP_DEBUG was set to true. (thnx Thomas van der Beek)
@@ -191,6 +194,9 @@ Fixed so users get alerted of they don't enter a username before clicking the OT
 * Initial release
 
 == Upgrade Notice ==
+= 4.3.1 =
+Sucessfully tested in WP 3.8
+
 = 4.3 =
 New login layout. The OTP field won't be visible until username and password is entered.
 
