@@ -171,7 +171,8 @@ private $pw_prefix;
 		if(!$this->isCallerActive($params))
 			return true;
 		
-		$query = $wpdb->prepare("SELECT ID from ".$wpdb->users." WHERE user_login=%s", $params['log']);
+		$field = filter_var($params['log'], FILTER_VALIDATE_EMAIL) ? 'user_email' : 'user_login';
+		$query = $wpdb->prepare("SELECT ID from ".$wpdb->users." WHERE ".$field."=%s", $params['log']);
 		$user_ID = $wpdb->get_var($query);
 		$user_code = trim(@$params['two_factor_code']);
 		
