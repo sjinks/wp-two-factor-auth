@@ -3,7 +3,7 @@ Contributors: oskarhane
 Tags: auth, two factor auth, login, security, authenticate, password, hacking, security plugin, secure
 Requires at least: 3.1.0
 Tested up to: 3.8
-Stable tag: 4.3.1
+Stable tag: 4.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -96,11 +96,14 @@ If you have Panic Codes, you can use them. Otherwise, no.
 == Screenshots ==
 
 1. The admin login page.
-2. The admin login page when One Time Password button is clicked.
+2. The admin login page when the username and password is entered and an OTP is asked for.
 3. User settings page where they choose delivery type.
 4. Admin settings page.
 
 == Changelog ==
+= 4.3.2 =
+* You can now enter an email address instead of an username to generate an OTP email.
+
 = 4.3.1 =
 * Successfully tested in WP 3.8
 
@@ -194,6 +197,9 @@ Fixed so users get alerted of they don't enter a username before clicking the OT
 * Initial release
 
 == Upgrade Notice ==
+= 4.3.2 =
+* You can now enter an email address instead of an username to generate an OTP email.
+
 = 4.3.1 =
 Successfully tested in WP 3.8
 

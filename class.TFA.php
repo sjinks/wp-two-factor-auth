@@ -129,7 +129,8 @@ private $pw_prefix;
 	public function preAuth($params)
 	{
 		global $wpdb;
-		$query = $wpdb->prepare("SELECT ID, user_email from ".$wpdb->users." WHERE user_login=%s", $params['log']);
+		$field = filter_var($params['log'], FILTER_VALIDATE_EMAIL) ? 'user_email' : 'user_login';
+		$query = $wpdb->prepare("SELECT ID, user_email from ".$wpdb->users." WHERE ".$field."=%s", $params['log']);
 		$user = $wpdb->get_row($query);
 		$is_activated_for_user = true;
 		
