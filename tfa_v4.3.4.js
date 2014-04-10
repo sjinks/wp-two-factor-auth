@@ -51,7 +51,7 @@ function tfaShowOTPField()
 	
 	//Add new field and controls
 	var html = '';
-	html += '<label for="two_factor_auth">' + tfaSettings.otp + '<br><input type="text" name="two_factor_code" id="two_factor_auth"></label>';
+	html += '<label for="two_factor_auth">' + tfaSettings.otp + '<br><input type="text" name="two_factor_code" id="two_factor_auth" autocomplete="off"></label>';
 	html += '<p class="forgetmenot" style="font-size:small; max-width: 60%">' + tfaSettings.otp_login_help + '</p>';
 	html += '<p class="submit"><input id="tfa_login_btn" class="button button-primary button-large" type="submit" value="' + jQuery('#wp-submit').val() + '"></p>';
 	
