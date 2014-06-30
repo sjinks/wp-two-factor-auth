@@ -55,6 +55,6 @@ function tfaShowOTPField()
 	html += '<p class="forgetmenot" style="font-size:small; max-width: 60%">' + tfaSettings.otp_login_help + '</p>';
 	html += '<p class="submit"><input id="tfa_login_btn" class="button button-primary button-large" type="submit" value="' + jQuery('#wp-submit').val() + '"></p>';
 	
-	jQuery('#wp-submit').parents('form:first').append(html);
+	jQuery('#wp-submit').parents('form:first').prepend(html);
 	jQuery('#two_factor_auth').focus();
 }
