@@ -2,8 +2,8 @@
 Contributors: oskarhane
 Tags: auth, two factor auth, login, security, authenticate, password, hacking, security plugin, secure
 Requires at least: 3.1.0
-Tested up to: 3.8
-Stable tag: 4.3.3
+Tested up to: 3.9.1
+Stable tag: 4.3.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -101,6 +101,9 @@ If you have Panic Codes, you can use them. Otherwise, no.
 4. Admin settings page.
 
 == Changelog ==
+= 4.3.4 =
+* Removed autocomplete on OTP field. Thanks to https://github.com/edent
+
 = 4.3.3 =
 * Last release introduced a email login bug that is fixed in this version.
 
@@ -200,6 +203,9 @@ Fixed so users get alerted of they don't enter a username before clicking the OT
 * Initial release
 
 == Upgrade Notice ==
+= 4.3.4 =
+* Removed autocomplete on OTP field. Thanks to https://github.com/edent
+
 = 4.3.3 =
 * Last release introduced a email login bug that is fixed in this version.
 
