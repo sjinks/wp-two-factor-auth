@@ -3,7 +3,7 @@ Contributors: oskarhane
 Tags: auth, two factor auth, login, security, authenticate, password, hacking, security plugin, secure
 Requires at least: 3.1.0
 Tested up to: 3.9.1
-Stable tag: 4.3.4
+Stable tag: 4.3.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -101,6 +101,10 @@ If you have Panic Codes, you can use them. Otherwise, no.
 4. Admin settings page.
 
 == Changelog ==
+= 4.3.5 =
+* Inserting the TFA Form as first element in form. Enables sending the form with return-key in all browsers.
+* Updated Tested up to version to 3.9.1
+
 = 4.3.4 =
 * Removed autocomplete on OTP field. Thanks to https://github.com/edent
 
@@ -203,6 +207,9 @@ Fixed so users get alerted of they don't enter a username before clicking the OT
 * Initial release
 
 == Upgrade Notice ==
+= 4.3.5 =
+* Inserting the TFA Form as first element in form. Enables sending the form with return-key in all browsers.
+
 = 4.3.4 =
 * Removed autocomplete on OTP field. Thanks to https://github.com/edent
 
