@@ -38,6 +38,19 @@ if(@$_GET['upgrade_done'] == 'true')
 	</form>
 	
 	<hr>
+	<h2><?php _e('Email Settings', TFA_TEXT_DOMAIN); ?></h2>
+	<form method="post" action="options.php" style="margin-top: 40px">
+		<?php
+			settings_fields('tfa_email_group');
+		?>
+		<p>
+		<?php
+			tfaListEmailSettings()
+		?></p>
+		<?php submit_button(); ?>
+	</form>
+	
+	<hr>
 	<form method="post" action="options.php" style="margin-top: 40px">
 	<?php
 		settings_fields('tfa_xmlrpc_status_group');
