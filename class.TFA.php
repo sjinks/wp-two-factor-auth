@@ -356,7 +356,15 @@ private $pw_prefix;
 
 	private function sendOTPEmail($email, $code)
 	{
-		wp_mail( $email, 'Login Code for '.get_bloginfo('name'), "\n\nEnter this code to log in: ".$code."\n\n\n".site_url(), "Content-Type: text/plain");
+		$email_setting = get_option('tfa_email_group');
+		$header = array();
+		
+		if($email_setting && $email_setting['email_address'] && filter_var($email_setting['email_address'], FILTER_VALIDATE_EMAIL)) {
+			$header[] = "From: \"{$email_setting['email_name']}\" <{$email_setting['email_address']}>"."\r\n";
+		}
+		$header[] = 'Content-Type: text/plain'."\r\n";
+		
+		wp_mail( $email, 'One Time Password for '.get_bloginfo('name'), "\n\nEnter this OTP to log in: ".$code."\n\n\n".site_url(), $header);
 	}
 
 	private function encryptString($string, $salt_suffix)

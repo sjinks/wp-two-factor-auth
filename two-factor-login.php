@@ -5,7 +5,7 @@ Plugin URI: http://oskarhane.com/plugin-two-factor-auth-for-wordpress
 Description: Secure your WordPress login with two factor auth. Users will be prompted with a page to enter a One Time Password when they login.
 Author: Oskar Hane
 Author URI: http://oskarhane.com
-Version: 4.3.5
+Version: 4.4
 License: GPLv2 or later
 */
 //error_reporting(E_ALL);
@@ -110,6 +110,7 @@ function tfaRegisterTwoFactorAuthSettings()
 	
 	register_setting('tfa_default_hmac_group', 'tfa_default_hmac');
 	register_setting('tfa_xmlrpc_status_group', 'tfa_xmlrpc_on');
+	register_setting('tfa_email_group', 'tfa_email_group');
 }
 
 
@@ -158,6 +159,15 @@ function tfaListUserRolesCheckboxes()
 		print '<input type="checkbox" name="tfa_'.$id.'" value="1" '.($setting ? 'checked="checked"' :'').'> '.$name."<br>\n";
 	}
 	
+}
+
+function tfaListEmailSettings() 
+{
+	$setting = get_option('tfa_email_group');
+
+	print __('Email Address From', TFA_TEXT_DOMAIN).': <input type="text" name="tfa_email_group[email_address]" value="'.$setting['email_address'].'"><br>';
+	print __('Email Address From Name', TFA_TEXT_DOMAIN).': <input type="text" name="tfa_email_group[email_name]" value="'.$setting['email_name'].'"><br>';
+
 }
 
 function tfaListDefaultHMACRadios()
