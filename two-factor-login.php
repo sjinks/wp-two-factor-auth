@@ -8,6 +8,9 @@ Author URI: http://oskarhane.com
 Version: 4.4
 License: GPLv2 or later
 */
+
+defined('ABSPATH') || die();
+
 //error_reporting(E_ALL);
 //ini_set("display_errors", true);
 define('TFA_TEXT_DOMAIN', 'two-factor-auth');

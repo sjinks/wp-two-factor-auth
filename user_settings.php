@@ -1,4 +1,5 @@
 <?php
+defined('ABSPATH') || die();
 
 if(@$_POST['tfa_delivery_type'] && @$_GET['settings-updated'] == 'true')
 {

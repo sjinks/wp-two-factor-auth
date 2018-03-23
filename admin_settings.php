@@ -1,4 +1,5 @@
 <?php
+defined('ABSPATH') || die();
 
 if(!is_admin())
 	exit;
