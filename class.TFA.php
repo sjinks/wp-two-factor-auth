@@ -399,7 +399,7 @@ private $pw_prefix;
 	private function hashAndBin($pw, $salt)
 	{
 		$key = $this->hash($pw, $salt);
-		$key = pack('H*', $key);
+		return pack('H*', $key);
 	}
 
 	private function hash($pw, $salt)
