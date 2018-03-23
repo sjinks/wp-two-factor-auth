@@ -279,7 +279,7 @@ function tfaAddJSToLogin()
 	if(isset($_GET['action']) && $_GET['action'] != 'logout' && $_GET['action'] != 'login')
 		return;
 	
-	wp_enqueue_script( 'tfa-ajax-request', plugin_dir_url( __FILE__ ) . 'tfa_v4.3.4.js', array( 'jquery' ) );
+	wp_enqueue_script( 'tfa-ajax-request', plugin_dir_url( __FILE__ ) . 'tfa_v4.3.4.js', array( 'jquery' ), '4.3.4', true );
 	wp_localize_script( 'tfa-ajax-request', 'tfaSettings', array(
 		'ajaxurl' => admin_url('admin-ajax.php'),
 		'click_to_enter_otp' => __("Click to enter One Time Password", TFA_TEXT_DOMAIN),
