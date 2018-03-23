@@ -34,7 +34,7 @@ function tfaInitLogin()
 	exit;
 }
 add_action( 'wp_ajax_nopriv_tfa-init-otp', 'tfaInitLogin');
-
+add_action( 'wp_ajax_tfa-init-otp', 'tfaInitLogin');
 
 
 function tfaVerifyCodeAndUser($user, $username, $password)
