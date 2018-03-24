@@ -369,31 +369,23 @@ private $pw_prefix;
 
 	private function encryptString($string, $salt_suffix)
 	{
-		$key = $this->hash($this->pw_prefix.$salt_suffix, $this->salt_prefix.$salt_suffix, true);
-		
-		$iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
-		$iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
-		
-		$enc = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $key, $string, MCRYPT_MODE_CBC, $iv);
-		
-		$enc = $iv.$enc;
-		$enc_b64 = base64_encode($enc);
-		return $enc_b64;
+		$string  = str_pad($string, 16, "\0", STR_PAD_RIGHT);
+		$key     = $this->hash($this->pw_prefix.$salt_suffix, $this->salt_prefix.$salt_suffix, true);
+		$iv_size = openssl_cipher_iv_length('aes-128-cbc');
+		$iv      = openssl_random_pseudo_bytes($iv_size);
+		$enc     = $iv . openssl_encrypt($string, 'aes-128-cbc', $key, OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING, $iv);
+
+		return base64_encode($enc);
 	}
 	
 	private function decryptString($enc_b64, $salt_suffix)
 	{
-		$key = $this->hash($this->pw_prefix.$salt_suffix, $this->salt_prefix.$salt_suffix, true);
-		
-		$iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
-		$enc_conc = base64_decode($enc_b64);
-		
-		$iv = substr($enc_conc, 0, $iv_size);
-		$enc = substr($enc_conc, $iv_size);
-		
-		$string = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, $enc, MCRYPT_MODE_CBC, $iv);
-
-		return $string;
+		$key     = $this->hash($this->pw_prefix.$salt_suffix, $this->salt_prefix.$salt_suffix, true);
+		$iv_size = openssl_cipher_iv_length('aes-128-cbc');
+		$enc     = base64_decode($enc_b64);
+		$iv      = substr($enc, 0, $iv_size);
+		$enc     = substr($enc, $iv_size);
+		return openssl_decrypt($enc, 'aes-128-cbc', $key, OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING, $iv);
 	}
 
 	private function hash($pw, $salt, $raw = false)
