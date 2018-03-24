@@ -1,60 +1,68 @@
-jQuery(document).ready(function() {
-	var tfa_cb = function(e)
+window.addEventListener('DOMContentLoaded', function() {
+	var form = document.getElementById('loginform');
+	form.addEventListener('submit', tfaCallback);
+
+	function tfaCallback(e)
 	{
 		e.preventDefault();
 		var res = runGenerateOTPCall();
-		
-		jQuery('#wp-submit').parents('form:first').off();
-		
-		if(!res)
-			return true;
-		
-		return false;
-	};
-	jQuery('#wp-submit').parents('form:first').on('submit', tfa_cb);
-});
+		form.removeEventListener('submit', tfaCallback);
+		return !res;
+	}
 
-function runGenerateOTPCall()
-{
-	var username = jQuery('#user_login').val() || jQuery('[name="log"]').val();
-	
-	if(!username.length)
-		return false;
-		
-	jQuery.ajax(
+	function runGenerateOTPCall()
 	{
-		url: tfaSettings.ajaxurl,
-		type: 'POST',
-		data: {
-			action : 'tfa-init-otp',
-			user : username
-		},
-		dataType: 'json',
-		success: function(response) {
-			if(response.status === true)
-				tfaShowOTPField();
-			else
-				jQuery('#wp-submit').parents('form:first').submit();
+		var username = document.getElementById('user_login').value();
+		if (!username) {
+			return false;
 		}
-	});
-	return true;
-}
 
-function tfaShowOTPField()
-{
-	//Hide all elements in sa browser safe way
-	jQuery('#wp-submit').parents('form:first').find('p').each(function(i)
+		var req = new XMLHttpRequest();
+		req.addEventListener('readystatechange', function() {
+			try {
+				if (req.readyState === XMLHttpRequest.DONE) {
+					var r = JSON.parse(req.responseText);
+					if (r.status === true) {
+						tfaShowOTPField();
+					}
+					else {
+						form.submit();
+					}
+				}
+			}
+			catch (e) {
+				if (console) {
+					console.error(e);
+				}
+			}
+		});
+
+		req.open('POST', tfaSettings.ajaxurl);
+		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		req.send('action=tfa-init-otp&user=' + encodeURIComponent(username));
+		return true;
+	}
+
+	function tfaShowOTPField()
 	{
-		jQuery(this).css('visibility','hidden').css('position', 'absolute');
-	});
-	jQuery('#wp-submit').attr('disabled', 'disabled');
-	
-	//Add new field and controls
-	var html = '';
-	html += '<label for="two_factor_auth">' + tfaSettings.otp + '<br><input type="text" name="two_factor_code" id="two_factor_auth" autocomplete="off"></label>';
-	html += '<p class="forgetmenot" style="font-size:small; max-width: 60%">' + tfaSettings.otp_login_help + '</p>';
-	html += '<p class="submit"><input id="tfa_login_btn" class="button button-primary button-large" type="submit" value="' + jQuery('#wp-submit').val() + '"></p>';
-	
-	jQuery('#wp-submit').parents('form:first').prepend(html);
-	jQuery('#two_factor_auth').focus();
-}
+		var items = form.querySelectorAll('p');
+		var len   = items.length;
+		for (var i=0; i<len; ++i) {
+			var item = items[i];
+			item.style.visibility = 'hidden';
+			item.style.position   = 'absolute';
+		}
+
+		var submit = document.getElementById('wp-submit');
+		submit.setAttribute('disabled', 'disabled');
+
+		var html =
+			  '<label for="two_factor_auth">' + tfaSettings.otp + '<br/><input type="text" name="two_factor_code" id="two_factor_auth" autocomplete="off"></label>'
+			+ '<p class="forgetmenot" style="font-size: small; max-width: 60%">' + tfaSettings.otp_login_help + '</p>'
+			+ '<p class="submit"><input id="tfa_login_btn" class="button button-primary button-large" type="submit" value="' + submit.value + '"/></p>'
+		;
+
+		form.innerHTML = html + form.innerHTML;
+		document.getElementById('two_factor_auth').focus();
+	}
+});
