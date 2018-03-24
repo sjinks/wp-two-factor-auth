@@ -1,11 +1,11 @@
 <?php
 /*
-Plugin Name: Two Factor Auth
+Plugin Name: WP Two Factor Auth
 Plugin URI: http://oskarhane.com/plugin-two-factor-auth-for-wordpress
 Description: Secure your WordPress login with two factor auth. Users will be prompted with a page to enter a One Time Password when they login.
-Author: Oskar Hane
+Author: Oskar Hane, Volodymyr Kolesnykov
 Author URI: http://oskarhane.com
-Version: 4.4
+Version: 4.5
 License: GPLv2 or later
 */
 
@@ -296,13 +296,9 @@ function tfaAddJSToLogin()
 	if(isset($_GET['action']) && $_GET['action'] != 'logout' && $_GET['action'] != 'login')
 		return;
 	
-	wp_enqueue_script( 'tfa-ajax-request', plugin_dir_url( __FILE__ ) . 'tfa.js', array(), '4.3.4', true );
+	wp_enqueue_script( 'tfa-ajax-request', plugin_dir_url( __FILE__ ) . 'tfa.min.js', array(), '4.5', true );
 	wp_localize_script( 'tfa-ajax-request', 'tfaSettings', array(
-		'ajaxurl' => admin_url('admin-ajax.php'),
-		'click_to_enter_otp' => __("Click to enter One Time Password", TFA_TEXT_DOMAIN),
-		'enter_username_first' => __('You have to enter a username first.', TFA_TEXT_DOMAIN),
-		'otp' => __("One Time Password", TFA_TEXT_DOMAIN),
-		'otp_login_help' => __('(check your email or OTP-app to get this password)', TFA_TEXT_DOMAIN)
+		'ajaxurl' => admin_url('admin-ajax.php')
 	));
 }
 add_action('login_enqueue_scripts', 'tfaAddJSToLogin');
@@ -350,10 +346,10 @@ if(is_admin())
 function installTFA()
 {
 	$error = false;
-	if (version_compare(PHP_VERSION, '5.3', '<' ))
+	if (version_compare(PHP_VERSION, '5.4', '<' ))
 	{
 		$error = true;
-		$flag = 'PHP version 5.3 or higher.';
+		$flag = 'PHP version 5.4 or higher.';
 	}
 	elseif(!function_exists('openssl_encrypt'))
 	{

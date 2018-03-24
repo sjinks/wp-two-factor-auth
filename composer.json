@@ -1,0 +1,20 @@
+{
+	"name" : "wildwolf/wp-two-factor-auth",
+	"type" : "wordpress-plugin",
+	"description" : "WordPress plugin for two factor authentication",
+	"keywords" : ["wordpress", "plugin", "security", "2fa", "otp"],
+	"license" : "MIT",
+	"homepage" : "https://github.com/sjinks/wp-two-factor-auth",
+	"authors" : [
+		{
+			"name" : "Volodymyr Kolesnykov",
+			"email" : "volodymyr@wildwolf.name",
+			"role" : "Developer"
+		}
+	],
+	"require" : {
+		"php" : ">=5.4.0",
+		"ext-openssl" : ">=5.4.0",
+		"composer/installers" : "~1.0"
+	}
+}
