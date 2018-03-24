@@ -47,7 +47,7 @@ window.addEventListener('DOMContentLoaded', function() {
 	{
 		var tfa = document.getElementById('two_factor_auth');
 		tfa.removeAttribute('disabled');
-		document.getElementById('tfa').style.display = 'block';
+		document.getElementById('tfa-block').style.display = 'block';
 		tfa.focus();
 	}
 });
