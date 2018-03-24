@@ -369,7 +369,7 @@ private $pw_prefix;
 
 	private function encryptString($string, $salt_suffix)
 	{
-		$key = $this->hashAndBin($this->pw_prefix.$salt_suffix, $this->salt_prefix.$salt_suffix);
+		$key = $this->hash($this->pw_prefix.$salt_suffix, $this->salt_prefix.$salt_suffix, true);
 		
 		$iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
 		$iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
@@ -383,7 +383,7 @@ private $pw_prefix;
 	
 	private function decryptString($enc_b64, $salt_suffix)
 	{
-		$key = $this->hashAndBin($this->pw_prefix.$salt_suffix, $this->salt_prefix.$salt_suffix);
+		$key = $this->hash($this->pw_prefix.$salt_suffix, $this->salt_prefix.$salt_suffix, true);
 		
 		$iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
 		$enc_conc = base64_decode($enc_b64);
@@ -396,17 +396,9 @@ private $pw_prefix;
 		return $string;
 	}
 
-	private function hashAndBin($pw, $salt)
+	private function hash($pw, $salt, $raw = false)
 	{
-		$key = $this->hash($pw, $salt);
-		return pack('H*', $key);
-	}
-
-	private function hash($pw, $salt)
-	{
-		//$hash = hash_pbkdf2('sha256', $pw, $salt, 10);
-		//$hash = crypt($pw, '$5$'.$salt.'$');
-		$hash = md5($salt.$pw);
+		$hash = md5($salt.$pw, $raw);
 		return $hash;
 	}
 
