@@ -45,9 +45,9 @@ function tfaLoginForm()
 ?>
 <p id="tfa-block" style="display: none;">
 	<label for="two_factor_auth"><?php _e("One Time Password", TFA_TEXT_DOMAIN); ?><br/>
-		<input type="text" name="two_factor_code" id="two_factor_auth" autocomplete="off" disabled="disabled"/>
+		<input type="text" name="two_factor_code" id="two_factor_auth" autocomplete="off" disabled="disabled" style="margin-bottom: 2px;"/>
 	</label>
-	<span style="font-size: small;"><?php _e('(check your email or OTP-app to get this password)', TFA_TEXT_DOMAIN); ?></span>
+	<span style="font-size: small; display: inline-block; margin-bottom: 16px;"><?php _e('(check your email or OTP-app to get this password)', TFA_TEXT_DOMAIN); ?></span>
 </p>
 <?php
 }
