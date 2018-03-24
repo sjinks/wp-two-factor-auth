@@ -6,7 +6,7 @@ if(!is_admin())
 
 $tfa->setUserHMACTypes();
 
-if(@$_GET['upgrade_done'] == 'true')
+if(!empty($_GET['upgrade_done']) && $_GET['upgrade_done'] == 'true')
 {
 	?>
 		<div id="setting-error-settings_updated" class="updated settings-error"> 

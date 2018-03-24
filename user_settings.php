@@ -1,11 +1,11 @@
 <?php
 defined('ABSPATH') || die();
 
-if(@$_POST['tfa_delivery_type'] && @$_GET['settings-updated'] == 'true')
+if(!empty($_POST['tfa_delivery_type']) && !empty($_GET['settings-updated']) && $_GET['settings-updated'] == 'true')
 {
 	$tfa->changeUserDeliveryTypeTo($current_user->ID, $_POST['tfa_delivery_type']);
 }
-elseif(@$_POST['tfa_algorithm_type'] && @$_GET['settings-updated'] == 'true')
+elseif(!empty($_POST['tfa_algorithm_type']) && !empty($_GET['settings-updated']) && $_GET['settings-updated'] == 'true')
 {
 	$old_algorithm = $tfa->getUserAlgorithm($current_user->ID);
 	

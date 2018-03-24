@@ -174,7 +174,7 @@ private $pw_prefix;
 		$field = filter_var($params['log'], FILTER_VALIDATE_EMAIL) ? 'user_email' : 'user_login';
 		$query = $wpdb->prepare("SELECT ID from ".$wpdb->users." WHERE ".$field."=%s", $params['log']);
 		$user_ID = $wpdb->get_var($query);
-		$user_code = trim(@$params['two_factor_code']);
+		$user_code = trim(isset($params['two_factor_code']) ? $params['two_factor_code'] : '');
 		
 		if(!$user_ID)
 			return true;
@@ -185,7 +185,7 @@ private $pw_prefix;
 		$tfa_priv_key = get_user_meta($user_ID, 'tfa_priv_key_64', true);
 		$tfa_last_login = get_user_meta($user_ID, 'tfa_last_login', true);
 		$tfa_last_pws_arr = get_user_meta($user_ID, 'tfa_last_pws', true);
-		$tfa_last_pws = @$tfa_last_pws_arr ? $tfa_last_pws_arr : array();
+		$tfa_last_pws = $tfa_last_pws_arr ? $tfa_last_pws_arr : array();
 		$alg = $this->getUserAlgorithm($user_ID);
 		
 		$current_time_window = intval(time()/30);
@@ -215,7 +215,7 @@ private $pw_prefix;
 		{
 			$panic_codes = get_user_meta($user_ID, 'tfa_panic_codes_64');
 			
-			if(!@$panic_codes[0])
+			if(empty($panic_codes[0]))
 				return $match;
 			
 			$panic_codes = current($panic_codes);

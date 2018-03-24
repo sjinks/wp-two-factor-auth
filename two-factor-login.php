@@ -243,7 +243,7 @@ function addPluginSettingsLink($links)
 function tfaSaveSettings()
 {
 	global $current_user;
-	if(@$_GET['tfa_change_to_email'] && @$_GET['tfa_user_id'])
+	if(!empty($_GET['tfa_change_to_email']) && !empty($_GET['tfa_user_id']))
 	{
 		$tfa = getTFAClass();
 		
@@ -255,7 +255,7 @@ function tfaSaveSettings()
 		exit;
 	}
 	
-	if(@$_GET['tfa_priv_key_reset'])
+	if(!empty($_GET['tfa_priv_key_reset']))
 	{
 		delete_user_meta($current_user->ID, 'tfa_priv_key_64');
 		delete_user_meta($current_user->ID, 'tfa_panic_codes_64');
@@ -263,7 +263,7 @@ function tfaSaveSettings()
 		exit;
 	}
 	
-	if(@$_GET['tfa_upgrade_script'])
+	if(!empty($_GET['tfa_upgrade_script']))
 	{
 		$tfa = getTFAClass();
 		$tfa->upgrade();
