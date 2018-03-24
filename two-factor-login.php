@@ -40,6 +40,20 @@ add_action( 'wp_ajax_nopriv_tfa-init-otp', 'tfaInitLogin');
 add_action( 'wp_ajax_tfa-init-otp', 'tfaInitLogin');
 
 
+function tfaLoginForm()
+{
+?>
+<p id="tfa-block" style="display: none;">
+	<label for="two_factor_auth"><?php _e("One Time Password", TFA_TEXT_DOMAIN); ?><br/>
+		<input type="text" name="two_factor_code" id="two_factor_auth" autocomplete="off" disabled="disabled"/>
+	</label>
+	<span class="forgetmenot" style="font-size: small; max-width: 60%"><?php _e('(check your email or OTP-app to get this password)', TFA_TEXT_DOMAIN); ?></span>
+</p>
+<?php
+}
+
+add_action('login_form', 'tfaLoginForm');
+
 function tfaVerifyCodeAndUser($user, $username, $password)
 {
 	
