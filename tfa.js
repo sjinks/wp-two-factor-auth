@@ -62,7 +62,7 @@ window.addEventListener('DOMContentLoaded', function() {
 			+ '<p class="submit"><input id="tfa_login_btn" class="button button-primary button-large" type="submit" value="' + submit.value + '"/></p>'
 		;
 
-		form.innerHTML = html + form.innerHTML;
+		form.insertAdjacentHTML('afterbegin', html);
 		document.getElementById('two_factor_auth').focus();
 	}
 });
