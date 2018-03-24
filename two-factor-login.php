@@ -355,10 +355,10 @@ function installTFA()
 		$error = true;
 		$flag = 'PHP version 5.3 or higher.';
 	}
-	elseif(!function_exists('mcrypt_get_iv_size'))
+	elseif(!function_exists('openssl_encrypt'))
 	{
 		$error = true;
-		$flag = 'that PHP mcrypt installed. See <a href="http://www.php.net/manual/en/mcrypt.installation.php" target="_blank">PHP.net mcrypt >></a> for more info.';
+		$flag = 'OpenSSL extension. See <a href="http://www.php.net/manual/en/openssl.installation.php" target="_blank">PHP.net &gt;&gt;</a> for more info.';
 	}
 	
 	if($error)
