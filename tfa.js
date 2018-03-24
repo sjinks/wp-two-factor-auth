@@ -12,7 +12,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
 	function runGenerateOTPCall()
 	{
-		var username = document.getElementById('user_login').value();
+		var username = document.getElementById('user_login').value;
 		if (!username) {
 			return false;
 		}
