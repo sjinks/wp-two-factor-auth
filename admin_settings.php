@@ -112,27 +112,4 @@ $tfa->setUserHMACTypes();
 		
 		?>
 	</p>
-	<hr>
-	<h2><?php _e('Translations', TFA_TEXT_DOMAIN); ?></h2>
-	<p>
-		<?php _e('If you translate this plugin, please send the translations .po-file to me so I can include it in future releases.', TFA_TEXT_DOMAIN); ?>
-		<br>
-		<?php _e('I can recommend the plugin', TFA_TEXT_DOMAIN); ?> <a href="http://wordpress.org/plugins/codestyling-localization/" target="_blank">Codestyling Localization</a> <?php _e('for adding and editing translations of plugins.', TFA_TEXT_DOMAIN); ?>
-		<br><br>
-		<?php _e('Email your translations .po-file to', TFA_TEXT_DOMAIN); ?>: <a href="mailto:tfa.translation@oskarhane.com">tfa.translation@oskarhane.com</a>.
-	</p>
-	<hr>
-	<h2>Rate it if you like it!</h2>
-	<p>
-		Please, rate this plugin with ✭✭✭✭✭ if you like it so more users can take advantage of a more secure login 
-		without having third party dependencies.
-		<br>
-		<br>
-		<a href="http://wordpress.org/plugins/two-factor-auth/" target="_blank">Two Factor Auth on Wordpress.org >></a>
-	</p>
-	<p>
-		Feel free to contact me at any time. 
-		<br>
-		<a href="http://oskarhane.com" target="_blank">http://oskarhane.com</a>
-	</p>
 </div>
