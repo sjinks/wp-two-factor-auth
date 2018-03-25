@@ -21,7 +21,6 @@ elseif (file_exists(ABSPATH . 'vendor/autoload.php')) {
 //error_reporting(E_ALL);
 //ini_set("display_errors", true);
 define('TFA_TEXT_DOMAIN', 'two-factor-auth');
-$my_translator_is_setup = 0;
 define('TFA_MAIN_PLUGIN_PATH', dirname( __FILE__ ));
 
 function getTFAClass()
@@ -334,18 +333,9 @@ register_activation_hook(__FILE__, 'installTFA');
 
 function tfaSetLanguages()
 {
-	global $my_translator_is_setup;
-	
-	if($my_translator_is_setup)
-		return;
-	
-	load_plugin_textdomain(
-		TFA_TEXT_DOMAIN,
-		false,
-		dirname( plugin_basename( __FILE__ ) ) . '/languages/'
-	);
-	$my_translator_is_setup = true;
+	load_plugin_textdomain(TFA_TEXT_DOMAIN, false, substr(__DIR__, strlen(\WP_PLUGIN_DIR) + 1) . '/languages/');
 }
-tfaSetLanguages();
+
+add_action('init', 'tfaSetLanguages');
 
 ?>
