@@ -95,7 +95,7 @@ if(isset($_GET['warning_button_clicked']) && $_GET['warning_button_clicked'] == 
 					<?php _e('You are currently using', TFA_TEXT_DOMAIN); ?> <?php print strtoupper($algorithm_type).' ('.($algorithm_type == 'totp' ? __('a time based', TFA_TEXT_DOMAIN) : __('an event based', TFA_TEXT_DOMAIN)).')'; ?> <?php _e('algorithm, if the app asks for that info', TFA_TEXT_DOMAIN); ?>.
 				</p>
 				<p>
-					<img src="https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=otpauth://<?php print $algorithm_type; ?>/<?php print $url; ?>:%2520<?php print urlencode($current_user->user_login); ?>%3Fsecret%3D<?php print Base32::encode($tfa_priv_key); ?>%26issuer=<?php print $url; ?>%26counter=<?php print $tfa->getUserCounter($current_user->ID); ?>">
+					<img src="https://chart.googleapis.com/chart?chs=200x200&chld=M|0&amp;cht=qr&amp;chl=otpauth://<?php print $algorithm_type; ?>/<?php print $url; ?>:%2520<?php print urlencode($current_user->user_login); ?>%3Fsecret%3D<?php print \Tuupola\Base32Proxy::encode($tfa_priv_key); ?>%26issuer=<?php print $url; ?>%26counter=<?php print $tfa->getUserCounter($current_user->ID); ?>">
 				</p>
 			</div>
 		</div>
