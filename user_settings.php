@@ -146,7 +146,7 @@ if(isset($_GET['warning_button_clicked']) && $_GET['warning_button_clicked'] == 
 				<h3 class="normal" style="cursor: default">Base32</h3>
 				<p><?php _e('Base32 is used by some third party apps like Google Authenticator. This is just as secret as the key in plain text.', TFA_TEXT_DOMAIN); ?>
 				</p>
-				<p><strong><?php _e('Your private key in base32 is', TFA_TEXT_DOMAIN); ?></strong>: <?php print Base32::encode($tfa_priv_key); ?></p>
+				<p><strong><?php _e('Your private key in base32 is', TFA_TEXT_DOMAIN); ?></strong>: <?php print \Tuupola\Base32Proxy::encode((string)$tfa_priv_key); ?></p>
 				<h3 class="normal" style="cursor: default"><?php _e('Algorithm Used', TFA_TEXT_DOMAIN); ?></h3>
 				
 				<form method="post" action="<?php print add_query_arg('settings-updated', 'true', $_SERVER['REQUEST_URI']); ?>">

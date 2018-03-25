@@ -11,6 +11,13 @@ License: GPLv2 or later
 
 defined('ABSPATH') || die();
 
+if (file_exists(__DIR__ . '/vendor/autoload.php')) {
+	require __DIR__ . '/vendor/autoload.php';
+}
+elseif (file_exists(ABSPATH . 'vendor/autoload.php')) {
+	require ABSPATH . 'vendor/autoload.php';
+}
+
 //error_reporting(E_ALL);
 //ini_set("display_errors", true);
 define('TFA_TEXT_DOMAIN', 'two-factor-auth');
@@ -20,10 +27,9 @@ define('TFA_MAIN_PLUGIN_PATH', dirname( __FILE__ ));
 function getTFAClass()
 {
 	include_once TFA_MAIN_PLUGIN_PATH.'/hotp-php-master/hotp.php';
-	include_once TFA_MAIN_PLUGIN_PATH.'/Base32/Base32.php';
 	include_once TFA_MAIN_PLUGIN_PATH.'/class.TFA.php';
 	
-	$tfa = new TFA(new Base32(), new HOTP());
+	$tfa = new TFA(new HOTP());
 	
 	return $tfa;
 }

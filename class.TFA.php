@@ -1,14 +1,13 @@
 <?php
 
 
-class TFA 
+class TFA
 {
-private $salt_prefix;
-private $pw_prefix;
+	private $salt_prefix;
+	private $pw_prefix;
 
-	public function __construct($base23_encoder, $otp_helper)
+	public function __construct($otp_helper)
 	{
-		$this->base32_encoder = $base23_encoder;
 		$this->otp_helper = $otp_helper;
 		$this->time_window_size = 30;
 		$this->check_back_time_windows = 2;
