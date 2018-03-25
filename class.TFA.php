@@ -413,56 +413,6 @@ class TFA
 			}
 		}
 	}
-	
-	public function upgrade()
-	{
-		global $wpdb;
-		
-		$installed_version = get_option('tfa_version');
-		if($installed_version > 3)
-			return;
-		
-		//Private key. Encrypt and remove old field
-		$users = get_users(array('meta_key' => 'tfa_priv_key'));
-		if(!empty($users))
-		{
-			foreach($users as $user)
-			{
-				$tfa_priv_key = get_user_meta($user->ID, 'tfa_priv_key');
-				$tfa_priv_key = is_array($tfa_priv_key) ? $tfa_priv_key[0] : $tfa_priv_key;
-				
-				$enc_key_64 = $this->addPrivateKey($user->ID, $tfa_priv_key);
-				delete_user_meta($user->ID, 'tfa_priv_key');
-			}
-		}
-		
-		
-		//Panic codes. Encrypt and remove old field.
-		$users = get_users(array('meta_key' => 'tfa_panic_codes'));
-		if(!empty($users))
-		{
-			foreach($users as $user)
-			{
-				$tfa_panic_codes = get_user_meta($user->ID, 'tfa_panic_codes');
-
-				$enc_p_codes = array();
-				foreach($tfa_panic_codes[0] as $p_code)
-				{
-					$enc_pc_64 = $this->encryptString($p_code, $user->ID);
-					$enc_p_codes[] = $enc_pc_64;
-				}
-				update_user_meta($user->ID, 'tfa_panic_codes_64', $enc_p_codes);
-				delete_user_meta($user->ID, 'tfa_panic_codes');
-
-			}
-		}
-		
-		//Last used. Remove all since hashed with md5.
-		$q = "DELETE FROM ".$wpdb->usermeta." WHERE meta_key = 'tfa_last_pws'";
-		$wpdb->query($q);
-		update_option('tfa_version', '4');
-	}
-
 }
 
 

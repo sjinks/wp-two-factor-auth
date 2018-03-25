@@ -90,36 +90,6 @@ function tfaVerifyCodeAndUser($user, $username, $password)
 }
 add_filter('authenticate', 'tfaVerifyCodeAndUser', 99999999999, 3);//We want to be the last filter that runs.
 
-
-
-/**
-* For Admin menu and settings
-*/
-
-function tfaPushForUpgrade() {
-	if(!current_user_can('install_plugins'))
-		return;
-		
-	$installed_version = get_option('tfa_version');
-	if($installed_version >= 4)
-		return;
-	
-    ?>
-    <div class="updated">
-    	<h3>Database changes needed!</h3>
-        <p>
-        	You need to initialize changes to the database for <strong>Two Factor Auth</strong> to work with the current version.
-        	<br>
-        	This is safe and will only have effect on values added by the <strong>Two Factor Auth</strong> plugin.
-        	<br><br>
-        	<a href="options-general.php?page=two-factor-auth&tfa_upgrade_script=yes" class="button">Click here to upgrade</a>
-        </p>
-    </div>
-    <?php
-}
-add_action( 'admin_notices', 'tfaPushForUpgrade' );
-
-
 function tfaRegisterTwoFactorAuthSettings()
 {
 	global $wp_roles;
@@ -282,23 +252,10 @@ function tfaSaveSettings()
 		wp_safe_redirect(site_url().remove_query_arg('tfa_priv_key_reset'));
 		exit;
 	}
-	
-	if(!empty($_GET['tfa_upgrade_script']))
-	{
-		$tfa = getTFAClass();
-		$tfa->upgrade();
-		wp_safe_redirect(site_url().remove_query_arg('tfa_upgrade_script').'&upgrade_done=true');
-		exit;
-	}
 }
 
 function tfaAddJSToLogin()
 {
-	
-	$installed_version = get_option('tfa_version');
-	if($installed_version < 4)
-		return;
-	
 	if(isset($_GET['action']) && $_GET['action'] != 'logout' && $_GET['action'] != 'login')
 		return;
 	

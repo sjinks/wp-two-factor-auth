@@ -5,19 +5,8 @@ if(!is_admin())
 	exit;
 
 $tfa->setUserHMACTypes();
-
-if(!empty($_GET['upgrade_done']) && $_GET['upgrade_done'] == 'true')
-{
-	?>
-		<div id="setting-error-settings_updated" class="updated settings-error"> 
-			<p>
-				<strong><?php _e('Your upgrade was successful, Two Factor Auth is now enabled.', TFA_TEXT_DOMAIN); ?></strong>
-			</p>
-		</div>
-	<?php
-}
-
-?><div class="wrap">
+?>
+<div class="wrap">
 	<?php screen_icon(); ?>
 	<h2>Two Factor Auth <?php _e('Settings', TFA_TEXT_DOMAIN); ?></h2>
 	<div>
