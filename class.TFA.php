@@ -334,12 +334,6 @@ private $pw_prefix;
 		
 	}
 
-	public function saveCallerStatus($caller_id, $status)
-	{
-		if($caller_id == 'xmlrpc')
-			set_option('tfa_xmlrpc_on', $status);
-	}
-
 	private function isCallerActive($params)
 	{
 
