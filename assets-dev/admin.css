@@ -1,0 +1,26 @@
+.qrcode {
+	margin-right: 10px;
+}
+
+.otp {
+	color: red;
+	font-size: x-large;
+	font-weight: bold;
+}
+
+.wrap section {
+	position: relative;
+	margin-top: 20px;
+	padding: .7em 2em 1em;
+	border: 1px solid #E5E5E5;
+	box-shadow: 0 1px 1px rgba(0,0,0,.04);
+	background: #FFF;
+}
+
+.verify-success {
+	color: green;
+}
+
+.verify-failure {
+	color: red;
+}

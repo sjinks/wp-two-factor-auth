@@ -1,0 +1,13 @@
+#tfa-block {
+	display: none;
+}
+
+input#two_factor_auth {
+	margin-bottom: 2px;
+}
+
+#tfa-block > span {
+	font-size: small;
+	display: inline-block;
+	margin-bottom: 16px;
+}
