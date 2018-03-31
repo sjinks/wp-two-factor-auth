@@ -3,7 +3,6 @@ namespace WildWolf\TFA;
 
 use WildWolf\OTP;
 
-
 class UserData
 {
 	/**
@@ -307,7 +306,7 @@ class UserData
 		foreach ($codes as $idx => $c) {
 			if (OTP::asOTP($c, self::$otpLength) === $code) {
 				if (!$relaxed) {
-					$data['used'] = \array_slice($codes, 0, $idx + 1);
+					$this->used = \array_slice($codes, 0, $idx + 1);
 					$this->save();
 				}
 
@@ -318,13 +317,24 @@ class UserData
 		return false;
 	}
 
-	private static function checkPanicCode(string $code) : bool
+	private function checkPanicCode(string $code) : bool
 	{
 		if (\strlen($code) === self::$panicCodeLength) {
 			$idx = \array_search($code, $this->panic);
 			if (false !== $idx) {
 				\array_splice($this->panic, $idx, 1);
 				$this->save();
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private function isCodeUsed(string $code) : bool
+	{
+		foreach ($this->used as $c) {
+			if (OTP::asOTP($c, self::$otpLength) === $code) {
 				return true;
 			}
 		}
@@ -342,7 +352,7 @@ class UserData
 		// Check the code only if its length matches
 		if (\strlen($code) === self::$otpLength) {
 			// Disallow recently entered codes
-			if (!$relaxed && \in_array($hashed, $this->used)) {
+			if (!$relaxed && $this->isCodeUsed($code)) {
 				return false;
 			}
 
