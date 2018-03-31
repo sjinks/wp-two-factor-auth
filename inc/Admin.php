@@ -12,6 +12,9 @@ class Admin
 	 */
 	private $user_settings_hook;
 
+	/**
+	 * @var array
+	 */
 	private static $delivery_type_lut = [];
 
 	public static function instance()
@@ -49,7 +52,7 @@ class Admin
 	{
 		$log = \sanitize_user($_POST['log'] ?? '');
 		$res = WPUtils::preAuth($log);
-		die(\json_encode(['status' => $res]));
+		\wp_die(\json_encode(['status' => $res]));
 	}
 
 	public function checkbox_field(array $args)
@@ -270,7 +273,7 @@ EOT;
 		$current_user = \wp_get_current_user();
 		\check_ajax_referer('tfa-verify_' . $current_user->ID);
 
-		$code   = \filter_input(\INPUT_POST, 'code');
+		$code   = $_POST['code'] ?? '';
 		$data   = new UserData($current_user);
 		$result = $data->verifyOTP($code, true);
 
@@ -285,7 +288,7 @@ EOT;
 	public function tfa_reset_method()
 	{
 		if (\current_user_can('edit_users')) {
-			$uid = \filter_input(INPUT_POST, 'uid', \FILTER_SANITIZE_NUMBER_INT);
+			$uid = (int)($_POST['uid'] ?? -1);
 			\check_ajax_referer('tfa-reset_' . $uid);
 
 			$data = new UserData($uid);
