@@ -13,8 +13,41 @@ class PluginTest extends WP_UnitTestCase
 		$this->assertSame($i1, $i2);
 	}
 
+	public function testInit()
+	{
+		$inst = Plugin::instance();
+		$this->assertEquals(10,  has_action('login_init',   [$inst, 'login_init']));
+		$this->assertEquals(999, has_filter('authenticate', [$inst, 'authenticate']));
+
+		$settings = get_registered_settings();
+		$this->assertArrayHasKey(Plugin::OPTIONS_KEY, $settings);
+
+		$this->assertTrue(is_textdomain_loaded('two-factor-auth'));
+	}
+
+	public function testLoginInit()
+	{
+		$inst = Plugin::instance();
+		remove_action('login_init', 'send_frame_options_header', 10);
+		remove_action('login_init', 'wp_admin_headers', 10);
+		do_action('login_init');
+		$this->assertEquals(10, has_action('login_enqueue_scripts', [$inst, 'login_enqueue_scripts']));
+		$this->assertEquals(10, has_action('login_form',            [$inst, 'login_form']));
+	}
+
+	public function testBaseUrl()
+	{
+		$actual = Plugin::instance()->baseUrl();
+		$prefix = 'http://' . WP_TESTS_DOMAIN . '/wp-content/plugins/';
+		$suffix = '/wp-two-factor-auth/';
+		$this->assertEquals($prefix, substr($actual, 0, strlen($prefix)));
+		$this->assertEquals($suffix, substr($actual, -strlen($suffix)));
+	}
+
 	public function testAuthenticate()
 	{
+		unset($_POST['two_factor_code']);
+
 		$result = apply_filters('authenticate', new WP_Error(), 'user', 'pass');
 		$this->assertWPError($result);
 
