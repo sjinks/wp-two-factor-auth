@@ -1,6 +1,5 @@
 <?php
 
-
 $_tests_dir = getenv('WP_TESTS_DIR');
 
 if (!$_tests_dir) {
@@ -8,7 +7,7 @@ if (!$_tests_dir) {
 }
 
 if (!file_exists($_tests_dir . '/includes/functions.php')) {
-    throw new Exception("Could not find $_tests_dir/includes/functions.php, have you run bin/install-wp-tests.sh?");
+	throw new Exception("Could not find {$_tests_dir}/includes/functions.php, have you run bin/install-wp-tests.sh?");
 }
 
 // Give access to tests_add_filter() function.
@@ -16,7 +15,13 @@ require_once $_tests_dir . '/includes/functions.php';
 
 function _manually_load_plugin()
 {
-    require dirname(dirname(__FILE__)) . '/plugin.php';
+	if (file_exists(WP_PLUGIN_DIR . '/two-factor-auth') && is_link(WP_PLUGIN_DIR . '/wp-two-factor-auth')) {
+		unlink(WP_PLUGIN_DIR . '/wp-two-factor-auth');
+	}
+
+	symlink(dirname(dirname(__FILE__)), WP_PLUGIN_DIR . '/wp-two-factor-auth');
+	wp_register_plugin_realpath(WP_PLUGIN_DIR . '/wp-two-factor-auth/plugin.php');
+	require WP_PLUGIN_DIR . '/wp-two-factor-auth/plugin.php';
 }
 
 tests_add_filter('muplugins_loaded', '_manually_load_plugin');
