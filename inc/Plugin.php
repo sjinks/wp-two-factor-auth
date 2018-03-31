@@ -15,12 +15,15 @@ class Plugin
 		static $self = null;
 
 		if (!$self) {
+			// @codeCoverageIgnoreStart
 			$self = new self();
+			// @codeCoverageIgnoreEnd
 		}
 
 		return $self;
 	}
 
+	// @codeCoverageIgnoreStart
 	private function __construct()
 	{
 		\add_action('init', [$this, 'init']);
@@ -30,7 +33,7 @@ class Plugin
 	{
 		$this->base_url = \plugin_dir_url(\dirname(__DIR__) . '/plugin.php');
 
-		\load_plugin_textdomain('two-factor-auth', false, \dirname(\substr(__DIR__, \strlen(\WP_PLUGIN_DIR) + 1)) . '/languages/');
+		\load_plugin_textdomain('two-factor-auth', false, \plugin_basename(\dirname(\dirname(__FILE__))) . '/languages/');
 		\register_setting('two-factor-auth', self::OPTIONS_KEY, ['default' => []]);
 
 		if (\is_admin()) {
@@ -40,6 +43,7 @@ class Plugin
 		\add_action('login_init',   [$this, 'login_init']);
 		\add_filter('authenticate', [$this, 'authenticate'], 999, 3);
 	}
+	// @codeCoverageIgnoreEnd
 
 	public function baseUrl() : string
 	{
