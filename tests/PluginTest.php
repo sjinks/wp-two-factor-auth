@@ -35,6 +35,29 @@ class PluginTest extends WP_UnitTestCase
 		$this->assertEquals(10, has_action('login_form',            [$inst, 'login_form']));
 	}
 
+	public function testLoginEnqueueScripts()
+	{
+		remove_action('login_init', 'send_frame_options_header', 10);
+		remove_action('login_init', 'wp_admin_headers', 10);
+		do_action('login_init');
+		do_action('login_enqueue_scripts');
+		$this->assertTrue(wp_styles()->query('tfa-login', 'enqueued'));
+		$this->assertTrue(wp_scripts()->query('tfa-ajax-request', 'enqueued'));
+	}
+
+	public function testLoginForm()
+	{
+		remove_action('login_init', 'send_frame_options_header', 10);
+		remove_action('login_init', 'wp_admin_headers', 10);
+		do_action('login_init');
+		ob_start();
+		do_action('login_form');
+		$s = ob_get_clean();
+
+		$needle = '<input type="text" name="two_factor_code" id="two_factor_auth"';
+		$this->assertContains($needle, $s);
+	}
+
 	public function testBaseUrl()
 	{
 		$actual = Plugin::instance()->baseUrl();
