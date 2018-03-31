@@ -121,5 +121,11 @@ class PluginTest extends WP_UnitTestCase
 		$data = new UserData(1);
 		$new  = $data->getCounter();
 		$this->assertEquals($ctr + 6, $new);
+
+		// Should not be able to use previous codes
+		$_POST['two_factor_code'] = Utils::generateHOTP($key, $ctr + 4, 6);
+		$result = apply_filters('authenticate', null, 'admin', 'password');
+		$this->assertWPError($result);
+		$this->assertSame(['authentication_failed'], $result->get_error_codes());
 	}
 }
