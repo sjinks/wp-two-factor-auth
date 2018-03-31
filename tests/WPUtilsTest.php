@@ -5,6 +5,12 @@ use WildWolf\TFA\WPUtils;
 
 class WPUtilsTest extends WP_UnitTestCase
 {
+	public function setUp()
+	{
+		parent::setUp();
+		reset_phpmailer_instance();
+	}
+
 	public function testGetUserByLoginOrEmail()
 	{
 		$login = 'admin';

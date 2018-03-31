@@ -110,7 +110,13 @@ class PluginTest extends WP_UnitTestCase
 		$this->assertWPError($result);
 		$this->assertSame(['authentication_failed'], $result->get_error_codes());
 
-		// Authenticate using TOTP; must be able to resynchronize
+		// and a wrong code won't be accepted
+		$_POST['two_factor_code'] = 'AAAAAA';
+		$result = apply_filters('authenticate', null, 'admin', 'password');
+		$this->assertWPError($result);
+		$this->assertSame(['authentication_failed'], $result->get_error_codes());
+
+		// Authenticate using HOTP; must be able to resynchronize
 		$data = new UserData(1);
 		$data->setHMAC('hotp');
 		$key = $data->getPrivateKey();

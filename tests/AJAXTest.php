@@ -25,6 +25,24 @@ class AJAXTest extends WP_Ajax_UnitTestCase
 		update_option('tfa', ['role_administrator' => true]);
 	}
 
+	public function badNonceDataProvider()
+	{
+		return [
+			['tfa-refresh-code'],
+			['tfa-reset-method'],
+			['tfa-verify-code'],
+		];
+	}
+
+	/**
+	 * @dataProvider badNonceDataProvider
+	 */
+	public function testBadNonce(string $action)
+	{
+		$this->setExpectedException('WPAjaxDieStopException', '-1');
+		$this->_handleAjax($action);
+	}
+
 	public function testResetMethod()
 	{
 		$this->assertTrue(current_user_can('edit_users'));
@@ -154,5 +172,93 @@ class AJAXTest extends WP_Ajax_UnitTestCase
 		$this->assertNotNull($response);
 
 		$this->assertStringStartsWith('<strong class="verify-failure">', $response);
+	}
+
+	public function testRefreshCodeTOTP()
+	{
+		$uid  = wp_get_current_user()->ID;
+		$data = new UserData($uid);
+		$this->assertTrue($data->is2FAEnabled());
+
+		$data->setDeliveryMethod('third-party-apps');
+		$data->setHMAC('totp');
+		$_POST = [
+			'action'      => 'tfa-refresh-code',
+			'_ajax_nonce' => wp_create_nonce('tfa-refresh_' . $uid),
+		];
+
+		$response = null;
+		$now      = time();
+		$code     = null;
+		do {
+			$code = $data->generateOTP();
+			try {
+				$this->_handleAjax($_POST['action']);
+			}
+			catch (WPAjaxDieStopException $e) {
+				$response = $e->getMessage();
+			}
+
+			$then = time();
+		} while ($now != $then);
+
+		$this->assertTrue(did_action('wp_ajax_tfa-refresh-code') > 0);
+
+		$this->assertEmpty($this->_last_response);
+		$this->assertNotNull($response);
+
+		$this->assertEquals($code, $response);
+	}
+
+	public function testRefreshCodeHOTP()
+	{
+		$uid  = wp_get_current_user()->ID;
+		$data = new UserData($uid);
+		$this->assertTrue($data->is2FAEnabled());
+
+		$data->setDeliveryMethod('third-party-apps');
+		$data->setHMAC('hotp');
+		$_POST = [
+			'action'      => 'tfa-refresh-code',
+			'_ajax_nonce' => wp_create_nonce('tfa-refresh_' . $uid),
+		];
+
+		$response = null;
+		$code     = $data->generateOTP();
+		try {
+			$this->_handleAjax($_POST['action']);
+		}
+		catch (WPAjaxDieStopException $e) {
+			$response = $e->getMessage();
+		}
+
+		$this->assertEquals(1, did_action('wp_ajax_tfa-refresh-code'));
+
+		$this->assertEmpty($this->_last_response);
+		$this->assertNotNull($response);
+
+		$this->assertEquals($code, $response);
+	}
+
+	public function testInitOTP()
+	{
+		$uid  = wp_get_current_user()->ID;
+		$data = new UserData($uid);
+		$this->assertTrue($data->is2FAEnabled());
+
+		$_POST['log'] = wp_get_current_user()->user_login;
+		$response     = null;
+		try {
+			$this->_handleAjax('tfa-init-otp');
+		}
+		catch (WPAjaxDieStopException $e) {
+			$response = $e->getMessage();
+		}
+
+		$this->assertEmpty($this->_last_response);
+		$this->assertNotNull($response);
+
+		$data = json_decode($response, true);
+		$this->assertTrue($data['status']);
 	}
 }
