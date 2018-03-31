@@ -14,9 +14,9 @@ abstract class Utils
 		return OTP::asOTP($code, $len);
 	}
 
-	public static function generateTOTP(string $key, int $window, int $len, string $algo = 'sha1') : string
+	public static function generateTOTP(string $key, int $window, int $len, string $algo = 'sha1', int $time = null) : string
 	{
-		$code = OTP::generateByTime($key, $window, \time(), $algo);
+		$code = OTP::generateByTime($key, $window, $time, $algo);
 		return OTP::asOTP($code, $len);
 	}
 
