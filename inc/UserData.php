@@ -231,10 +231,12 @@ class UserData
 			 * the shared secret MUST be at least 128 bits. This document
 			 * RECOMMENDs a shared secret length of 160 bits.
 			 */
-
 			$this->secret = Utils::randomBase32String(32);
 			if ('email' !== $this->method) {
-				$this->doSetHMAC(self::$defaultHmac, false);
+				if (!$this->getHMAC()) {
+					$this->doSetHMAC(self::$defaultHmac, false);
+				}
+
 				$this->doGeneratePanicCodes(false);
 			}
 			else {
