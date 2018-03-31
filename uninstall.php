@@ -1,5 +1,6 @@
 <?php
 defined('WP_UNINSTALL_PLUGIN') || die();
-delete_option( 'tfa_version' );
 
-?>
+global $wpdb;
+delete_option('tfa');
+$wpdb->delete($wpdb->usermeta, ['meta_key' => 'tfa']);
