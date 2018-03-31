@@ -4,7 +4,6 @@ namespace WildWolf\TFA;
 
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
-use function wp_die;
 
 class Admin
 {
@@ -263,8 +262,7 @@ EOT;
 		\check_ajax_referer('tfa-refresh_' . $current_user->ID);
 
 		$data = new UserData($current_user);
-		echo $data->generateOTP();
-		die();
+		\wp_die($data->generateOTP());
 	}
 
 	public function tfa_verify_code()
@@ -277,13 +275,11 @@ EOT;
 		$result = $data->verifyOTP($code, true);
 
 		if ($result) {
-			echo '<strong class="verify-success">', \__('Success!', 'two-factor-auth'), '</strong>';
+			\wp_die('<strong class="verify-success">' . \__('Success!', 'two-factor-auth') . '</strong>');
 		}
 		else {
-			echo '<strong class="verify-failure">', \__('Failure!', 'two-factor-auth'), '</strong>';
+			\wp_die('<strong class="verify-failure">' . \__('Failure!', 'two-factor-auth') . '</strong>');
 		}
-
-		die();
 	}
 
 	public function tfa_reset_method()
@@ -295,8 +291,7 @@ EOT;
 			$data = new UserData($uid);
 			$data->setDeliveryMethod('email');
 
-			echo self::$delivery_type_lut['email'];
-			die();
+			\wp_die(self::$delivery_type_lut['email']);
 		}
 	}
 
