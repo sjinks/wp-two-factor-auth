@@ -73,7 +73,7 @@ class AJAXTest extends WP_Ajax_UnitTestCase
 		$this->assertEmpty($this->_last_response);
 		$this->assertNotNull($response);
 
-		$expected = __('By email', 'two-factor-auth');
+		$expected = __('By email', 'wwatfa');
 		$this->assertEquals($expected, $response);
 
 		$data = new UserData(self::$admin_id);

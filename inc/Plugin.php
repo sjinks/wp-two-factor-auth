@@ -33,7 +33,7 @@ class Plugin
 	{
 		$this->base_url = \plugin_dir_url(\dirname(__DIR__) . '/plugin.php');
 
-		\load_plugin_textdomain('two-factor-auth', false, \plugin_basename(\dirname(\dirname(__FILE__))) . '/languages/');
+		\load_plugin_textdomain('wwtfa', false, \plugin_basename(\dirname(\dirname(__FILE__))) . '/lang/');
 		\register_setting('two-factor-auth', self::OPTIONS_KEY, ['default' => []]);
 
 		if (\is_admin()) {
@@ -81,7 +81,7 @@ class Plugin
 			if ($data->is2FAEnabled()) {
 				$ok   = $data->verifyOTP($code);
 				if (!$ok) {
-					return new \WP_Error('authentication_failed', \__('<strong>ERROR</strong>: The one time password you have entered is incorrect.', 'two-factor-auth'));
+					return new \WP_Error('authentication_failed', \__('<strong>ERROR</strong>: The one time password you have entered is incorrect.', 'wwtfa'));
 				}
 			}
 		}

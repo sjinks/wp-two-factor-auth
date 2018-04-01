@@ -22,7 +22,7 @@ class PluginTest extends WP_UnitTestCase
 		$settings = get_registered_settings();
 		$this->assertArrayHasKey(Plugin::OPTIONS_KEY, $settings);
 
-		$this->assertTrue(is_textdomain_loaded('two-factor-auth'));
+		$this->assertTrue(is_textdomain_loaded('wwtfa'));
 	}
 
 	public function testLoginInit()

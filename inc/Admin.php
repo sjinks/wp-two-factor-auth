@@ -33,8 +33,8 @@ class Admin
 		$this->init();
 
 		self::$delivery_type_lut = [
-			'email'            => \__('By email', 'two-factor-auth'),
-			'third-party-apps' => \__('Via third party applications', 'two-factor-auth')
+			'email'            => \__('By email', 'wwatfa'),
+			'third-party-apps' => \__('Via third party applications', 'wwatfa')
 		];
 	}
 
@@ -43,6 +43,8 @@ class Admin
 	 */
 	public function init()
 	{
+		\load_plugin_textdomain('wwatfa', false, \plugin_basename(\dirname(\dirname(__FILE__))) . '/lang/');
+
 		\add_action('wp_ajax_nopriv_tfa-init-otp', [$this, 'preAuth']);
 		\add_action('admin_init',                  [$this, 'admin_init']);
 		\add_action('admin_menu',                  [$this, 'admin_menu']);
@@ -86,14 +88,14 @@ EOT;
 		 */
 		$roles = \wp_roles();
 
-		\add_settings_section('tfa-roles', \__('User Roles', 'two-factor-auth'), [$this, 'tfa_user_roles_callback'], 'two-factor-auth');
+		\add_settings_section('tfa-roles', \__('User Roles', 'wwatfa'), [$this, 'tfa_user_roles_callback'], 'two-factor-auth');
 		foreach ($roles->role_names as $id => $name) {
 			\add_settings_field('role_' . $id, $name, [$this, 'checkbox_field'], 'two-factor-auth', 'tfa-roles', ['label_for' => 'role_' . $id]);
 		}
 
-		\add_settings_section('tfa-email', \__('Email Settings', 'two-factor-auth'), '__return_null', 'two-factor-auth');
-		\add_settings_field('email_from', \__('Email Address', 'two-factor-auth'), [$this, 'input_field'], 'two-factor-auth', 'tfa-email', ['label_for' => 'email_from', 'type' => 'email']);
-		\add_settings_field('email_name', \__('Sender Name', 'two-factor-auth'),   [$this, 'input_field'], 'two-factor-auth', 'tfa-email', ['label_for' => 'email_name']);
+		\add_settings_section('tfa-email', \__('Email Settings', 'wwatfa'), '__return_null', 'two-factor-auth');
+		\add_settings_field('email_from', \__('Email Address', 'wwatfa'), [$this, 'input_field'], 'two-factor-auth', 'tfa-email', ['label_for' => 'email_from', 'type' => 'email']);
+		\add_settings_field('email_name', \__('Sender Name', 'wwatfa'),   [$this, 'input_field'], 'two-factor-auth', 'tfa-email', ['label_for' => 'email_name']);
 
 		$plugin = \plugin_basename(dirname(__DIR__) . '/plugin.php');
 		\add_filter('plugin_action_links_' . $plugin, [$this, 'plugin_action_links']);
@@ -110,6 +112,7 @@ EOT;
 		\add_action('admin_post_tfa_save_user_settings', [$this, 'tfa_save_user_settings']);
 		\add_action('admin_post_tfa_reset_key',          [$this, 'tfa_reset_key']);
 		\add_action('admin_post_tfa_save_user_method',   [$this, 'tfa_save_user_method']);
+		\add_action('admin_post_tfa_reset_panic',        [$this, 'tfa_reset_panic']);
 
 		\add_action('admin_enqueue_scripts',             [$this, 'admin_enqueue_scripts'], 10, 1);
 	}
@@ -150,8 +153,8 @@ EOT;
 			\wp_enqueue_script('tfa-user-settings', $base . 'assets/user-settings.min.js', [], '5.0', true);
 			\wp_localize_script('tfa-user-settings', 'tfaSettings', [
 				'ajaxurl'    => \admin_url('admin-ajax.php'),
-				'confirm'    => \__('WARNING: If you reset the private key, you will have to update your applications with the new one. Do you want to proceed?', 'two-factor-auth'),
-				'refreshing' => \__('Refreshing&hellip;', 'two-factor-auth'),
+				'confirm'    => \__('WARNING: If you reset the private key, you will have to update your applications with the new one. Do you want to proceed?', 'wwatfa'),
+				'refreshing' => \__('Refreshing&hellip;', 'wwatfa'),
 				'nonce'      => \wp_create_nonce('tfa-refresh_' . $user->ID),
 				'vnonce'     => \wp_create_nonce('tfa-verify_'  . $user->ID),
 			]);
@@ -163,8 +166,9 @@ EOT;
 		$message = \filter_input(\INPUT_GET, 'message', \FILTER_SANITIZE_NUMBER_INT);
 		switch ($message) {
 			case 1: \add_settings_error('general', 'settings_updated', \__('Settings saved.'), 'updated'); break;
-			case 2: \add_settings_error('general', 'settings_updated', \__('Private key reset.', 'two-factor-auth'), 'updated'); break;
-			case 3: \add_settings_error('general', 'settings_updated', \__('Algorithm changed.', 'two-factor-auth'), 'updated'); break;
+			case 2: \add_settings_error('general', 'settings_updated', \__('Private key reset.', 'wwatfa'), 'updated'); break;
+			case 3: \add_settings_error('general', 'settings_updated', \__('Algorithm changed.', 'wwatfa'), 'updated'); break;
+			case 4: \add_settings_error('general', 'settings_updated', \__('Panic codes regenerated.', 'wwatfa'), 'updated'); break;
 		}
 
 		$current_user = \wp_get_current_user();
@@ -216,7 +220,7 @@ EOT;
 	public function plugin_action_links(array $links) : array
 	{
 		$url  = \esc_attr(\admin_url('options-general.php?page=two-factor-auth'));
-		$link = '<a href="' . $url . '">' . \__('Settings', 'two-factor-auth') . '</a>';
+		$link = '<a href="' . $url . '">' . \__('Settings', 'wwatfa') . '</a>';
 		$links['settings'] = $link;
 		return $links;
 	}
@@ -278,10 +282,10 @@ EOT;
 		$result = $data->verifyOTP($code, true);
 
 		if ($result) {
-			\wp_die('<strong class="verify-success">' . \__('Success!', 'two-factor-auth') . '</strong>');
+			\wp_die('<strong class="verify-success">' . \__('Success!', 'wwatfa') . '</strong>');
 		}
 		else {
-			\wp_die('<strong class="verify-failure">' . \__('Failure!', 'two-factor-auth') . '</strong>');
+			\wp_die('<strong class="verify-failure">' . \__('Failure!', 'wwatfa') . '</strong>');
 		}
 	}
 
@@ -296,6 +300,16 @@ EOT;
 
 			\wp_die(self::$delivery_type_lut['email']);
 		}
+	}
+
+	public function tfa_reset_panic()
+	{
+		$current_user = \wp_get_current_user();
+		\check_admin_referer('reset-tfapanic_' . $current_user->ID);
+
+		$data  = new UserData($current_user->ID);
+		$data->generatePanicCodes();
+		\wp_redirect(\admin_url('admin.php?page=two-factor-auth-user&message=4'));
 	}
 
 	private function render(string $view, array $options = [])

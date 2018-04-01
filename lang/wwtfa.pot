@@ -1,0 +1,12 @@
+#: ../inc/Plugin.php:84
+msgid ""
+"<strong>ERROR</strong>: The one time password you have entered is incorrect."
+msgstr ""
+
+#: ../views/login.php:3
+msgid "One Time Password"
+msgstr ""
+
+#: ../views/login.php:6
+msgid "(check your email or OTP application to get the password)"
+msgstr ""

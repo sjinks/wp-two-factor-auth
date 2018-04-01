@@ -22,8 +22,8 @@ class WPUtils
 		}
 
 		$headers[] = "Content-Type: text/plain\r\n";
-		$subject   = \sprintf(\__('One Time Password for %s', 'two-factor-auth'), \get_bloginfo('name'));
-		$body      = \sprintf(\__("Enter this OTP to log in: %s\n\n%s\n", 'two-factor-auth'), $code, \site_url());
+		$subject   = \sprintf(\__('One Time Password for %s', 'wwatfa'), \get_bloginfo('name'));
+		$body      = \sprintf(\__("Enter this OTP to log in: %s\n\n%s\n", 'wwatfa'), $code, \site_url());
 
 		$subject   = \apply_filters('tfa_otp_email_subject', $subject, $user, $code);
 		$body      = \apply_filters('tfa_otp_email_body',    $body, $user, $code);

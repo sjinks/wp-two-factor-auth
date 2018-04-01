@@ -1,19 +1,19 @@
 <?php defined('ABSPATH') || die(); ?>
-<h3><?=__('Two Factor Authentication', 'two-facor-auth');?></h3>
+<h3><?=__('Two Factor Authentication', 'wwatfa');?></h3>
 
 <table class="form-table">
 	<tbody>
 		<tr>
-			<th><?=__('Enabled for this user', 'two-factor-auth'); ?>
-			<td><?=($options['enabled'] ? __('Yes', 'two-factor-auth') : __('No', 'two-factor-auth'));?>
+			<th><?=__('Enabled for this user', 'wwatfa'); ?>
+			<td><?=($options['enabled'] ? __('Yes', 'wwatfa') : __('No', 'wwatfa'));?>
 		</tr>
 <?php if ($options['enabled']) : ?>
 		<tr>
-			<th><?=__('OTP delivery method', 'two-factor-auth');?></th>
+			<th><?=__('OTP delivery method', 'wwatfa');?></th>
 			<td>
 				<span id="tfa-delivery-method"><?=$options['delivery'];?></span>
 <?php if ('email' !== $options['method']) : ?>
-				<span class="button-link hide-if-no-js" id="tfa-change-method"><?=__('(change to "By email")', 'two-factor-auth');?></span>
+				<span class="button-link hide-if-no-js" id="tfa-change-method"><?=__('(change to "By email")', 'wwatfa');?></span>
 <?php endif; ?>
 			</td>
 		</tr>
