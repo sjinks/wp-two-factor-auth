@@ -188,7 +188,7 @@ class AJAXTest extends WP_Ajax_UnitTestCase
 		];
 
 		$response = null;
-		$now      = time();
+		$now      = (int)(time() / 30);
 		$code     = null;
 		do {
 			$code = $data->generateOTP();
@@ -199,7 +199,7 @@ class AJAXTest extends WP_Ajax_UnitTestCase
 				$response = $e->getMessage();
 			}
 
-			$then = time();
+			$then = (int)(time() / 30);
 		} while ($now != $then);
 
 		$this->assertTrue(did_action('wp_ajax_tfa-refresh-code') > 0);
