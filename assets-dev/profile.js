@@ -1,3 +1,4 @@
+/** global: tfaSettings, XMLHttpRequest */
 window.addEventListener('DOMContentLoaded', function() {
 	document.getElementById('tfa-change-method').addEventListener('click', function() {
 		var req = new XMLHttpRequest();

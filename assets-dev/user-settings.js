@@ -1,3 +1,4 @@
+/** global: tfaSettings, XMLHttpRequest */
 window.addEventListener('DOMContentLoaded', function() {
 	document.getElementById('tfa-reset-form').addEventListener('submit', function(e) {
 		if (!confirm(tfaSettings.confirm)) {

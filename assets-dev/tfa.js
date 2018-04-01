@@ -1,3 +1,4 @@
+/** global: tfaSettings, XMLHttpRequest */
 window.addEventListener('DOMContentLoaded', function() {
 	var form = document.getElementById('loginform');
 	form.addEventListener('submit', tfaCallback);
