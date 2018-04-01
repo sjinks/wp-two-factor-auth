@@ -1,30 +1,28 @@
 <?php
 namespace WildWolf\TFA;
 
-use WildWolf\OTP;
-
 class UserData
 {
 	/**
 	 * @var integer
 	 */
-	private static $timeWindow       = 30;
+	public static $timeWindow       = 30;
 	/**
 	 * @var integer
 	 */
-	private static $windowsToCheck   =  2;
-	private static $countersToCheck  = 20;
-	private static $otpLength        =  6;
-	private static $panicCodeLength  =  8;
-	private static $panicCodes       = 10;
+	public static $windowsToCheck   =  2;
+	public static $countersToCheck  = 20;
+	public static $otpLength        =  6;
+	public static $panicCodeLength  =  8;
+	public static $panicCodes       = 10;
 	/**
 	 * @var string
 	 */
-	private static $defaultHmac      = 'totp';
+	public static $defaultHmac      = 'totp';
 	/**
 	 * @var string
 	 */
-	private static $defaultHash      = 'sha1';
+	public static $defaultHash      = 'sha1';
 
 	/**
 	 * @var string
@@ -162,6 +160,12 @@ class UserData
 		return $this->panic;
 	}
 
+	public function setPanicCodes(array $v)
+	{
+		$this->panic = $v;
+		$this->save();
+	}
+
 	private function doSetHMAC(string $hmac) : bool
 	{
 		if ($this->hmac !== $hmac) {
@@ -194,6 +198,23 @@ class UserData
 	public function getCounter() : int
 	{
 		return $this->counter;
+	}
+
+	public function setCounter(int $v)
+	{
+		$this->counter = $v;
+		$this->save();
+	}
+
+	public function getUsedCodes() : array
+	{
+		return $this->used;
+	}
+
+	public function setUsedCodes(array $v)
+	{
+		$this->used = $v;
+		$this->save();
 	}
 
 	public function getDeliveryMethod() : string
@@ -271,117 +292,6 @@ class UserData
 		}
 
 		return Utils::generateTOTP($secret, self::$timeWindow, self::$otpLength, self::$defaultHash);
-	}
-
-	private function verifyEmailOTP(string $code) : bool
-	{
-		$otp = Utils::generateHOTP($this->getPrivateKey(), $this->getCounter(), self::$otpLength, self::$defaultHash);
-		if ($code === $otp) {
-			// https://tools.ietf.org/html/rfc4226#section-7.2
-			// If the value received by the authentication server matches the value calculated by the client,
-			// then the HOTP value is validated. In this case, the server increments the counter value by one.
-			++$this->counter;
-			$this->save();
-			return true;
-		}
-
-		return false;
-	}
-
-	private function verifyHOTP(string $code) : bool
-	{
-		$codes = OTP::generateMultipleByCounter($this->getPrivateKey(), $this->getCounter(), self::$countersToCheck, self::$defaultHash);
-		foreach ($codes as $idx => $c) {
-			if (OTP::asOTP($c, self::$otpLength) === $code) {
-				$this->counter += $idx + 1;
-				$this->save();
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	private function verifyTOTP(string $code, bool $relaxed) : bool
-	{
-		$codes = OTP::generateByTimeWindow($this->getPrivateKey(), self::$timeWindow, -self::$windowsToCheck, 0, null, self::$defaultHash);
-		foreach ($codes as $idx => $c) {
-			if (OTP::asOTP($c, self::$otpLength) === $code) {
-				if (!$relaxed) {
-					$this->used = \array_slice($codes, 0, $idx + 1);
-					$this->save();
-				}
-
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	private function checkPanicCode(string $code) : bool
-	{
-		if (\strlen($code) === self::$panicCodeLength) {
-			$idx = \array_search($code, $this->panic);
-			if (false !== $idx) {
-				\array_splice($this->panic, (int)$idx, 1);
-				$this->save();
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	private function isCodeUsed(string $code) : bool
-	{
-		foreach ($this->used as $c) {
-			if (OTP::asOTP($c, self::$otpLength) === $code) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	private function doVerifyCode(string $code, bool $relaxed) : bool
-	{
-		return ('hotp' === $this->getHMAC())
-			? $this->verifyHOTP($code)
-			: $this->verifyTOTP($code, $relaxed)
-		;
-	}
-
-	public function verifyOTPRelaxed(string $code)
-	{
-		\assert('email' !== $this->getDeliveryMethod());
-
-		if (\strlen($code) === self::$otpLength) {
-			return $this->doVerifyCode($code, true);
-		}
-
-		return false;
-	}
-
-	public function verifyOTP(string $code) : bool
-	{
-		if ('email' === $this->getDeliveryMethod()) {
-			return $this->verifyEmailOTP($code);
-		}
-
-		// Check the code only if its length matches
-		if (\strlen($code) === self::$otpLength) {
-			// Disallow recently entered codes
-			if ($this->isCodeUsed($code)) {
-				return false;
-			}
-
-			if ($this->doVerifyCode($code, false)) {
-				return true;
-			}
-		}
-
-		return $this->checkPanicCode($code);
 	}
 
 	public function is2FAEnabled()

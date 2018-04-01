@@ -278,8 +278,7 @@ EOT;
 		\check_ajax_referer('tfa-verify_' . $current_user->ID);
 
 		$code   = $_POST['code'] ?? '';
-		$data   = new UserData($current_user);
-		$result = $data->verifyOTPRelaxed($code);
+		$result = OTPVerifier::verifyRelaxed(new UserData($current_user), $code);
 
 		if ($result) {
 			\wp_die('<strong class="verify-success">' . \__('Success!', 'wwatfa') . '</strong>');

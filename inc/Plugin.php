@@ -78,11 +78,8 @@ class Plugin
 		if (false !== $u) {
 			$code = $_POST['two_factor_code'] ?? '';
 			$data = new UserData($u);
-			if ($data->is2FAEnabled()) {
-				$ok   = $data->verifyOTP($code);
-				if (!$ok) {
-					return new \WP_Error('authentication_failed', \__('<strong>ERROR</strong>: The one time password you have entered is incorrect.', 'wwtfa'));
-				}
+			if ($data->is2FAEnabled() && !OTPVerifier::verify($data, $code)) {
+				return new \WP_Error('authentication_failed', \__('<strong>ERROR</strong>: The one time password you have entered is incorrect.', 'wwtfa'));
 			}
 		}
 
