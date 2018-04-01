@@ -11,6 +11,7 @@ class AJAXTest extends WP_Ajax_UnitTestCase
 	public static function wpSetUpBeforeClass($factory)
 	{
 		self::$admin_id = $factory->user->create(['role' => 'administrator']);
+		grant_super_admin(self::$admin_id);
 	}
 
 	public function setUp()

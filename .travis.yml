@@ -42,4 +42,5 @@ script:
   - |
     if [[ ! -z "$WP_VERSION" ]] ; then
       vendor/bin/phpunit
+      WP_MULTISITE=1 vendor/bin/phpunit
     fi
