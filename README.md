@@ -1,6 +1,12 @@
 wp-two-factor-auth
 ==================
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sjinks/wp-two-factor-auth/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sjinks/wp-two-factor-auth/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/sjinks/wp-two-factor-auth/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/sjinks/wp-two-factor-auth/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/sjinks/wp-two-factor-auth/badges/build.png?b=master)](https://scrutinizer-ci.com/g/sjinks/wp-two-factor-auth/build-status/master)
+[![Code Intelligence Status](https://scrutinizer-ci.com/g/sjinks/wp-two-factor-auth/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
+[![Build Status](https://travis-ci.org/sjinks/wp-two-factor-auth.svg?branch=master)](https://travis-ci.org/sjinks/wp-two-factor-auth)
+
 Secure WordPress login with Two Factor Auth. Users will have to enter an One Time Password when they log in.
 
 ## Description
