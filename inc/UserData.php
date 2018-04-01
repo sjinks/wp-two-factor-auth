@@ -126,11 +126,11 @@ class UserData
 				$data['counter'] = $this->counter;
 			}
 
-			if ($this->panic) {
+			if (!empty($this->panic)) {
 				$data['panic'] = $this->panic;
 			}
 
-			if ($this->used) {
+			if (!empty($this->used)) {
 				$data['used'] = $this->used;
 			}
 		}
@@ -324,7 +324,7 @@ class UserData
 		if (\strlen($code) === self::$panicCodeLength) {
 			$idx = \array_search($code, $this->panic);
 			if (false !== $idx) {
-				\array_splice($this->panic, $idx, 1);
+				\array_splice($this->panic, (int)$idx, 1);
 				$this->save();
 				return true;
 			}

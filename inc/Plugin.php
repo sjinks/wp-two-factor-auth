@@ -33,7 +33,7 @@ class Plugin
 	{
 		$this->base_url = \plugin_dir_url(\dirname(__DIR__) . '/plugin.php');
 
-		\load_plugin_textdomain('wwtfa', false, \plugin_basename(\dirname(\dirname(__FILE__))) . '/lang/');
+		\load_plugin_textdomain('wwtfa', /** @scrutinizer ignore-type */ false, \plugin_basename(\dirname(\dirname(__FILE__))) . '/lang/');
 		\register_setting('two-factor-auth', self::OPTIONS_KEY, ['default' => []]);
 
 		if (\is_admin()) {
@@ -68,7 +68,7 @@ class Plugin
 		require __DIR__ . '/../views/login.php';
 	}
 
-	public function authenticate($user, $username, $password)
+	public function authenticate($user, $username, /** @scrutinizer ignore-unused */ $password)
 	{
 		if (\is_wp_error($user)) {
 			return $user;

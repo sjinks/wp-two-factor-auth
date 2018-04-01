@@ -43,7 +43,7 @@ class Admin
 	 */
 	public function init()
 	{
-		\load_plugin_textdomain('wwatfa', false, \plugin_basename(\dirname(\dirname(__FILE__))) . '/lang/');
+		\load_plugin_textdomain('wwatfa', /** @scrutinizer ignore-type */ false, \plugin_basename(\dirname(\dirname(__FILE__))) . '/lang/');
 
 		\add_action('wp_ajax_nopriv_tfa-init-otp', [$this, 'preAuth']);
 		\add_action('admin_init',                  [$this, 'admin_init']);
