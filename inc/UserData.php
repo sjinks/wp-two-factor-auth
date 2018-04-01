@@ -344,33 +344,44 @@ class UserData
 		return false;
 	}
 
-	public function verifyOTP(string $code, bool $relaxed = false) : bool
+	private function doVerifyCode(string $code, bool $relaxed) : bool
+	{
+		return ('hotp' === $this->getHMAC())
+			? $this->verifyHOTP($code)
+			: $this->verifyTOTP($code, $relaxed)
+		;
+	}
+
+	public function verifyOTPRelaxed(string $code)
+	{
+		\assert('email' !== $this->getDeliveryMethod());
+
+		if (\strlen($code) === self::$otpLength) {
+			return $this->doVerifyCode($code, true);
+		}
+
+		return false;
+	}
+
+	public function verifyOTP(string $code) : bool
 	{
 		if ('email' === $this->getDeliveryMethod()) {
-			\assert(!$relaxed);
 			return $this->verifyEmailOTP($code);
 		}
 
 		// Check the code only if its length matches
 		if (\strlen($code) === self::$otpLength) {
 			// Disallow recently entered codes
-			if (!$relaxed && $this->isCodeUsed($code)) {
+			if ($this->isCodeUsed($code)) {
 				return false;
 			}
 
-			if ('hotp' === $this->getHMAC()) {
-				$result = $this->verifyHOTP($code);
-			}
-			else {
-				$result = $this->verifyTOTP($code, $relaxed);
-			}
-
-			if ($result) {
+			if ($this->doVerifyCode($code, false)) {
 				return true;
 			}
 		}
 
-		return $relaxed ? false : $this->checkPanicCode($code);
+		return $this->checkPanicCode($code);
 	}
 
 	public function is2FAEnabled()

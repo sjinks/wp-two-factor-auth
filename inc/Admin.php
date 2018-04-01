@@ -279,7 +279,7 @@ EOT;
 
 		$code   = $_POST['code'] ?? '';
 		$data   = new UserData($current_user);
-		$result = $data->verifyOTP($code, true);
+		$result = $data->verifyOTPRelaxed($code);
 
 		if ($result) {
 			\wp_die('<strong class="verify-success">' . \__('Success!', 'wwatfa') . '</strong>');
