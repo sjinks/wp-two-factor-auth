@@ -145,7 +145,7 @@ class UserData
 		\update_user_meta($this->id, 'tfa', \base64_encode($data));
 	}
 
-	private function doGeneratePanicCodes(bool $save)
+	private function doGeneratePanicCodes()
 	{
 		$panic = [];
 		for ($i=0; $i<self::$panicCodes; ++$i) {
@@ -153,27 +153,24 @@ class UserData
 		}
 
 		$this->panic = $panic;
-		if ($save) {
-			$this->save();
-		}
 	}
 
 	public function generatePanicCodes() : array
 	{
-		$this->doGeneratePanicCodes(true);
+		$this->doGeneratePanicCodes();
+		$this->save();
 		return $this->panic;
 	}
 
-	private function doSetHMAC(string $hmac, bool $save)
+	private function doSetHMAC(string $hmac) : bool
 	{
 		if ($this->hmac !== $hmac) {
 			$this->hmac    = $hmac;
 			$this->counter = ('hotp' === $hmac) ? \mt_rand(1, \mt_getrandmax()) : 0;
-
-			if ($save) {
-				$this->save();
-			}
+			return true;
 		}
+
+		return false;
 	}
 
 	public function getHMAC() : string
@@ -187,7 +184,10 @@ class UserData
 			throw new \InvalidArgumentException();
 		}
 
-		$this->doSetHMAC($hmac, true);
+		if ($this->doSetHMAC($hmac)) {
+			$this->save();
+		}
+
 		return $this->hmac;
 	}
 
@@ -210,7 +210,7 @@ class UserData
 		if ($this->method !== $method) {
 			$this->method = $method;
 			if ('email' === $method) {
-				$this->doSetHMAC('hotp', false);
+				$this->doSetHMAC('hotp');
 				$this->panic = [];
 				$this->used  = [];
 			}
@@ -234,13 +234,13 @@ class UserData
 			$this->secret = Utils::randomBase32String(32);
 			if ('email' !== $this->method) {
 				if (!$this->getHMAC()) {
-					$this->doSetHMAC(self::$defaultHmac, false);
+					$this->doSetHMAC(self::$defaultHmac);
 				}
 
-				$this->doGeneratePanicCodes(false);
+				$this->doGeneratePanicCodes();
 			}
 			else {
-				$this->doSetHMAC('hotp', false);
+				$this->doSetHMAC('hotp');
 				$this->panic = [];
 			}
 
