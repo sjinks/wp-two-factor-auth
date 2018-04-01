@@ -90,7 +90,7 @@ EOT;
 
 		\add_settings_section('tfa-roles', \__('User Roles', 'wwatfa'), [$this, 'tfa_user_roles_callback'], 'two-factor-auth');
 		foreach ($roles->role_names as $id => $name) {
-			\add_settings_field('role_' . $id, $name, [$this, 'checkbox_field'], 'two-factor-auth', 'tfa-roles', ['label_for' => 'role_' . $id]);
+			\add_settings_field('role_' . $id, \translate_user_role($name), [$this, 'checkbox_field'], 'two-factor-auth', 'tfa-roles', ['label_for' => 'role_' . $id]);
 		}
 
 		\add_settings_section('tfa-email', \__('Email Settings', 'wwatfa'), '__return_null', 'two-factor-auth');
