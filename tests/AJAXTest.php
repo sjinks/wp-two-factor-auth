@@ -1,6 +1,6 @@
 <?php
 
-
+use WildWolf\TFA\AJAX;
 use WildWolf\TFA\Admin;
 use WildWolf\TFA\UserData;
 
@@ -18,9 +18,11 @@ class AJAXTest extends WP_Ajax_UnitTestCase
 	{
 		parent::setUp();
 		wp_set_current_user(self::$admin_id);
-		$inst = Admin::instance();
+
+		Admin::instance();
+		$inst = AJAX::instance();
 		if (false === has_action('admin_init', [$inst, 'admin_init'])) {
-			$inst->init();
+			$inst->admin_init();
 		}
 
 		update_option('tfa', ['role_administrator' => true]);
@@ -74,7 +76,7 @@ class AJAXTest extends WP_Ajax_UnitTestCase
 		$this->assertEmpty($this->_last_response);
 		$this->assertNotNull($response);
 
-		$expected = __('By email', 'wwatfa');
+		$expected = Admin::$delivery_type_lut['email'];
 		$this->assertEquals($expected, $response);
 
 		$data = new UserData(self::$admin_id);

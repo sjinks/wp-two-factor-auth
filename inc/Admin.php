@@ -15,7 +15,7 @@ class Admin
 	/**
 	 * @var array
 	 */
-	private static $delivery_type_lut = [];
+	public static $delivery_type_lut = [];
 
 	public static function instance()
 	{
@@ -45,16 +45,8 @@ class Admin
 	{
 		\load_plugin_textdomain('wwatfa', /** @scrutinizer ignore-type */ false, \plugin_basename(\dirname(\dirname(__FILE__))) . '/lang/');
 
-		\add_action('wp_ajax_nopriv_tfa-init-otp', [$this, 'preAuth']);
-		\add_action('admin_init',                  [$this, 'admin_init']);
-		\add_action('admin_menu',                  [$this, 'admin_menu']);
-	}
-
-	public function preAuth()
-	{
-		$log = \sanitize_user($_POST['log'] ?? '');
-		$res = WPUtils::preAuth($log);
-		\wp_die(\json_encode(['status' => $res]));
+		\add_action('admin_init', [$this, 'admin_init']);
+		\add_action('admin_menu', [$this, 'admin_menu']);
 	}
 
 	public function checkbox_field(array $args)
@@ -81,7 +73,7 @@ EOT;
 EOT;
 	}
 
-	public function admin_init()
+	private function register_settings()
 	{
 		/**
 		 * @var WP_Roles $roles
@@ -96,6 +88,11 @@ EOT;
 		\add_settings_section('tfa-email', \__('Email Settings', 'wwatfa'), '__return_null', 'two-factor-auth');
 		\add_settings_field('email_from', \__('Email Address', 'wwatfa'), [$this, 'input_field'], 'two-factor-auth', 'tfa-email', ['label_for' => 'email_from', 'type' => 'email']);
 		\add_settings_field('email_name', \__('Sender Name', 'wwatfa'),   [$this, 'input_field'], 'two-factor-auth', 'tfa-email', ['label_for' => 'email_name']);
+	}
+
+	public function admin_init()
+	{
+		$this->register_settings();
 
 		$plugin = \plugin_basename(dirname(__DIR__) . '/plugin.php');
 		\add_filter('plugin_action_links_' . $plugin, [$this, 'plugin_action_links']);
@@ -104,17 +101,15 @@ EOT;
 			\add_action('edit_user_profile', [$this, 'edit_user_profile']);
 		}
 
-		\add_action('wp_ajax_tfa-init-otp',              [$this, 'preAuth']);
-		\add_action('wp_ajax_tfa-refresh-code',          [$this, 'tfa_refresh_code']);
-		\add_action('wp_ajax_tfa-reset-method',          [$this, 'tfa_reset_method']);
-		\add_action('wp_ajax_tfa-verify-code',           [$this, 'tfa_verify_code']);
-
 		\add_action('admin_post_tfa_save_user_settings', [$this, 'tfa_save_user_settings']);
 		\add_action('admin_post_tfa_reset_key',          [$this, 'tfa_reset_key']);
 		\add_action('admin_post_tfa_save_user_method',   [$this, 'tfa_save_user_method']);
 		\add_action('admin_post_tfa_reset_panic',        [$this, 'tfa_reset_panic']);
-
 		\add_action('admin_enqueue_scripts',             [$this, 'admin_enqueue_scripts'], 10, 1);
+
+		if (defined('DOING_AJAX') && DOING_AJAX) {
+			AJAX::instance();
+		}
 	}
 
 	public function admin_menu()
@@ -265,44 +260,6 @@ EOT;
 		\wp_redirect(\admin_url('admin.php?page=two-factor-auth-user&message=3'));
 	}
 
-	public function tfa_refresh_code()
-	{
-		$current_user = \wp_get_current_user();
-		\check_ajax_referer('tfa-refresh_' . $current_user->ID);
-
-		$data = new UserData($current_user);
-		\wp_die($data->generateOTP());
-	}
-
-	public function tfa_verify_code()
-	{
-		$current_user = \wp_get_current_user();
-		\check_ajax_referer('tfa-verify_' . $current_user->ID);
-
-		$code   = $_POST['code'] ?? '';
-		$result = OTPVerifier::verifyRelaxed(new UserData($current_user), $code);
-
-		if ($result) {
-			\wp_die('<strong class="verify-success">' . \__('Success!', 'wwatfa') . '</strong>');
-		}
-		else {
-			\wp_die('<strong class="verify-failure">' . \__('Failure!', 'wwatfa') . '</strong>');
-		}
-	}
-
-	public function tfa_reset_method()
-	{
-		if (\current_user_can('edit_users')) {
-			$uid = (int)($_POST['uid'] ?? -1);
-			\check_ajax_referer('tfa-reset_' . $uid);
-
-			$data = new UserData($uid);
-			$data->setDeliveryMethod('email');
-
-			\wp_die(self::$delivery_type_lut['email']);
-		}
-	}
-
 	public function tfa_reset_panic()
 	{
 		$current_user = \wp_get_current_user();
@@ -333,7 +290,6 @@ EOT;
 		$data    = new UserData($user);
 		if ($data->is2FAEnabled()) {
 			$type = $data->getDeliveryMethod();
-			$type = isset(self::$delivery_type_lut[$type]) ? $type : \key(self::$delivery_type_lut);
 			$options['enabled']  = true;
 			$options['method']   = $type;
 			$options['delivery'] = self::$delivery_type_lut[$type];
