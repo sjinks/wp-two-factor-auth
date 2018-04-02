@@ -126,7 +126,9 @@ EOT;
 
 	public function settings_page()
 	{
-		$this->render(__DIR__ . '/../views/admin-settings.php');
+		if (\current_user_can('manage_options')) {
+			$this->render(__DIR__ . '/../views/admin-settings.php');
+		}
 	}
 
 	public function admin_enqueue_scripts($hook)
