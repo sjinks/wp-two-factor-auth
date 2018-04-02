@@ -2,6 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use WildWolf\TFA\UserData;
+use WildWolf\TFA\Utils;
 
 class UserDataTest extends TestCase
 {
@@ -76,5 +77,40 @@ class UserDataTest extends TestCase
 		foreach ($codes as $code) {
 			$this->assertEquals(UserData::$panicCodeLength, strlen($code));
 		}
+	}
+
+	public function testGenerateOTP_1()
+	{
+		$data = new UserData(1);
+		$data->setDeliveryMethod('email');
+		$this->assertEquals('hotp',  $data->getHMAC());
+
+		$expected = $data->generateOTP();
+		$data     = new UserData(1);
+		$counter  = $data->getCounter();
+		$actual   = Utils::generateHOTP($data->getPrivateKey(), $counter, UserData::$otpLength, UserData::$defaultHash);
+
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function testGenerateOTP_2()
+	{
+		$data = new UserData(1);
+		update_option('tfa', ['role_administrator' => true]);
+
+		$this->assertTrue($data->is2FAEnabled());
+		$this->assertEquals('email', $data->getDeliveryMethod());
+		$this->assertEquals('hotp',  $data->getHMAC());
+
+		$expected = $data->generateOTP();
+		$data     = new UserData(1);
+
+		$this->assertEquals('email', $data->getDeliveryMethod());
+		$this->assertEquals('hotp',  $data->getHMAC());
+
+		$counter  = $data->getCounter();
+		$actual   = Utils::generateHOTP($data->getPrivateKey(), $counter, UserData::$otpLength, UserData::$defaultHash);
+
+		$this->assertEquals($expected, $actual);
 	}
 }

@@ -219,7 +219,7 @@ class UserData
 	public function getDeliveryMethod() : string
 	{
 		if ($this->is2FAForcefullyEnabled()) {
-			return $this->method ?: 'email';
+			return $this->method ?: $this->setDeliveryMethod('email');
 		}
 
 		return $this->method;
@@ -269,6 +269,8 @@ class UserData
 		if ($this->doSetDeliveryMethod($method)) {
 			$this->save();
 		}
+
+		return $method;
 	}
 
 	public function getPrivateKey() : string
