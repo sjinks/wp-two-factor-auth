@@ -38,7 +38,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
 		req.open('POST', tfaSettings.ajaxurl);
 		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-		req.send('action=tfa-init-otp&user=' + encodeURIComponent(username));
+		req.send('action=tfa-init-otp&log=' + encodeURIComponent(username));
 		return false;
 	}
 });
