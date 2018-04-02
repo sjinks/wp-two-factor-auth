@@ -125,25 +125,15 @@ class UserData
 
 		$data = [];
 		if ($this->secret && $this->hmac) {
-			$data['secret'] = $this->secret;
-			$data['hmac']   = $this->hmac;
-
-			if ($this->counter) {
-				$data['counter'] = $this->counter;
-			}
-
-			if (!empty($this->panic)) {
-				$data['panic'] = $this->panic;
-			}
-
-			if (!empty($this->used)) {
-				$data['used'] = $this->used;
-			}
+			$data['secret']  = $this->secret;
+			$data['hmac']    = $this->hmac;
+			$data['counter'] = $this->counter;
+			$data['panic']   = $this->panic;
+			$data['used']    = $this->used;
 		}
 
-		if ($this->method) {
-			$data['method'] = $this->method;
-		}
+		$data['method'] = $this->method;
+		$data = \array_filter($data);
 
 		$password = $this->password();
 		$payload  = \serialize($data);
@@ -192,7 +182,8 @@ class UserData
 
 	public function setHMAC(string $hmac) : string
 	{
-		if ($hmac !== 'hotp' && $hmac !== 'totp') {
+		static $allowed = ['hotp' => 1, 'totp' => 1];
+		if (!isset($allowed[$hmac])) {
 			throw new \InvalidArgumentException();
 		}
 
@@ -266,7 +257,8 @@ class UserData
 
 	public function setDeliveryMethod(string $method)
 	{
-		if ($method !== 'email' && $method !== 'third-party-apps' && $method !== '') {
+		static $allowed = ['email' => 1, 'third-party-apps' => 1, '' => 1];
+		if (!isset($allowed[$method])) {
 			throw new \InvalidArgumentException();
 		}
 
