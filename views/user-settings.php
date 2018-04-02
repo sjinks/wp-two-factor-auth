@@ -87,12 +87,12 @@
 	</form>
 
 	<section>
-		<h2><?=__('Panic Codes', 'wwatfa'); ?></h2>
+		<h2><?=__('Backup Codes', 'wwatfa'); ?></h2>
 		<p>
-			<?=__("You have panic codes that can be used if you lose your phone and cannot get your one time passwords. Each code can only be used once.", 'wwatfa'); ?>
+			<?=__("You have backup codes which can be used if you do not have access to your phone or unable to get your one time passwords. Each code can be used only once.", 'wwatfa'); ?>
 			<?=__('Please keep them in a safe place, they are just as secret as your private key is.', 'wwatfa'); ?>
 		</p>
-		<p><strong><?=__('Your panic codes are:', 'wwatfa'); ?></strong></p>
+		<p><strong><?=__('Your backup codes are:', 'wwatfa'); ?></strong></p>
 
 		<form action="<?=admin_url('admin-post.php'); ?>" method="post" id="tfa-reset-panic">
 <?php if ($options['panic']) : ?>

@@ -165,7 +165,7 @@ EOT;
 			case 1: \add_settings_error('general', 'settings_updated', \__('Settings saved.'), 'updated'); break;
 			case 2: \add_settings_error('general', 'settings_updated', \__('Private key reset.', 'wwatfa'), 'updated'); break;
 			case 3: \add_settings_error('general', 'settings_updated', \__('Algorithm changed.', 'wwatfa'), 'updated'); break;
-			case 4: \add_settings_error('general', 'settings_updated', \__('Panic codes regenerated.', 'wwatfa'), 'updated'); break;
+			case 4: \add_settings_error('general', 'settings_updated', \__('Backup codes regenerated.', 'wwatfa'), 'updated'); break;
 		}
 
 		$current_user = \wp_get_current_user();

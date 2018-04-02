@@ -36,7 +36,10 @@ XGETTEXT_OPTIONS := --language=php \
 
 all: $(POT_FRONT) $(POT_BACK) $(MO_FRONT_FILES) $(MO_BACK_FILES)
 
-$(MO_FRONT_FILES) $(MO_BACK_FILES): %.mo: %.po
+$(MO_FRONT_FILES): $(PO_FRONT_FILES)
+$(MO_BACK_FILES):  $(PO_BACK_FILES)
+
+%.mo: %.po
 	$(MSGFMT) -o$@ $<
 
 $(PO_FRONT_FILES): %: $(POT_FRONT)
@@ -47,10 +50,10 @@ $(PO_BACK_FILES): %: $(POT_BACK)
 	$(MSGMERGE) -U "$@" $(POT_BACK)
 	touch "$@"
 
-$(POT_FRONT): $(PHP_FILES)
+$(POT_FRONT): $(PHP_FRONT)
 	$(XGETTEXT) --default-domain=$(DOMAIN_FRONT) $(XGETTEXT_OPTIONS) $(PHP_FRONT) --output="$@"
 
-$(POT_BACK): $(PHP_FILES)
+$(POT_BACK): $(PHP_BACK)
 	$(XGETTEXT) --default-domain=$(DOMAIN_BACK) $(XGETTEXT_OPTIONS) $(PHP_BACK) --output="$@"
 
 clean:

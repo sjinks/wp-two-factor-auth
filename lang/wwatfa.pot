@@ -45,7 +45,7 @@ msgid "Algorithm changed."
 msgstr ""
 
 #: ../inc/Admin.php:168
-msgid "Panic codes regenerated."
+msgid "Backup codes regenerated."
 msgstr ""
 
 #: ../inc/Admin.php:224
@@ -199,13 +199,14 @@ msgid "Verify"
 msgstr ""
 
 #: ../views/user-settings.php:90
-msgid "Panic Codes"
+msgid "Backup Codes"
 msgstr ""
 
 #: ../views/user-settings.php:92
 msgid ""
-"You have panic codes that can be used if you lose your phone and cannot get "
-"your one time passwords. Each code can only be used once."
+"You have backup codes which can be used if you do not have access to your "
+"phone or unable to get your one time passwords. Each code can be used only "
+"once."
 msgstr ""
 
 #: ../views/user-settings.php:93
@@ -215,7 +216,7 @@ msgid ""
 msgstr ""
 
 #: ../views/user-settings.php:95
-msgid "Your panic codes are:"
+msgid "Your backup codes are:"
 msgstr ""
 
 #: ../views/user-settings.php:105

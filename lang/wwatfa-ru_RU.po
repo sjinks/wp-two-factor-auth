@@ -54,8 +54,8 @@ msgid "Algorithm changed."
 msgstr "Алгоритм изменён."
 
 #: ../inc/Admin.php:168
-msgid "Panic codes regenerated."
-msgstr ""
+msgid "Backup codes regenerated."
+msgstr "Резервные коды перегенерированы."
 
 #: ../inc/Admin.php:224
 msgid "Settings"
@@ -63,16 +63,16 @@ msgstr "Настройки"
 
 #: ../inc/Admin.php:286
 msgid "Success!"
-msgstr ""
+msgstr "Успех!"
 
 #: ../inc/Admin.php:289
 msgid "Failure!"
-msgstr ""
+msgstr "Неудача!"
 
 #: ../inc/WPUtils.php:25
 #, php-format
 msgid "One Time Password for %s"
-msgstr "Одноразовый паролл для %s"
+msgstr "Одноразовый пароль для %s"
 
 #: ../inc/WPUtils.php:26
 #, php-format
@@ -91,7 +91,7 @@ msgstr ""
 
 #: ../views/user-settings.php:9
 msgid "Please turn JavaScript on for this page to function properly."
-msgstr ""
+msgstr "Для нормальной работы необходимо включить JavaScript."
 
 #: ../views/user-settings.php:14
 msgid "Delivery Type"
@@ -99,7 +99,7 @@ msgstr "Способ доставки одноразового пароля"
 
 #: ../views/user-settings.php:15
 msgid "Please choose how you want your one time passwords delivered:"
-msgstr ""
+msgstr "Выберите способ доставки одноразовых паролей:"
 
 #: ../views/user-settings.php:23
 msgid "Disabled"
@@ -108,6 +108,7 @@ msgstr "Отключена"
 #: ../views/user-settings.php:26
 msgid "Via third party applications (Duo Mobile, Google Authenticator, etc)"
 msgstr ""
+"При помощи стороннего приложения (Duo Mobile, Google Authenticator и т.п.)"
 
 #: ../views/user-settings.php:31
 msgid ""
@@ -117,7 +118,7 @@ msgstr ""
 
 #: ../views/user-settings.php:36
 msgid "Third Party Application Set Up"
-msgstr ""
+msgstr "Настройка сторонних приложений"
 
 #: ../views/user-settings.php:38
 msgid "QR Code"
@@ -128,6 +129,8 @@ msgid ""
 "Scan this code with Duo Mobile, Google Authenticator, or any other "
 "application whcih supports 6 digit OTPs."
 msgstr ""
+"Отсканируйте данный код Duo Mobile, Google Authenticator или любым другим "
+"приложением, поддерживающим шестизначные одноразовые пароли."
 
 #: ../views/user-settings.php:41
 #, php-format
@@ -174,23 +177,27 @@ msgstr "(Сбросить)"
 #: ../views/user-settings.php:57
 #, php-format
 msgid "Your private key in base32 is <code>%s</code>"
-msgstr ""
+msgstr "Ваш закрытый ключ в формате base32: <code>%s</code>"
 
 #: ../views/user-settings.php:63
 msgid "Verify OTP Configuration"
-msgstr ""
+msgstr "Проверка правильности настройки"
 
 #: ../views/user-settings.php:65
 msgid ""
 "Please use this form to make sure that you have configured your application "
 "correctly."
 msgstr ""
+"Используйте данную форму, чтобы убедиться в правильности настройки "
+"приложения."
 
 #: ../views/user-settings.php:66
 msgid ""
 "Please enter the 6 digit code shown by your application into the field below "
 "and then click Verify button."
 msgstr ""
+"Введите шестизначный код, показанный приложением в поле нижу и нажмите "
+"«Проверить»."
 
 #: ../views/user-settings.php:68
 msgid ""
@@ -211,24 +218,30 @@ msgid "Verify"
 msgstr "Проверить"
 
 #: ../views/user-settings.php:90
-msgid "Panic Codes"
-msgstr ""
+msgid "Backup Codes"
+msgstr "Резервные коды"
 
 #: ../views/user-settings.php:92
 msgid ""
-"You have panic codes that can be used if you lose your phone and cannot get "
-"your one time passwords. Each code can only be used once."
+"You have backup codes which can be used if you do not have access to your "
+"phone or unable to get your one time passwords. Each code can be used only "
+"once."
 msgstr ""
+"Вам предоставляются резервные коды на случай, если у вас нет доступа к "
+"телефону или отсутствует возможность получить одноразовый пароль. Каждый код "
+"можно использовать только один раз."
 
 #: ../views/user-settings.php:93
 msgid ""
 "Please keep them in a safe place, they are just as secret as your private "
 "key is."
 msgstr ""
+"Храните коды в безопасном месте, они такие же секретные, как и ваш закрытый "
+"ключ."
 
 #: ../views/user-settings.php:95
-msgid "Your panic codes are:"
-msgstr ""
+msgid "Your backup codes are:"
+msgstr "Ваши резервные коды:"
 
 #: ../views/user-settings.php:105
 msgid "Generate new codes"
@@ -236,11 +249,11 @@ msgstr "Сгенерировать новые коды"
 
 #: ../views/profile.php:2
 msgid "Two Factor Authentication"
-msgstr ""
+msgstr "Two Factor Authentication"
 
 #: ../views/profile.php:7
 msgid "Enabled for this user"
-msgstr ""
+msgstr "Включена для данного пользователя"
 
 #: ../views/profile.php:8
 msgid "Yes"
