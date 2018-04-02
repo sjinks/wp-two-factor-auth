@@ -119,14 +119,9 @@ EOT;
 
 	public function admin_menu()
 	{
-		\add_options_page('Two Factor Auth', 'Two Factor Auth', 'manage_options', 'two-factor-auth', [$this, 'settings_page']);
-
-		$current_user = \wp_get_current_user();
-		$data         = new UserData($current_user);
-		if ($data->is2FAEnabled()) {
-			$base = Plugin::instance()->baseUrl();
-			$this->user_settings_hook = \add_menu_page('Two Factor Auth', 'Two Factor Auth', 'read', 'two-factor-auth-user', [$this, 'user_settings_page'], $base . 'assets/icon.png', 72);
-		}
+		\add_options_page('Two Factor Authentication', 'Two Factor Auth', 'manage_options', 'two-factor-auth', [$this, 'settings_page']);
+		$base = Plugin::instance()->baseUrl();
+		$this->user_settings_hook = \add_menu_page('Two Factor Authentication', 'Two Factor Auth', 'read', 'two-factor-auth-user', [$this, 'user_settings_page'], $base . 'assets/icon.png', 72);
 	}
 
 	public function settings_page()
@@ -182,7 +177,7 @@ EOT;
 		$counter      = null;
 		$qrimg        = null;
 		$type         = $data->getDeliveryMethod();
-		$type         = isset(self::$delivery_type_lut[$type]) ? $type : \key(self::$delivery_type_lut);
+		$forced       = $data->is2FAForcefullyEnabled();
 
 		if ('third-party-apps' === $type) {
 			$privkey = $data->getPrivateKey();
@@ -195,7 +190,10 @@ EOT;
 			$issuer  = \get_bloginfo('name') . ' (' . $domain . ')';
 			$login   = \urlencode($current_user->user_login);
 			$key     = \Tuupola\Base32Proxy::encode($privkey);
- 			$otpauth = "otpauth://{$algo}/{$issuer}:{$login}?secret={$key}&issuer={$issuer}&counter={$counter}";
+ 			$otpauth = "otpauth://{$algo}/{$issuer}:{$login}?secret={$key}&issuer={$issuer}";
+ 			if ('hotp' === $algo) {
+ 				$otpauth .= "&counter={$counter}";
+ 			}
 
  			$qropts  = new QROptions(['outputType' => QRCode::OUTPUT_IMAGE_PNG, 'eccLevel' => QRCode::ECC_H, 'imageBase64' => true, 'scale' => 4, 'addQuietzone' => false]);
  			$qrcode  = new QRCode($qropts);
@@ -212,6 +210,7 @@ EOT;
 			'algo'          => $algo,
 			'counter'       => $counter,
 			'qrimg'         => $qrimg,
+			'forced'        => $forced,
 		];
 
 		$this->render(__DIR__ . '/../views/user-settings.php', $options);
@@ -231,7 +230,8 @@ EOT;
 		\check_admin_referer('save-tfauser_' . $current_user->ID);
 
 		$tfa  = (array)($_POST['tfa'] ?? []);
-		$type = $tfa['delivery'] ?? 'email';
+		$type = $tfa['delivery'] ?? '';
+
 		$data = new UserData($current_user);
 		$data->setDeliveryMethod($type);
 

@@ -80,6 +80,10 @@ class UserData
 
 	private function password() : string
 	{
+		if (!$this->salt) {
+			$this->salt = \openssl_random_pseudo_bytes(64);
+		}
+
 		return \hash_pbkdf2(
 			'sha256',
 			\hash('sha256', \AUTH_KEY . $this->id, true),
@@ -94,7 +98,6 @@ class UserData
 	{
 		$data = \base64_decode($data);
 		if (\strlen($data) < 64) {
-			$this->salt = \openssl_random_pseudo_bytes(64);
 			return;
 		}
 
@@ -115,6 +118,11 @@ class UserData
 
 	private function save()
 	{
+		if (!$this->secret && !$this->hmac && !$this->method) {
+			\delete_user_meta($this->id, 'tfa');
+			return;
+		}
+
 		$data = [];
 		if ($this->secret && $this->hmac) {
 			$data['secret'] = $this->secret;
@@ -219,27 +227,54 @@ class UserData
 
 	public function getDeliveryMethod() : string
 	{
-		return $this->method ?: 'email';
+		if ($this->is2FAForcefullyEnabled()) {
+			return $this->method ?: 'email';
+		}
+
+		return $this->method;
+	}
+
+	private function doSetDeliveryMethod(string $method)
+	{
+		if ($this->method !== $method) {
+			$this->method = $method;
+			switch ($method) {
+				case 'email':
+					$this->doSetHMAC('hotp');
+					$this->panic = [];
+					$this->used  = [];
+					break;
+
+				case 'third-party-apps':
+					$this->secret  = '';
+					$this->counter = 0;
+					break;
+
+				default:
+					$this->secret  = '';
+					$this->counter = 0;
+					$this->hmac    = '';
+					$this->panic   = [];
+					$this->used    = [];
+			}
+
+			return true;
+		}
+
+		return false;
 	}
 
 	public function setDeliveryMethod(string $method)
 	{
-		if ($method !== 'email' && $method !== 'third-party-apps') {
+		if ($method !== 'email' && $method !== 'third-party-apps' && $method !== '') {
 			throw new \InvalidArgumentException();
 		}
 
-		if ($this->method !== $method) {
-			$this->method = $method;
-			if ('email' === $method) {
-				$this->doSetHMAC('hotp');
-				$this->panic = [];
-				$this->used  = [];
-			}
-			else {
-				$this->secret  = '';
-				$this->counter = 0;
-			}
+		if ('' === $method && $this->is2FAForcefullyEnabled()) {
+			$method = 'email';
+		}
 
+		if ($this->doSetDeliveryMethod($method)) {
 			$this->save();
 		}
 	}
@@ -294,7 +329,7 @@ class UserData
 		return Utils::generateTOTP($secret, self::$timeWindow, self::$otpLength, self::$defaultHash);
 	}
 
-	public function is2FAEnabled()
+	public function is2FAForcefullyEnabled() : bool
 	{
 		$user = new \WP_User($this->id);
 		$opts = \get_option(Plugin::OPTIONS_KEY);
@@ -306,5 +341,11 @@ class UserData
 		}
 
 		return false;
+	}
+
+	public function is2FAEnabled() : bool
+	{
+		$dm = $this->getDeliveryMethod();
+		return !empty($dm) || $this->is2FAForcefullyEnabled();
 	}
 }

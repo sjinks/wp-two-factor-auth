@@ -19,6 +19,9 @@
 			<input type="hidden" name="uid" value="<?=$options['uid'];?>"/>
 			<?=wp_nonce_field("save-tfauser_" . $options['uid']);?>
 
+<?php if (!$options['forced']) : ?>
+			<label><input type="radio" name="tfa[delivery]" value=""<?php checked('', $options['delivery_type']); ?>/> <?=__('Disabled', 'wwatfa');?></label><br/>
+<?php endif; ?>
 			<label><input type="radio" name="tfa[delivery]" value="email"<?php checked('email', $options['delivery_type']); ?>/> <?=__('By email', 'wwatfa');?></label><br/>
 			<label><input type="radio" name="tfa[delivery]" value="third-party-apps"<?php checked('third-party-apps', $options['delivery_type']); ?>/> <?=__('Via third party applications (Duo Mobile, Google Authenticator, etc)', 'wwatfa');?></label><br/>
 
@@ -85,8 +88,10 @@
 
 	<section>
 		<h2><?=__('Panic Codes', 'wwatfa'); ?></h2>
-		<p><?=__("You have panic codes that can be used if you lose your phone and cannot get your one time passwords. Each code can only be used once.", 'wwatfa'); ?></p>
-		<p><?=__('Keep them in a safe place.', 'wwatfa'); ?></p>
+		<p>
+			<?=__("You have panic codes that can be used if you lose your phone and cannot get your one time passwords. Each code can only be used once.", 'wwatfa'); ?>
+			<?=__('Please keep them in a safe place, they are just as secret as your private key is.', 'wwatfa'); ?>
+		</p>
 		<p><strong><?=__('Your panic codes are:', 'wwatfa'); ?></strong></p>
 
 		<form action="<?=admin_url('admin-post.php'); ?>" method="post" id="tfa-reset-panic">
