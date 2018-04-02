@@ -2,10 +2,10 @@
 /*
  Plugin Name: WP Two Factor Auth
  Plugin URI: https://github.com/sjinks/wp-two-factor-auth
- Description: Secure your WordPress login with two factor auth. Users will be prompted with a page to enter a One Time Password when they login.
- Author: Oskar Hane, Volodymyr Kolesnykov
+ Description: HOTP/TOTP based two factor authentication for WordPress
+ Author: Volodymyr Kolesnykov
  Version: 5.0
- License: GPLv2 or later
+ License: MIT
  */
 
 defined('ABSPATH') || die();
