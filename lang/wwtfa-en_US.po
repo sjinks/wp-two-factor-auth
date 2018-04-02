@@ -1,4 +1,4 @@
-#: ../inc/Plugin.php:84
+#: ../inc/Plugin.php:82
 msgid ""
 "<strong>ERROR</strong>: The one time password you have entered is incorrect."
 msgstr ""

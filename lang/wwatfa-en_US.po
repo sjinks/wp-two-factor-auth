@@ -7,7 +7,7 @@ msgstr ""
 "X-Language: en_US\n"
 "X-Source-Language: C\n"
 
-#: ../inc/Admin.php:36 ../views/user-settings.php:22
+#: ../inc/Admin.php:36 ../views/user-settings.php:25
 msgid "By email"
 msgstr "By email"
 
@@ -15,23 +15,23 @@ msgstr "By email"
 msgid "Via third party applications"
 msgstr "Via third party applications"
 
-#: ../inc/Admin.php:89
+#: ../inc/Admin.php:91
 msgid "User Roles"
 msgstr "User Roles"
 
-#: ../inc/Admin.php:94
+#: ../inc/Admin.php:96
 msgid "Email Settings"
 msgstr "Email Settings"
 
-#: ../inc/Admin.php:95
+#: ../inc/Admin.php:97
 msgid "Email Address"
 msgstr "Email Address"
 
-#: ../inc/Admin.php:96
+#: ../inc/Admin.php:98
 msgid "Sender Name"
 msgstr "Sender Name"
 
-#: ../inc/Admin.php:154
+#: ../inc/Admin.php:153
 msgid ""
 "WARNING: If you reset the private key, you will have to update your "
 "applications with the new one. Do you want to proceed?"
@@ -39,35 +39,35 @@ msgstr ""
 "WARNING: If you reset the private key, you will have to update your "
 "applications with the new one. Do you want to proceed?"
 
-#: ../inc/Admin.php:155
+#: ../inc/Admin.php:154
 msgid "Refreshing&hellip;"
 msgstr "Refreshing&hellip;"
 
-#: ../inc/Admin.php:166
+#: ../inc/Admin.php:165
 msgid "Settings saved."
 msgstr "Settings saved."
 
-#: ../inc/Admin.php:167
+#: ../inc/Admin.php:166
 msgid "Private key reset."
 msgstr "Private key reset."
 
-#: ../inc/Admin.php:168
+#: ../inc/Admin.php:167
 msgid "Algorithm changed."
 msgstr "Algorithm changed."
 
-#: ../inc/Admin.php:169
+#: ../inc/Admin.php:168
 msgid "Panic codes regenerated."
 msgstr "Panic codes regenerated."
 
-#: ../inc/Admin.php:221
+#: ../inc/Admin.php:224
 msgid "Settings"
 msgstr "Settings"
 
-#: ../inc/Admin.php:283
+#: ../inc/Admin.php:286
 msgid "Success!"
 msgstr "Success!"
 
-#: ../inc/Admin.php:286
+#: ../inc/Admin.php:289
 msgid "Failure!"
 msgstr "Failure!"
 
@@ -104,10 +104,14 @@ msgid "Please choose how you want your one time passwords delivered:"
 msgstr "Please choose how you want your one time passwords delivered:"
 
 #: ../views/user-settings.php:23
+msgid "Disabled"
+msgstr "Disabled"
+
+#: ../views/user-settings.php:26
 msgid "Via third party applications (Duo Mobile, Google Authenticator, etc)"
 msgstr "Via third party applications (Duo Mobile, Google Authenticator, etc)"
 
-#: ../views/user-settings.php:28
+#: ../views/user-settings.php:31
 msgid ""
 "If you choose \"third party applications\" delivery type, you have to make "
 "sure you scan the QR code (or enter your private key manually)."
@@ -115,15 +119,15 @@ msgstr ""
 "If you choose \"third party applications\" delivery type, you have to make "
 "sure you scan the QR code (or enter your private key manually)."
 
-#: ../views/user-settings.php:33
+#: ../views/user-settings.php:36
 msgid "Third Party Application Set Up"
 msgstr "Third Party Application Set Up"
 
-#: ../views/user-settings.php:35
+#: ../views/user-settings.php:38
 msgid "QR Code"
 msgstr "QR Code"
 
-#: ../views/user-settings.php:36
+#: ../views/user-settings.php:39
 msgid ""
 "Scan this code with Duo Mobile, Google Authenticator, or any other "
 "application whcih supports 6 digit OTPs."
@@ -131,7 +135,7 @@ msgstr ""
 "Scan this code with Duo Mobile, Google Authenticator, or any other "
 "application whcih supports 6 digit OTPs."
 
-#: ../views/user-settings.php:38
+#: ../views/user-settings.php:41
 #, php-format
 msgid ""
 "You are currently using <strong>%1$s</strong> (%2$s) algorithm, in case the "
@@ -140,91 +144,91 @@ msgstr ""
 "You are currently using <strong>%1$s</strong> (%2$s) algorithm, in case the "
 "application asks for that information"
 
-#: ../views/user-settings.php:38 ../views/user-settings.php:39
+#: ../views/user-settings.php:41 ../views/user-settings.php:42
 msgid "time based"
 msgstr "time based"
 
-#: ../views/user-settings.php:38 ../views/user-settings.php:39
+#: ../views/user-settings.php:41 ../views/user-settings.php:42
 msgid "event based"
 msgstr "event based"
 
-#: ../views/user-settings.php:39
+#: ../views/user-settings.php:42
 #, php-format
 msgid "(change to %1$s&nbsp;&mdash;&nbsp;%2$s)"
 msgstr "(change to %1$s&nbsp;&mdash;&nbsp;%2$s)"
 
-#: ../views/user-settings.php:42
+#: ../views/user-settings.php:45
 #, php-format
 msgid "The counter value on this server is currently <code>%s</code>."
 msgstr "The counter value on this server is currently <code>%s</code>."
 
-#: ../views/user-settings.php:46
+#: ../views/user-settings.php:49
 msgid "The current one time password is:"
 msgstr "The current one time password is:"
 
-#: ../views/user-settings.php:48
+#: ../views/user-settings.php:51
 msgid "(refresh code)"
 msgstr "(refresh code)"
 
-#: ../views/user-settings.php:51
+#: ../views/user-settings.php:54
 #, php-format
 msgid "Your private key is <code>%s</code>"
 msgstr "Your private key is <code>%s</code>"
 
-#: ../views/user-settings.php:52
+#: ../views/user-settings.php:55
 msgid "(Reset)"
 msgstr "(Reset)"
 
-#: ../views/user-settings.php:54
+#: ../views/user-settings.php:57
 #, php-format
 msgid "Your private key in base32 is <code>%s</code>"
 msgstr "Your private key in base32 is <code>%s</code>"
 
-#: ../views/user-settings.php:60
+#: ../views/user-settings.php:63
 msgid "Verify OTP Configuration"
 msgstr "Verify OTP Configuration"
 
-#: ../views/user-settings.php:62
-msgid ""
-"Please use this form to make sure that you have configured your application "
-"correctly."
-msgstr ""
-"Please use this form to make sure that you have configured your application "
-"correctly."
-
-#: ../views/user-settings.php:63
-msgid ""
-"Please enter the 6 digit code shown by your application into the field below "
-"and then click Verify button."
-msgstr ""
-"Please enter the 6 digit code shown by your application into the field below "
-"and then click Verify button."
-
 #: ../views/user-settings.php:65
 msgid ""
+"Please use this form to make sure that you have configured your application "
+"correctly."
+msgstr ""
+"Please use this form to make sure that you have configured your application "
+"correctly."
+
+#: ../views/user-settings.php:66
+msgid ""
+"Please enter the 6 digit code shown by your application into the field below "
+"and then click Verify button."
+msgstr ""
+"Please enter the 6 digit code shown by your application into the field below "
+"and then click Verify button."
+
+#: ../views/user-settings.php:68
+msgid ""
 "If code verification fails, please activate code delivery by email and "
 "contact your site administrator."
 msgstr ""
 "If code verification fails, please activate code delivery by email and "
 "contact your site administrator."
 
-#: ../views/user-settings.php:66
+#: ../views/user-settings.php:69
 msgid "Otherwise, you will probably be unable to log into this site anymore."
 msgstr "Otherwise, you will probably be unable to log into this site anymore."
 
-#: ../views/user-settings.php:69
+#: ../views/user-settings.php:72
 msgid "Enter OTP value"
 msgstr "Enter OTP value"
 
-#: ../views/user-settings.php:69
+#: ../views/user-settings.php:72
 msgid "Verify"
 msgstr "Verify"
 
-#: ../views/user-settings.php:87
+#: ../views/user-settings.php:90
 msgid "Panic Codes"
 msgstr "Panic Codes"
 
-#: ../views/user-settings.php:88
+#: ../views/user-settings.php:92
 msgid ""
 "You have panic codes that can be used if you lose your phone and cannot get "
 "your one time passwords. Each code can only be used once."
@@ -232,15 +236,19 @@ msgstr ""
 "You have panic codes that can be used if you lose your phone and cannot get "
 "your one time passwords. Each code can only be used once."
 
-#: ../views/user-settings.php:89
-msgid "Keep them in a safe place."
-msgstr "Keep them in a safe place."
+#: ../views/user-settings.php:93
+msgid ""
+"Please keep them in a safe place, they are just as secret as your private "
+"key is."
+msgstr ""
+"Please keep them in a safe place, they are just as secret as your private "
+"key is."
 
-#: ../views/user-settings.php:90
+#: ../views/user-settings.php:95
 msgid "Your panic codes are:"
 msgstr "Your panic codes are:"
 
-#: ../views/user-settings.php:100
+#: ../views/user-settings.php:105
 msgid "Generate new codes"
 msgstr "Generate new codes"
 
@@ -270,9 +278,11 @@ msgstr "(change to \"By email\")"
 
 #: ../views/admin-settings-roles.php:3
 msgid ""
-"Please choose which User Roles will have two factor authentication activated."
+"Please choose which User Roles will have two factor authentication "
+"<strong>forcefully</strong> activated."
 msgstr ""
-"Please choose which User Roles will have two factor authentication activated."
+"Please choose which User Roles will have two factor authentication "
+"<strong>forcefully</strong> activated."
 
 #: ../views/admin-settings-roles.php:4
 msgid ""
@@ -281,3 +291,13 @@ msgid ""
 msgstr ""
 "These users will receive their one time passwords by email; to use thrid "
 "party applications, they will need to configure them first."
+
+#: ../views/admin-settings-roles.php:7
+msgid ""
+"Please note that other users can use (or not use) two factor authentication "
+"at their own discretion, only users with the roles selected below will be "
+"unable to opt out of two factor authentication."
+msgstr ""
+"Please note that other users can use (or not use) two factor authentication "
+"at their own discretion, only users with the roles selected below will be "
+"unable to opt out of two factor authentication."

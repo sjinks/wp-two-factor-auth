@@ -1,26 +1,35 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Language: ru_RU\n"
+"X-Source-Language: C\n"
+
 #: ../inc/Admin.php:36 ../views/user-settings.php:25
 msgid "By email"
-msgstr ""
+msgstr "По email"
 
 #: ../inc/Admin.php:37
 msgid "Via third party applications"
-msgstr ""
+msgstr "Через стороннее приложение"
 
 #: ../inc/Admin.php:91
 msgid "User Roles"
-msgstr ""
+msgstr "Роли пользователей"
 
 #: ../inc/Admin.php:96
 msgid "Email Settings"
-msgstr ""
+msgstr "Настройки email"
 
 #: ../inc/Admin.php:97
 msgid "Email Address"
-msgstr ""
+msgstr "Email"
 
 #: ../inc/Admin.php:98
 msgid "Sender Name"
-msgstr ""
+msgstr "Имя отправителя"
 
 #: ../inc/Admin.php:153
 msgid ""
@@ -30,19 +39,19 @@ msgstr ""
 
 #: ../inc/Admin.php:154
 msgid "Refreshing&hellip;"
-msgstr ""
+msgstr "Обновление&hellip;"
 
 #: ../inc/Admin.php:165
 msgid "Settings saved."
-msgstr ""
+msgstr "Настройки сохранены."
 
 #: ../inc/Admin.php:166
 msgid "Private key reset."
-msgstr ""
+msgstr "Закрытый ключ сброшен."
 
 #: ../inc/Admin.php:167
 msgid "Algorithm changed."
-msgstr ""
+msgstr "Алгоритм изменён."
 
 #: ../inc/Admin.php:168
 msgid "Panic codes regenerated."
@@ -50,7 +59,7 @@ msgstr ""
 
 #: ../inc/Admin.php:224
 msgid "Settings"
-msgstr ""
+msgstr "Настройки"
 
 #: ../inc/Admin.php:286
 msgid "Success!"
@@ -63,7 +72,7 @@ msgstr ""
 #: ../inc/WPUtils.php:25
 #, php-format
 msgid "One Time Password for %s"
-msgstr ""
+msgstr "Одноразовый паролл для %s"
 
 #: ../inc/WPUtils.php:26
 #, php-format
@@ -72,6 +81,9 @@ msgid ""
 "\n"
 "%s\n"
 msgstr ""
+"Введите этот одноразовый пароль, чтобы войти: %s\n"
+"\n"
+"%s\n"
 
 #: ../views/user-settings.php:3 ../views/admin-settings.php:3
 msgid "Two Factor Auth Settings"
@@ -83,7 +95,7 @@ msgstr ""
 
 #: ../views/user-settings.php:14
 msgid "Delivery Type"
-msgstr ""
+msgstr "Способ доставки одноразового пароля"
 
 #: ../views/user-settings.php:15
 msgid "Please choose how you want your one time passwords delivered:"
@@ -91,7 +103,7 @@ msgstr ""
 
 #: ../views/user-settings.php:23
 msgid "Disabled"
-msgstr ""
+msgstr "Отключена"
 
 #: ../views/user-settings.php:26
 msgid "Via third party applications (Duo Mobile, Google Authenticator, etc)"
@@ -109,7 +121,7 @@ msgstr ""
 
 #: ../views/user-settings.php:38
 msgid "QR Code"
-msgstr ""
+msgstr "QR-код"
 
 #: ../views/user-settings.php:39
 msgid ""
@@ -144,20 +156,20 @@ msgstr ""
 
 #: ../views/user-settings.php:49
 msgid "The current one time password is:"
-msgstr ""
+msgstr "Текущее значение одноразового пароля:"
 
 #: ../views/user-settings.php:51
 msgid "(refresh code)"
-msgstr ""
+msgstr "(обновить код)"
 
 #: ../views/user-settings.php:54
 #, php-format
 msgid "Your private key is <code>%s</code>"
-msgstr ""
+msgstr "Ваш закрытый ключ: <code>%s</code>"
 
 #: ../views/user-settings.php:55
 msgid "(Reset)"
-msgstr ""
+msgstr "(Сбросить)"
 
 #: ../views/user-settings.php:57
 #, php-format
@@ -192,11 +204,11 @@ msgstr ""
 
 #: ../views/user-settings.php:72
 msgid "Enter OTP value"
-msgstr ""
+msgstr "Введите код"
 
 #: ../views/user-settings.php:72
 msgid "Verify"
-msgstr ""
+msgstr "Проверить"
 
 #: ../views/user-settings.php:90
 msgid "Panic Codes"
@@ -220,7 +232,7 @@ msgstr ""
 
 #: ../views/user-settings.php:105
 msgid "Generate new codes"
-msgstr ""
+msgstr "Сгенерировать новые коды"
 
 #: ../views/profile.php:2
 msgid "Two Factor Authentication"
@@ -232,19 +244,19 @@ msgstr ""
 
 #: ../views/profile.php:8
 msgid "Yes"
-msgstr ""
+msgstr "Да"
 
 #: ../views/profile.php:8
 msgid "No"
-msgstr ""
+msgstr "Нет"
 
 #: ../views/profile.php:12
 msgid "OTP delivery method"
-msgstr ""
+msgstr "Способ доставки одноразового пароля"
 
 #: ../views/profile.php:16
 msgid "(change to \"By email\")"
-msgstr ""
+msgstr "(изменить на \"По email\")"
 
 #: ../views/admin-settings-roles.php:3
 msgid ""
