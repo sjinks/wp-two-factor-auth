@@ -83,7 +83,7 @@ abstract class OTPVerifier
 			// https://tools.ietf.org/html/rfc4226#section-7.2
 			// If the value received by the authentication server matches the value calculated by the client,
 			// then the HOTP value is validated. In this case, the server increments the counter value by one.
-			$data->setCounter($counter + 1);
+			$data->setCounter($counter + \mt_rand(1, 100));
 			return true;
 		}
 
