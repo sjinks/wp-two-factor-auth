@@ -23,7 +23,7 @@ gulp.task('clean:img', function() {
 	return del(['assets/*.png']);
 });
 
-gulp.task('clean', ['clean:js', 'clean:css', 'clean:img']);
+gulp.task('clean', gulp.series(['clean:js', 'clean:css', 'clean:img']));
 
 gulp.task('img', function() {
 	var dest = 'assets/';
@@ -82,4 +82,4 @@ gulp.task('js', function() {
 	;
 });
 
-gulp.task('default', ['img', 'css', 'js']);
+gulp.task('default', gulp.parallel(['img', 'css', 'js']));
