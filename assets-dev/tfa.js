@@ -31,7 +31,8 @@ window.addEventListener('DOMContentLoaded', function() {
 
 		var req = new XMLHttpRequest();
 		req.addEventListener('load', function() {
-			if (null === this.response || this.status !== 200 || !this.response.status) {
+			var r = (typeof this.response === "string") ? JSON.parse(this.response) : this.response;
+			if (null === r || this.status !== 200 || !r.status) {
 				input.setAttribute('disabled', '');
 				container.setAttribute('hidden', '');
 				submit.click();
