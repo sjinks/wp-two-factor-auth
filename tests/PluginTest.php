@@ -41,7 +41,6 @@ class PluginTest extends WP_UnitTestCase
 		remove_action('login_init', 'wp_admin_headers', 10);
 		do_action('login_init');
 		do_action('login_enqueue_scripts');
-		$this->assertTrue(wp_styles()->query('tfa-login', 'enqueued'));
 		$this->assertTrue(wp_scripts()->query('tfa-ajax-request', 'enqueued'));
 	}
 
