@@ -1,44 +1,51 @@
 /** global: tfaSettings, XMLHttpRequest */
 window.addEventListener('DOMContentLoaded', function() {
-	var form = document.getElementById('loginform');
-	form.addEventListener('submit', tfaCallback);
+	var submit    = document.getElementById('wp-submit');
+	var login     = document.getElementById('user_login');
+	var container = document.getElementById('tfa-block');
+	var input     = document.getElementById('two_factor_auth');
+
+	submit.addEventListener('click', tfaCallback);
+	container.setAttribute('hidden', '');
+	input.setAttribute('disabled', '');
+
+	function loginChangeCallback(e)
+	{
+		submit.addEventListener('click', tfaCallback);
+		login.removeEventListener('change', loginChangeCallback);
+	}
 
 	function tfaCallback(e)
 	{
 		e.preventDefault();
-		form.removeEventListener('submit', tfaCallback);
+		e.stopPropagation();
+		e.stopImmediatePropagation();
 
-		var username = document.getElementById('user_login').value;
+		var username = login.value;
 		if (!username) {
-			return true;
+			return;
 		}
 
+		submit.removeEventListener('click', tfaCallback);
+		login.addEventListener('change', loginChangeCallback);
+
 		var req = new XMLHttpRequest();
-		req.addEventListener('readystatechange', function() {
-			try {
-				if (req.readyState === XMLHttpRequest.DONE) {
-					var r = JSON.parse(req.responseText);
-					if (r.status === true) {
-						var tfa = document.getElementById('two_factor_auth');
-						tfa.removeAttribute('disabled');
-						document.getElementById('tfa-block').style.display = 'block';
-						tfa.focus();
-					}
-					else {
-						form.submit();
-					}
-				}
+		req.addEventListener('load', function() {
+			if (null === this.response || this.status !== 200 || !this.response.status) {
+				input.setAttribute('disabled', '');
+				container.setAttribute('hidden', '');
+				submit.click();
+				return;
 			}
-			catch (e) {
-				if (console) {
-					console.error(e);
-				}
-			}
+
+			input.removeAttribute('disabled');
+			container.removeAttribute('hidden');
+			input.focus();
 		});
 
 		req.open('POST', tfaSettings.ajaxurl);
+		req.responseType = 'json';
 		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		req.send('action=tfa-init-otp&log=' + encodeURIComponent(username));
-		return false;
 	}
 });
