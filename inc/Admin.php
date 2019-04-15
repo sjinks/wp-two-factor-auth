@@ -131,7 +131,7 @@ EOT;
 		$base = Plugin::instance()->baseUrl();
 		if ('user-edit.php' === $hook) {
 			$uid = \filter_input(INPUT_GET, 'user_id', \FILTER_SANITIZE_NUMBER_INT);
-			\wp_enqueue_script('tfa-profile', $base . 'assets/profile.min.js', [], '5.0', true);
+			\wp_enqueue_script('tfa-profile', $base . 'assets/profile.min.js', [], '5.1.2', true);
 			\wp_localize_script('tfa-profile', 'tfaSettings', [
 				'ajaxurl' => \admin_url('admin-ajax.php'),
 				'uid'     => $uid,
@@ -142,7 +142,7 @@ EOT;
 			$user = \wp_get_current_user();
 
 			\wp_enqueue_style('tfa-admin', $base . 'assets/admin.min.css', [], '5.0');
-			\wp_enqueue_script('tfa-user-settings', $base . 'assets/user-settings.min.js', [], '5.0', true);
+			\wp_enqueue_script('tfa-user-settings', $base . 'assets/user-settings.min.js', [], '5.1.2', true);
 			\wp_localize_script('tfa-user-settings', 'tfaSettings', [
 				'ajaxurl'    => \admin_url('admin-ajax.php'),
 				'confirm'    => \__('WARNING: If you reset the private key, you will have to update your applications with the new one. Do you want to proceed?', 'wwatfa'),
