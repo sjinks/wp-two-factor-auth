@@ -60,7 +60,7 @@ class Plugin
 	{
 		static $style = 'input#two_factor_auth{margin-bottom:2px}#tfa-block>span{font-size:small;display:inline-block;margin-bottom:16px;}';
 		\wp_add_inline_style('login', $style);
-		\wp_enqueue_script('tfa-ajax-request', $this->base_url . 'assets/tfa.min.js', [], '5.1.2', true);
+		\wp_enqueue_script('tfa-ajax-request', $this->base_url . 'assets/tfa.min.js', [], '5.1.3', true);
 		\wp_localize_script('tfa-ajax-request', 'tfaSettings', ['ajaxurl' => \admin_url('admin-ajax.php')]);
 	}
 
