@@ -8,7 +8,7 @@ msgstr ""
 "X-Language: ru_RU\n"
 "X-Source-Language: C\n"
 
-#: ../inc/Plugin.php:82
+#: ../inc/Plugin.php:83
 msgid ""
 "<strong>ERROR</strong>: The one time password you have entered is incorrect."
 msgstr "<strong>ОШИБКА</strong>: неверный одноразовый пароль."

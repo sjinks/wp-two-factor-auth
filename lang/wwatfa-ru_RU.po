@@ -3,9 +3,18 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Language: ru_RU\n"
 "X-Source-Language: C\n"
+
+#: ../inc/AJAX.php:78
+msgid "Success!"
+msgstr "Успех!"
+
+#: ../inc/AJAX.php:81
+msgid "Failure!"
+msgstr "Неудача!"
 
 #: ../inc/Admin.php:36 ../views/user-settings.php:25
 msgid "By email"
@@ -15,59 +24,51 @@ msgstr "По email"
 msgid "Via third party applications"
 msgstr "Через стороннее приложение"
 
-#: ../inc/Admin.php:91
+#: ../inc/Admin.php:83
 msgid "User Roles"
 msgstr "Роли пользователей"
 
-#: ../inc/Admin.php:96
+#: ../inc/Admin.php:88
 msgid "Email Settings"
 msgstr "Настройки email"
 
-#: ../inc/Admin.php:97
+#: ../inc/Admin.php:89
 msgid "Email Address"
 msgstr "Email"
 
-#: ../inc/Admin.php:98
+#: ../inc/Admin.php:90
 msgid "Sender Name"
 msgstr "Имя отправителя"
 
-#: ../inc/Admin.php:153
+#: ../inc/Admin.php:148
 msgid ""
 "WARNING: If you reset the private key, you will have to update your "
 "applications with the new one. Do you want to proceed?"
 msgstr ""
 
-#: ../inc/Admin.php:154
+#: ../inc/Admin.php:149
 msgid "Refreshing&hellip;"
 msgstr "Обновление&hellip;"
 
-#: ../inc/Admin.php:165
+#: ../inc/Admin.php:160
 msgid "Settings saved."
 msgstr "Настройки сохранены."
 
-#: ../inc/Admin.php:166
+#: ../inc/Admin.php:161
 msgid "Private key reset."
 msgstr "Закрытый ключ сброшен."
 
-#: ../inc/Admin.php:167
+#: ../inc/Admin.php:162
 msgid "Algorithm changed."
 msgstr "Алгоритм изменён."
 
-#: ../inc/Admin.php:168
+#: ../inc/Admin.php:163
 msgid "Backup codes regenerated."
 msgstr "Резервные коды перегенерированы."
 
-#: ../inc/Admin.php:224
+#: ../inc/Admin.php:219
 msgid "Settings"
 msgstr "Настройки"
-
-#: ../inc/Admin.php:286
-msgid "Success!"
-msgstr "Успех!"
-
-#: ../inc/Admin.php:289
-msgid "Failure!"
-msgstr "Неудача!"
 
 #: ../inc/WPUtils.php:25
 #, php-format
@@ -196,7 +197,7 @@ msgid ""
 "Please enter the 6 digit code shown by your application into the field below "
 "and then click Verify button."
 msgstr ""
-"Введите шестизначный код, показанный приложением в поле нижу и нажмите "
+"Введите шестизначный код, показанный приложением, в поле ниже и нажмите "
 "«Проверить»."
 
 #: ../views/user-settings.php:68

@@ -1,3 +1,11 @@
+#: ../inc/AJAX.php:78
+msgid "Success!"
+msgstr ""
+
+#: ../inc/AJAX.php:81
+msgid "Failure!"
+msgstr ""
+
 #: ../inc/Admin.php:36 ../views/user-settings.php:25
 msgid "By email"
 msgstr ""
@@ -6,58 +14,50 @@ msgstr ""
 msgid "Via third party applications"
 msgstr ""
 
-#: ../inc/Admin.php:91
+#: ../inc/Admin.php:83
 msgid "User Roles"
 msgstr ""
 
-#: ../inc/Admin.php:96
+#: ../inc/Admin.php:88
 msgid "Email Settings"
 msgstr ""
 
-#: ../inc/Admin.php:97
+#: ../inc/Admin.php:89
 msgid "Email Address"
 msgstr ""
 
-#: ../inc/Admin.php:98
+#: ../inc/Admin.php:90
 msgid "Sender Name"
 msgstr ""
 
-#: ../inc/Admin.php:153
+#: ../inc/Admin.php:148
 msgid ""
 "WARNING: If you reset the private key, you will have to update your "
 "applications with the new one. Do you want to proceed?"
 msgstr ""
 
-#: ../inc/Admin.php:154
+#: ../inc/Admin.php:149
 msgid "Refreshing&hellip;"
 msgstr ""
 
-#: ../inc/Admin.php:165
+#: ../inc/Admin.php:160
 msgid "Settings saved."
 msgstr ""
 
-#: ../inc/Admin.php:166
+#: ../inc/Admin.php:161
 msgid "Private key reset."
 msgstr ""
 
-#: ../inc/Admin.php:167
+#: ../inc/Admin.php:162
 msgid "Algorithm changed."
 msgstr ""
 
-#: ../inc/Admin.php:168
+#: ../inc/Admin.php:163
 msgid "Backup codes regenerated."
 msgstr ""
 
-#: ../inc/Admin.php:224
+#: ../inc/Admin.php:219
 msgid "Settings"
-msgstr ""
-
-#: ../inc/Admin.php:286
-msgid "Success!"
-msgstr ""
-
-#: ../inc/Admin.php:289
-msgid "Failure!"
 msgstr ""
 
 #: ../inc/WPUtils.php:25

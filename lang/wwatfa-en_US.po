@@ -7,6 +7,14 @@ msgstr ""
 "X-Language: en_US\n"
 "X-Source-Language: C\n"
 
+#: ../inc/AJAX.php:78
+msgid "Success!"
+msgstr "Success!"
+
+#: ../inc/AJAX.php:81
+msgid "Failure!"
+msgstr "Failure!"
+
 #: ../inc/Admin.php:36 ../views/user-settings.php:25
 msgid "By email"
 msgstr "By email"
@@ -15,23 +23,23 @@ msgstr "By email"
 msgid "Via third party applications"
 msgstr "Via third party applications"
 
-#: ../inc/Admin.php:91
+#: ../inc/Admin.php:83
 msgid "User Roles"
 msgstr "User Roles"
 
-#: ../inc/Admin.php:96
+#: ../inc/Admin.php:88
 msgid "Email Settings"
 msgstr "Email Settings"
 
-#: ../inc/Admin.php:97
+#: ../inc/Admin.php:89
 msgid "Email Address"
 msgstr "Email Address"
 
-#: ../inc/Admin.php:98
+#: ../inc/Admin.php:90
 msgid "Sender Name"
 msgstr "Sender Name"
 
-#: ../inc/Admin.php:153
+#: ../inc/Admin.php:148
 msgid ""
 "WARNING: If you reset the private key, you will have to update your "
 "applications with the new one. Do you want to proceed?"
@@ -39,37 +47,29 @@ msgstr ""
 "WARNING: If you reset the private key, you will have to update your "
 "applications with the new one. Do you want to proceed?"
 
-#: ../inc/Admin.php:154
+#: ../inc/Admin.php:149
 msgid "Refreshing&hellip;"
 msgstr "Refreshing&hellip;"
 
-#: ../inc/Admin.php:165
+#: ../inc/Admin.php:160
 msgid "Settings saved."
 msgstr "Settings saved."
 
-#: ../inc/Admin.php:166
+#: ../inc/Admin.php:161
 msgid "Private key reset."
 msgstr "Private key reset."
 
-#: ../inc/Admin.php:167
+#: ../inc/Admin.php:162
 msgid "Algorithm changed."
 msgstr "Algorithm changed."
 
-#: ../inc/Admin.php:168
+#: ../inc/Admin.php:163
 msgid "Backup codes regenerated."
 msgstr "Backup codes regenerated."
 
-#: ../inc/Admin.php:224
+#: ../inc/Admin.php:219
 msgid "Settings"
 msgstr "Settings"
-
-#: ../inc/Admin.php:286
-msgid "Success!"
-msgstr "Success!"
-
-#: ../inc/Admin.php:289
-msgid "Failure!"
-msgstr "Failure!"
 
 #: ../inc/WPUtils.php:25
 #, php-format
