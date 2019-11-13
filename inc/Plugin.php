@@ -40,8 +40,8 @@ class Plugin
 			Admin::instance();
 		}
 
-		\add_action('login_init',   [$this, 'login_init']);
-		\add_filter('authenticate', [$this, 'authenticate'], 999, 3);
+		\add_action('login_form_login', [$this, 'login_form_login']);
+		\add_filter('authenticate',     [$this, 'authenticate'], 999, 3);
 	}
 	// @codeCoverageIgnoreEnd
 
@@ -50,13 +50,10 @@ class Plugin
 		return $this->base_url;
 	}
 
-	public function login_init()
+	public function login_form_login()
 	{
-		global $action;
-		if ($action === 'login') {
-			\add_action('login_enqueue_scripts', [$this, 'login_enqueue_scripts']);
-			\add_action('login_form',            [$this, 'login_form']);
-		}
+		\add_action('login_enqueue_scripts', [$this, 'login_enqueue_scripts']);
+		\add_action('login_form',            [$this, 'login_form']);
 	}
 
 	public function login_enqueue_scripts()

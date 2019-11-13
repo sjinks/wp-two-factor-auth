@@ -16,8 +16,8 @@ class PluginTest extends WP_UnitTestCase
 	public function testInit()
 	{
 		$inst = Plugin::instance();
-		$this->assertEquals(10,  has_action('login_init',   [$inst, 'login_init']));
-		$this->assertEquals(999, has_filter('authenticate', [$inst, 'authenticate']));
+		$this->assertEquals(10,  has_action('login_form_login', [$inst, 'login_form_login']));
+		$this->assertEquals(999, has_filter('authenticate',     [$inst, 'authenticate']));
 
 		$settings = get_registered_settings();
 		$this->assertArrayHasKey(Plugin::OPTIONS_KEY, $settings);
@@ -30,7 +30,7 @@ class PluginTest extends WP_UnitTestCase
 		$inst = Plugin::instance();
 		remove_action('login_init', 'send_frame_options_header', 10);
 		remove_action('login_init', 'wp_admin_headers', 10);
-		do_action('login_init');
+		do_action('login_form_login');
 		$this->assertEquals(10, has_action('login_enqueue_scripts', [$inst, 'login_enqueue_scripts']));
 		$this->assertEquals(10, has_action('login_form',            [$inst, 'login_form']));
 	}
@@ -39,7 +39,7 @@ class PluginTest extends WP_UnitTestCase
 	{
 		remove_action('login_init', 'send_frame_options_header', 10);
 		remove_action('login_init', 'wp_admin_headers', 10);
-		do_action('login_init');
+		do_action('login_form_login');
 		do_action('login_enqueue_scripts');
 		$this->assertTrue(wp_scripts()->query('tfa-ajax-request', 'enqueued'));
 	}
@@ -48,7 +48,7 @@ class PluginTest extends WP_UnitTestCase
 	{
 		remove_action('login_init', 'send_frame_options_header', 10);
 		remove_action('login_init', 'wp_admin_headers', 10);
-		do_action('login_init');
+		do_action('login_form_login');
 		ob_start();
 		do_action('login_form');
 		$s = ob_get_clean();
