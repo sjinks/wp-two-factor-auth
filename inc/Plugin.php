@@ -52,8 +52,11 @@ class Plugin
 
 	public function login_init()
 	{
-		\add_action('login_enqueue_scripts', [$this, 'login_enqueue_scripts']);
-		\add_action('login_form',            [$this, 'login_form']);
+		global $action;
+		if ($action === 'login') {
+			\add_action('login_enqueue_scripts', [$this, 'login_enqueue_scripts']);
+			\add_action('login_form',            [$this, 'login_form']);
+		}
 	}
 
 	public function login_enqueue_scripts()
