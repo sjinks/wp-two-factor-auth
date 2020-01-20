@@ -21,8 +21,8 @@
 		"php" : ">=7.0.0",
 		"ext-openssl" : "*",
 		"composer/installers" : "~1.0",
-		"tuupola/base32": "^0.1.0",
-		"chillerlan/php-qrcode": "^2.0",
+		"tuupola/base32": "^0.3.0",
+		"chillerlan/php-qrcode": "^3.2.0",
 		"wildwolf/php-otp": "^1.1"
 	},
 	"require-dev": {
