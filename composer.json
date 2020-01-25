@@ -17,6 +17,21 @@
 			"WildWolf\\TFA\\": "inc/"
 		}
 	},
+	"archive": {
+		"exclude": [
+			"/assets/*.map",
+			"/build",
+			"/lang/*.po",
+			"/lang/Makefile",
+			"/node_modules",
+			"/tests",
+			"/.*",
+			"gulpfile.js",
+			"package.json",
+			"package-lock.json",
+			"phpunit.xml"
+		]
+	},
 	"require" : {
 		"php" : ">=7.2.0",
 		"ext-openssl" : "*",
