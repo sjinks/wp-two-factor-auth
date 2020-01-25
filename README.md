@@ -28,7 +28,7 @@ one time passwords are delivered by email.
 
 ## System Requirements
 
-  * PHP 7.0 or newer
+  * PHP 7.2 or newer
   * OpenSSL extension
 
 ## Installation
