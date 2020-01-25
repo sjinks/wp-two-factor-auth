@@ -2,7 +2,8 @@
 (function() {
 	function callback()
 	{
-		document.getElementById('tfa-reset-form').addEventListener('submit', function(e) {
+		var form = document.getElementById('tfa-reset-form');
+		form && form.addEventListener('submit', function(e) {
 			if (!confirm(tfaSettings.confirm)) {
 				e.preventDefault();
 			}
@@ -38,9 +39,11 @@
 			);
 		}
 
-		document.getElementById('refresh-code').addEventListener('click', refreshCode);
+		var rc = document.getElementById('refresh-code');
+		rc && rc.addEventListener('click', refreshCode);
 
-		document.getElementById('verify').addEventListener('click', function() {
+		var vf = document.getElementById('verify');
+		vf && vf.addEventListener('click', function() {
 			var vr   = document.getElementById('verify-result');
 			var code = document.getElementById('otpcode').value;
 			refreshCode();
