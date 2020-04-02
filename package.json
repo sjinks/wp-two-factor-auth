@@ -11,7 +11,7 @@
     "gulp-prune": "^0.2.0"
   },
   "devDependencies": {
-    "autoprefixer": "^9.5.0",
+    "autoprefixer": "^9.7.5",
     "cssnano": "^4.1.10",
     "del": "^5.1.0",
     "gulp": "^4.0.0",
