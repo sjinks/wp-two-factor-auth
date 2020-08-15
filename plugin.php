@@ -4,7 +4,7 @@
  Plugin URI: https://github.com/sjinks/wp-two-factor-auth
  Description: HOTP/TOTP based two factor authentication for WordPress
  Author: Volodymyr Kolesnykov
- Version: 5.1.8
+ Version: 5.1.9
  License: MIT
  */
 
