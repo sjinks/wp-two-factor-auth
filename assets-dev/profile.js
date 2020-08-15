@@ -12,7 +12,7 @@
 						document.getElementById('tfa-change-method').setAttribute('hidden', '');
 					}
 					catch (e) {
-						console && console.error(e);
+						console.error(e);
 					}
 				});
 			});
@@ -20,7 +20,7 @@
 			document.getElementById('tfa-delivery-method').innerHTML = '...';
 			req.open('POST', tfaSettings.ajaxurl);
 			req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-			req.send('action=tfa-reset-method&_ajax_nonce=' + tfaSettings.nonce + '&uid=' + tfaSettings.uid);
+			req.send('action=tfa-reset-method&_ajax_nonce=' + encodeURIComponent(tfaSettings.nonce) + '&uid=' + encodeURIComponent(tfaSettings.uid));
 		}
 	}
 

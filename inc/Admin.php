@@ -187,14 +187,14 @@ EOT;
 			$issuer  = \get_bloginfo('name') . ' (' . $domain . ')';
 			$login   = \urlencode($current_user->user_login);
 			$key     = \Tuupola\Base32Proxy::encode($privkey);
- 			$otpauth = "otpauth://{$algo}/{$issuer}:{$login}?secret={$key}&issuer={$issuer}";
- 			if ('hotp' === $algo) {
- 				$otpauth .= "&counter={$counter}";
- 			}
+			$otpauth = "otpauth://{$algo}/{$issuer}:{$login}?secret={$key}&issuer={$issuer}";
+			if ('hotp' === $algo) {
+				$otpauth .= "&counter={$counter}";
+			}
 
- 			$qropts  = new QROptions(['outputType' => QRCode::OUTPUT_IMAGE_PNG, 'eccLevel' => QRCode::ECC_H, 'imageBase64' => true, 'scale' => 4, 'addQuietzone' => false]);
- 			$qrcode  = new QRCode($qropts);
- 			$qrimg   = $qrcode->render($otpauth);
+			$qropts  = new QROptions(['outputType' => QRCode::OUTPUT_IMAGE_PNG, 'eccLevel' => QRCode::ECC_H, 'imageBase64' => true, 'scale' => 4, 'addQuietzone' => false]);
+			$qrcode  = new QRCode($qropts);
+			$qrimg   = $qrcode->render($otpauth);
 		}
 
 		$options = [
