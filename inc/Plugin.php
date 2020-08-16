@@ -69,9 +69,9 @@ class Plugin
 		require __DIR__ . '/../views/login.php';
 	}
 
-	public function authenticate($user, $username, /** @scrutinizer ignore-unused */ $password)
+	public function authenticate($user, $username)
 	{
-		if (\is_wp_error($user)) {
+		if (\is_wp_error($user) || WPUtils::isApiRequest()) {
 			return $user;
 		}
 

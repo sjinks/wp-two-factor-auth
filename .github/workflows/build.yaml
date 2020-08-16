@@ -37,7 +37,7 @@ jobs:
 
       - name: Run tests
         run: vendor/bin/phpunit
-      
+
       - name: Run tests in multi-site mode
         run: phpunit
         env:

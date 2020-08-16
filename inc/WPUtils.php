@@ -67,4 +67,12 @@ class WPUtils
 		// If this user does not exist, show the OTP field anyway
 		return true;
 	}
+
+	public static function isApiRequest() : bool
+	{
+		return
+			   (\defined('\\XMLRPC_REQUEST') && \XMLRPC_REQUEST)
+			|| (\defined('\\REST_REQUEST') && \REST_REQUEST)
+		;
+	}
 }
