@@ -9,6 +9,7 @@
 		{
 			"name" : "Volodymyr Kolesnykov",
 			"email" : "volodymyr@wildwolf.name",
+			"homepage": "https://wildwolf.name/",
 			"role" : "Developer"
 		}
 	],
@@ -41,6 +42,9 @@
 		"wildwolf/php-otp": "^1.1"
 	},
 	"require-dev": {
-		"phpunit/phpunit": "^6"
+		"phpunit/phpunit": "^7"
+	},
+	"scripts": {
+		"test": "phpunit"
 	}
 }

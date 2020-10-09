@@ -1,11 +1,11 @@
 <?php
 /*
- Plugin Name: WP Two Factor Auth
- Plugin URI: https://github.com/sjinks/wp-two-factor-auth
- Description: HOTP/TOTP based two factor authentication for WordPress
- Author: Volodymyr Kolesnykov
- Version: 5.1.9
- License: MIT
+	Plugin Name: WP Two Factor Auth
+	Plugin URI: https://github.com/sjinks/wp-two-factor-auth
+	Description: HOTP/TOTP based two factor authentication for WordPress
+	Author: Volodymyr Kolesnykov
+	Version: 5.1.10
+	License: MIT
  */
 
 defined('ABSPATH') || die();
