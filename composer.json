@@ -37,7 +37,7 @@
 		"php" : ">=7.2.0",
 		"ext-openssl" : "*",
 		"composer/installers" : "^1.0.0",
-		"tuupola/base32": "^1.0.0",
+		"tuupola/base32": "^1.0.0 || ^2.0.0",
 		"chillerlan/php-qrcode": "^3.2.0",
 		"wildwolf/php-otp": "^1.1"
 	},
