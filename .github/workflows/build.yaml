@@ -12,31 +12,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  prepare:
-    runs-on: ubuntu-latest
-    outputs:
-      head_tag: ${{ steps.check.outputs.head_tag }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2.3.4
-
-      - name: Retrieve tags
-        run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-
-      - name: Set output variables
-        id: check
-        run: |
-          if [[ "${{ github.ref }}" == refs/heads/* ]]; then
-            echo "::set-output name=head_tag::$(git tag --points-at HEAD)"
-          else
-            echo "::set-output name=head_tag::"
-          fi
-          
   test:
     name: Run PHP Tests
-    if: needs.prepare.outputs.head_tag == ''
     runs-on: ubuntu-latest
-    needs: prepare
     strategy:
       fail-fast: true
       matrix:
@@ -102,8 +80,6 @@ jobs:
 
   build:
     name: Build JS Files
-    needs: prepare
-    if: needs.prepare.outputs.head_tag == ''
     runs-on: ubuntu-latest
     steps:
       - name: Check out source code
