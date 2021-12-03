@@ -1,10 +1,6 @@
 # wp-two-factor-auth
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sjinks/wp-two-factor-auth/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sjinks/wp-two-factor-auth/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/sjinks/wp-two-factor-auth/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/sjinks/wp-two-factor-auth/?branch=master)
-[![Build Status](https://scrutinizer-ci.com/g/sjinks/wp-two-factor-auth/badges/build.png?b=master)](https://scrutinizer-ci.com/g/sjinks/wp-two-factor-auth/build-status/master)
-[![Code Intelligence Status](https://scrutinizer-ci.com/g/sjinks/wp-two-factor-auth/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
-![Build CI](https://github.com/sjinks/wp-two-factor-auth/workflows/Build%20CI/badge.svg)
+[![CI](https://github.com/sjinks/wp-two-factor-auth/actions/workflows/build.yaml/badge.svg)](https://github.com/sjinks/wp-two-factor-auth/actions/workflows/build.yaml)
 
 ## Description
 
