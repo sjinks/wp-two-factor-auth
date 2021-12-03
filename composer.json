@@ -42,7 +42,8 @@
 		"wildwolf/php-otp": "^1.1"
 	},
 	"require-dev": {
-		"phpunit/phpunit": "^7"
+		"phpunit/phpunit": "^7",
+		"yoast/phpunit-polyfills": "^1.0"
 	},
 	"scripts": {
 		"test": "phpunit"
