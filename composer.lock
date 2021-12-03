@@ -354,16 +354,16 @@
         },
         {
             "name": "wildwolf/php-otp",
-            "version": "1.2.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sjinks/php-otp.git",
-                "reference": "79fcfb9c9dcdd404a6e1c209c6023c6931a3c7e3"
+                "reference": "0107d6380ee286eea4e3262915078599ba5480ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sjinks/php-otp/zipball/79fcfb9c9dcdd404a6e1c209c6023c6931a3c7e3",
-                "reference": "79fcfb9c9dcdd404a6e1c209c6023c6931a3c7e3",
+                "url": "https://api.github.com/repos/sjinks/php-otp/zipball/0107d6380ee286eea4e3262915078599ba5480ce",
+                "reference": "0107d6380ee286eea4e3262915078599ba5480ce",
                 "shasum": ""
             },
             "require": {
@@ -399,9 +399,9 @@
             ],
             "support": {
                 "issues": "https://github.com/sjinks/php-otp/issues",
-                "source": "https://github.com/sjinks/php-otp/tree/1.2.0"
+                "source": "https://github.com/sjinks/php-otp/tree/1.2.1"
             },
-            "time": "2021-12-03T08:46:39+00:00"
+            "time": "2021-12-03T12:16:51+00:00"
         }
     ],
     "packages-dev": [
