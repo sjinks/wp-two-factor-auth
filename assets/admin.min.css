@@ -1,2 +1,1 @@
-.qrcode{margin-right:10px}.otp{color:red;font-size:x-large;font-weight:700}.wrap section{position:relative;margin-top:20px;padding:.7em 2em 1em;border:1px solid #e5e5e5;box-shadow:0 1px 1px rgba(0,0,0,.04);background:#fff}.verify-success{color:green}.verify-failure{color:red}
-/*# sourceMappingURL=admin.min.css.map */
+.qrcode{margin-right:10px}.otp{color:red;font-size:x-large;font-weight:700}.wrap section{background:#fff;border:1px solid #e5e5e5;box-shadow:0 1px 1px rgba(0,0,0,.04);margin-top:20px;padding:.7em 2em 1em;position:relative}.verify-success{color:green}.verify-failure{color:red}
