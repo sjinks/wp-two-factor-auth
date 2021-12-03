@@ -1,24 +1,43 @@
-name: Build CI
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: CI
 
 on:
   push:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build:
-    name: Build and Test
+  test:
+    name: Run PHP Tests
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
       matrix:
         php:
-          - "7.3"
           - "7.4"
+        wpmu:
+          - "0"
+          - "1"
+        wordpress:
+          - latest
+          - trunk
+    services:
+      mysql:
+        image: mariadb:latest
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306
+        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=5s --health-retries=5
     steps:
       - name: Check out source code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
 
       - name: Set up PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@2.12.0
         with:
           php-version: ${{ matrix.php }}
 
@@ -30,7 +49,7 @@ jobs:
         run: composer validate
 
       - name: Cache Composer packages
-        uses: actions/cache@v2.1.5
+        uses: actions/cache@v2.1.6
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-php-${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
@@ -39,19 +58,45 @@ jobs:
             ${{ runner.os }}-php-${{ matrix.php }}
             ${{ runner.os }}-php-
 
-      - name: Start MySQL
-        run: sudo systemctl start mysql.service
-
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
 
+      - name: Verify MariaDB connection
+        run: |
+          while ! mysqladmin ping -h 127.0.0.1 -P ${{ job.services.mysql.ports[3306] }} --silent; do
+            sleep 1
+          done
+        timeout-minutes: 3
+
       - name: Install WP Test Suite
-        run: ./.github/install-wp-tests.sh wordpress_test root root localhost latest
+        run: ./.github/install-wp-tests.sh wordpress_test root root 127.0.0.1:${{ job.services.mysql.ports[3306] }} ${{ matrix.wordpress }}
 
       - name: Run tests
         run: vendor/bin/phpunit
-
-      - name: Run tests in multi-site mode
-        run: phpunit
         env:
-          WP_MULTISITE: 1
+          WP_MULTISITE: ${{ matrix.wpmu }}
+
+  build:
+    name: Build JS Files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v2.3.4
+
+      - name: Set up Node.js environment
+        uses: actions/setup-node@v2.4.1
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - name: Update npm
+        run: npm i -g npm@latest
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Run postinstall scripts
+        run: npm rebuild && npm run prepare --if-present
+
+      - name: Build JS files
+        run: npm run build
