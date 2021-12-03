@@ -116,7 +116,7 @@ EOT;
 	{
 		\add_options_page('Two Factor Authentication', 'Two Factor Auth', 'manage_options', 'two-factor-auth', [$this, 'settings_page']);
 		$base = Plugin::instance()->baseUrl();
-		$this->user_settings_hook = \add_menu_page('Two Factor Authentication', 'Two Factor Auth', 'read', 'two-factor-auth-user', [$this, 'user_settings_page'], $base . 'assets/icon.png', 72);
+		$this->user_settings_hook = \add_menu_page('Two Factor Authentication', 'Two Factor Auth', 'read', 'two-factor-auth-user', [$this, 'user_settings_page'], 'dashicons-shield', 72);
 	}
 
 	public function settings_page()

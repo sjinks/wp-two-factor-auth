@@ -7,29 +7,12 @@ var sourcemaps   = require('gulp-sourcemaps');
 var uglify       = require('gulp-uglify');
 var prune        = require('gulp-prune');
 var newer        = require('gulp-newer');
-var imagemin     = require('gulp-imagemin');
 
 gulp.task('clean:js', function() {
 	return del(['assets/*.js', 'assets/*.js.map']);
 });
 
-gulp.task('clean:img', function() {
-	return del(['assets/*.png']);
-});
-
-gulp.task('clean', gulp.series(['clean:js', 'clean:img']));
-
-gulp.task('img', function() {
-	var dest = 'assets/';
-	return gulp.src(['assets-dev/*.png'])
-		.pipe(prune({ dest: dest, ext: ['.png'] }))
-		.pipe(newer({ dest: dest }))
-		.pipe(imagemin([
-			imagemin.optipng({ optimizationLevel: 9 })
-		]))
-		.pipe(gulp.dest('assets'))
-	;
-});
+gulp.task('clean', gulp.series(['clean:js']));
 
 gulp.task('js', function() {
 	var src  = ['assets-dev/*.js'];
@@ -51,4 +34,4 @@ gulp.task('js', function() {
 	;
 });
 
-gulp.task('default', gulp.parallel(['img', 'js']));
+gulp.task('default', gulp.series(['js']));
