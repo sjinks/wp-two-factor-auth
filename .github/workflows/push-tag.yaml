@@ -19,8 +19,7 @@ jobs:
         run: |
           git archive --format=tar --prefix=wp-two-factor-auth/ HEAD | (cd /var/tmp/ && tar xf -)
           cp composer.lock /var/tmp/wp-two-factor-auth/
-          composer install --no-dev --no-interaction
-          (cd /var/tmp && zip -r -9 wp-two-factor-auth.zip wp-two-factor-auth)
+          (cd /var/tmp && composer install --no-dev --no-interaction && zip -r -9 wp-two-factor-auth.zip wp-two-factor-auth)
 
       - name: Release
         uses: softprops/action-gh-release@v1
