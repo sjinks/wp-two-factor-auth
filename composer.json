@@ -1,51 +1,51 @@
 {
-	"name" : "wildwolf/wp-two-factor-auth",
-	"type" : "wordpress-plugin",
-	"description" : "WordPress plugin for two factor authentication",
-	"keywords" : ["wordpress", "plugin", "security", "2fa", "otp", "hotp", "totp"],
-	"license" : "MIT",
-	"homepage" : "https://github.com/sjinks/wp-two-factor-auth",
-	"authors" : [
+	"name": "wildwolf/wp-two-factor-auth",
+	"type": "wordpress-plugin",
+	"description": "WordPress plugin for two factor authentication",
+	"keywords": [
+		"wordpress",
+		"plugin",
+		"security",
+		"2fa",
+		"otp",
+		"hotp",
+		"totp"
+	],
+	"license": "MIT",
+	"homepage": "https://github.com/sjinks/wp-two-factor-auth",
+	"authors": [
 		{
-			"name" : "Volodymyr Kolesnykov",
-			"email" : "volodymyr@wildwolf.name",
+			"name": "Volodymyr Kolesnykov",
+			"email": "volodymyr@wildwolf.name",
 			"homepage": "https://wildwolf.name/",
-			"role" : "Developer"
+			"role": "Developer"
 		}
 	],
 	"autoload": {
 		"psr-4": {
 			"WildWolf\\TFA\\": "inc/"
-		}
-	},
-	"archive": {
-		"exclude": [
-			"/assets/*.map",
-			"/build",
-			"/lang/*.po",
-			"/lang/Makefile",
-			"/node_modules",
-			"/tests",
-			"/.*",
-			"gulpfile.js",
-			"package.json",
-			"package-lock.json",
-			"phpunit.xml"
+		},
+		"classmap": [
+			"inc/"
 		]
 	},
-	"require" : {
-		"php" : ">=7.2.0",
-		"ext-openssl" : "*",
-		"composer/installers" : "^1.0.0 | ^2.0.0",
+	"require": {
+		"php": ">=7.2.0",
+		"ext-openssl": "*",
+		"composer/installers": "^1.0.0 || ^2.0.0",
 		"tuupola/base32": "^1.0.0 || ^2.0.0",
 		"chillerlan/php-qrcode": "^4.0.0",
 		"wildwolf/php-otp": "^1.1"
 	},
 	"require-dev": {
+		"johnpbloch/wordpress-core": "^5.8",
 		"phpunit/phpunit": "^7",
 		"yoast/phpunit-polyfills": "^1.0"
 	},
 	"scripts": {
 		"test": "phpunit"
+	},
+	"config": {
+		"sort-packages": true
 	}
 }
