@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8f1073bcc207bfc9599c28dc5fc82ad0",
+    "content-hash": "67a27c1003a859bd91d6f9fb807d9bda",
     "packages": [
         {
             "name": "chillerlan/php-qrcode",
@@ -354,16 +354,16 @@
         },
         {
             "name": "wildwolf/php-otp",
-            "version": "1.1.3",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sjinks/php-otp.git",
-                "reference": "84c8b19675d3990cc1e3b312f9aae5676fd2ba81"
+                "reference": "79fcfb9c9dcdd404a6e1c209c6023c6931a3c7e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sjinks/php-otp/zipball/84c8b19675d3990cc1e3b312f9aae5676fd2ba81",
-                "reference": "84c8b19675d3990cc1e3b312f9aae5676fd2ba81",
+                "url": "https://api.github.com/repos/sjinks/php-otp/zipball/79fcfb9c9dcdd404a6e1c209c6023c6931a3c7e3",
+                "reference": "79fcfb9c9dcdd404a6e1c209c6023c6931a3c7e3",
                 "shasum": ""
             },
             "require": {
@@ -399,9 +399,9 @@
             ],
             "support": {
                 "issues": "https://github.com/sjinks/php-otp/issues",
-                "source": "https://github.com/sjinks/php-otp/tree/1.1.3"
+                "source": "https://github.com/sjinks/php-otp/tree/1.2.0"
             },
-            "time": "2020-09-30T11:25:51+00:00"
+            "time": "2021-12-03T08:46:39+00:00"
         }
     ],
     "packages-dev": [
