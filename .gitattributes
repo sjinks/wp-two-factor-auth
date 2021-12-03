@@ -1,0 +1,15 @@
+*.sh                    text eol=lf
+*.xml.dist              export-ignore
+/.github                export-ignore
+/assets/*.map           export-ignore
+/assets-dev/            export-ignore
+/bin/                   export-ignore
+/lang/*.po              export-ignore
+/lang/*.pot             export-ignore
+/tests/                 export-ignore
+/.gitattributes         export-ignore
+/.gitignore             export-ignore
+/docker-compose.yml     export-ignore
+/rollup.config.js       export-ignore
+/*.json                 export-ignore
+/*.stubs                export-ignore
