@@ -7,7 +7,7 @@
     "cssnano": "^5.0.2",
     "del": "^6.0.0",
     "gulp": "^4.0.0",
-    "gulp-autoprefixer": "^7.0.1",
+    "gulp-autoprefixer": "^8.0.0",
     "gulp-imagemin": "^7.1.0",
     "gulp-newer": "^1.4.0",
     "gulp-postcss": "^9.0.0",
