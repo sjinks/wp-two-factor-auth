@@ -1,0 +1,30 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "**"
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.4.0
+
+      - name: Generate self-contained package
+        run: |
+          git archive --format=tar --prefix=wp-two-factor-auth/ HEAD | (cd /var/tmp/ && tar xf -)
+          cp composer.lock /var/tmp/wp-two-factor-auth/
+          (cd /var/tmp/wp-two-factor-auth && composer install --no-dev --no-interaction)
+          (cd /var/tmp && zip -r -9 wp-two-factor-auth.zip wp-two-factor-auth)
+
+      - name: Release
+        uses: softprops/action-gh-release@v0.1.14
+        with:
+          generate_release_notes: true
+          files: |
+            /var/tmp/wp-two-factor-auth.zip
