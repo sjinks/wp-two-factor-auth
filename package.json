@@ -10,7 +10,7 @@
     "gulp-autoprefixer": "^8.0.0",
     "gulp-newer": "^1.4.0",
     "gulp-postcss": "^9.0.0",
-    "gulp-prune": "^0.2.0",
+    "gulp-prune": "^2.0.0",
     "gulp-rename": "^2.0.0",
     "gulp-sourcemaps": "^3.0.0",
     "gulp-uglify": "^3.0.2",
