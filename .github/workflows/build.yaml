@@ -41,7 +41,7 @@ jobs:
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846 # tag=v3.0.0
 
       - name: Set up PHP
-        uses: shivammathur/setup-php@7854a0cae7fa7a5f3feac66d27bae2dc42d1067a # tag=2.17.0
+        uses: shivammathur/setup-php@d37cc3048580de06099c81ded417530716a0d7ab # tag=2.18.0
         with:
           php-version: ${{ matrix.php }}
 
@@ -90,7 +90,7 @@ jobs:
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846 # tag=v3.0.0
 
       - name: Set up Node.js environment
-        uses: actions/setup-node@1f8c6b94b26d0feae1e387ca63ccbdc44d27b561 # renovate: tag=v2.5.1
+        uses: actions/setup-node@5b52f097d36d4b0b2f94ed6de710023fbb8b2236 # tag=v3.1.0
         with:
           node-version: lts/*
           cache: npm
