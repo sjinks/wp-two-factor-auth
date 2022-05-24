@@ -38,7 +38,7 @@
 		"wildwolf/php-otp": "^1.2.0"
 	},
 	"require-dev": {
-		"johnpbloch/wordpress-core": "^5.8",
+		"johnpbloch/wordpress-core": "^6.0",
 		"phpunit/phpunit": "^7",
 		"yoast/phpunit-polyfills": "^1.0"
 	},
