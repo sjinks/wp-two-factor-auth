@@ -1,5 +1,5 @@
 import { resolve } from 'path';
-import { terser } from 'rollup-plugin-terser';
+import { terser } from '@wwa/rollup-plugin-terser';
 import postcss from 'rollup-plugin-postcss';
 
 /**
@@ -15,7 +15,7 @@ const config = [
         output: {
             dir: 'assets',
             preserveModules: true,
-            entryFileNames: '[name].min[extname]',
+            entryFileNames: '[name].min.js',
             format: 'esm',
             plugins: [
                 terser(),

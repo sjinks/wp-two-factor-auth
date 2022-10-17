@@ -3,9 +3,9 @@
   "private": true,
   "version": "1.0.0",
   "devDependencies": {
-    "rollup": "^2.60.2",
-    "rollup-plugin-postcss": "^4.0.2",
-    "rollup-plugin-terser": "^7.0.2"
+    "@wwa/rollup-plugin-terser": "^1.0.1",
+    "rollup": "^3.0.0",
+    "rollup-plugin-postcss": "^4.0.2"
   },
   "scripts": {
     "build": "rollup -c"
