@@ -3,8 +3,8 @@
   "private": true,
   "version": "1.0.0",
   "devDependencies": {
-    "@wwa/rollup-plugin-terser": "^1.0.1",
-    "rollup": "^3.0.0",
+    "@wwa/rollup-plugin-terser": "^1.1.1",
+    "rollup": "^4.1.5",
     "rollup-plugin-postcss": "^4.0.2"
   },
   "scripts": {
