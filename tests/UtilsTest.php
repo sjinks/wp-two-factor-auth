@@ -1,9 +1,9 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
 use WildWolf\TFA\Utils;
+use Yoast\PHPUnitPolyfills\Polyfills\AssertionRenames;
 
-class UtilsTest extends TestCase
+class UtilsTest extends WP_UnitTestCase
 {
 	public function generatePanicCodeDataProvider()
 	{
@@ -21,7 +21,7 @@ class UtilsTest extends TestCase
 	{
 		$code = Utils::generatePanicCode($len);
 		$this->assertEquals($expectedLen, strlen($code));
-		$this->assertRegExp('/^[0-9]*+$/', $code);
+		$this->assertMatchesRegularExpression('/^[0-9]*+$/', $code);
 	}
 
 	public function randomBase32StringDataProvider()
@@ -41,7 +41,7 @@ class UtilsTest extends TestCase
 	{
 		$s = Utils::randomBase32String($len);
 		$this->assertEquals($expectedLen, strlen($s));
-		$this->assertRegExp('/^[ABCDEFGHIJKLMNOPQRSTUVWXYZ234567]*+$/', $s);
+		$this->assertMatchesRegularExpression('/^[ABCDEFGHIJKLMNOPQRSTUVWXYZ234567]*+$/', $s);
 	}
 
 	public function encryptionDataProvider()

@@ -30,7 +30,7 @@
 		]
 	},
 	"require": {
-		"php": "^7.4.0",
+		"php": "^7.4.0 || ^8.0.0",
 		"ext-openssl": "*",
 		"composer/installers": "^2.0.0",
 		"tuupola/base32": "^2.0.0",
@@ -38,8 +38,10 @@
 		"wildwolf/php-otp": "^1.2.0"
 	},
 	"require-dev": {
-		"johnpbloch/wordpress-core": "^6.0",
-		"phpunit/phpunit": "^7",
+		"johnpbloch/wordpress-core": "^6.3",
+		"php-stubs/wordpress-stubs": "^6.3",
+		"wildwolf/wordpress-test-library-stubs": "^6.2",
+		"wp-phpunit/wp-phpunit": "^6.3",
 		"yoast/phpunit-polyfills": "^2.0"
 	},
 	"scripts": {

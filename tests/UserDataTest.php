@@ -1,14 +1,21 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
 use WildWolf\TFA\UserData;
 use WildWolf\TFA\Utils;
 
-class UserDataTest extends TestCase
+class UserDataTest extends WP_UnitTestCase
 {
+	private static $admin_id;
+
+	public static function wpSetUpBeforeClass($factory)
+	{
+		self::$admin_id = $factory->user->create(['role' => 'administrator']);
+		grant_super_admin(self::$admin_id);
+	}
+
 	public function test2FAEnabled()
 	{
-		$user_id = 1;
+		$user_id = self::$admin_id;
 		$data    = new UserData($user_id);
 
 		$this->assertFalse($data->is2FAEnabled());
@@ -33,27 +40,23 @@ class UserDataTest extends TestCase
 		$this->assertEquals('email', $data->getDeliveryMethod());
 	}
 
-	/**
-	 * @expectedException \InvalidArgumentException
-	 */
 	public function testSetDeliveryMethodException()
 	{
-		$data = new UserData(1);
+		$this->expectException(InvalidArgumentException::class);
+		$data = new UserData(self::$admin_id);
 		$data->setDeliveryMethod('invalid');
 	}
 
-	/**
-	 * @expectedException \InvalidArgumentException
-	 */
 	public function testSetHMACMethodException()
 	{
-		$data = new UserData(1);
+		$this->expectException(InvalidArgumentException::class);
+		$data = new UserData(self::$admin_id);
 		$data->setHMAC('invalid');
 	}
 
 	public function testResetPrivateKey()
 	{
-		$data = new UserData(1);
+		$data = new UserData(self::$admin_id);
 		$data->setDeliveryMethod('email');
 
 		$pk1 = $data->getPrivateKey();
@@ -69,7 +72,7 @@ class UserDataTest extends TestCase
 
 	public function testGeneratePanicCodes()
 	{
-		$data  = new UserData(1);
+		$data  = new UserData(self::$admin_id);
 		$codes = $data->generatePanicCodes();
 		$this->assertNotEmpty($codes);
 		$this->assertCount(UserData::$panicCodes, $codes);
@@ -81,12 +84,12 @@ class UserDataTest extends TestCase
 
 	public function testGenerateOTP_1()
 	{
-		$data = new UserData(1);
+		$data = new UserData(self::$admin_id);
 		$data->setDeliveryMethod('email');
 		$this->assertEquals('hotp',  $data->getHMAC());
 
 		$expected = $data->generateOTP();
-		$data     = new UserData(1);
+		$data     = new UserData(self::$admin_id);
 		$counter  = $data->getCounter();
 		$actual   = Utils::generateHOTP($data->getPrivateKey(), $counter, UserData::$otpLength, UserData::$defaultHash);
 
@@ -95,7 +98,7 @@ class UserDataTest extends TestCase
 
 	public function testGenerateOTP_2()
 	{
-		$data = new UserData(1);
+		$data = new UserData(self::$admin_id);
 		update_option('tfa', ['role_administrator' => true]);
 
 		$this->assertTrue($data->is2FAEnabled());
@@ -103,7 +106,7 @@ class UserDataTest extends TestCase
 		$this->assertEquals('hotp',  $data->getHMAC());
 
 		$expected = $data->generateOTP();
-		$data     = new UserData(1);
+		$data     = new UserData(self::$admin_id);
 
 		$this->assertEquals('email', $data->getDeliveryMethod());
 		$this->assertEquals('hotp',  $data->getHMAC());

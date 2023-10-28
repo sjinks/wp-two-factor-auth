@@ -5,7 +5,7 @@ use WildWolf\TFA\WPUtils;
 
 class WPUtilsTest extends WP_UnitTestCase
 {
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 		reset_phpmailer_instance();

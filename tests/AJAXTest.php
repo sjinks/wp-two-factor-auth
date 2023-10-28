@@ -14,7 +14,7 @@ class AJAXTest extends WP_Ajax_UnitTestCase
 		grant_super_admin(self::$admin_id);
 	}
 
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 		wp_set_current_user(self::$admin_id);
@@ -42,7 +42,8 @@ class AJAXTest extends WP_Ajax_UnitTestCase
 	 */
 	public function testBadNonce(string $action)
 	{
-		$this->setExpectedException('WPAjaxDieStopException', '-1');
+		$this->expectException(WPAjaxDieStopException::class);
+		$this->expectExceptionMessage('-1');
 		$this->_handleAjax($action);
 	}
 
