@@ -77,7 +77,7 @@ jobs:
         uses: ramsey/composer-install@83af392bf5f031813d25e6fe4cd626cdba9a2df6 # 2.2.0
 
       - name: Set up WordPress and WordPress Test Library
-        uses: sjinks/setup-wordpress-test-library@f4a68bacec7b0b5fcad9770c07e479d7fefe6fcd # 1.1.15
+        uses: sjinks/setup-wordpress-test-library@3678772b2337205a3622622e06b4fdcde6279971 # 1.1.19
         with:
           version: ${{ matrix.config.wp }}
 
