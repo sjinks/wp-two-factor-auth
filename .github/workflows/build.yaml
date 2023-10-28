@@ -3,8 +3,6 @@ name: CI
 
 on:
   push:
-    branches:
-      - "**"
   workflow_dispatch:
 
 concurrency:
@@ -12,73 +10,97 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
-    permissions:
-      contents: read
-    name: Run PHP Tests
+  unit-tests:
+    name: "WP ${{ matrix.config.wp }}, multisite: ${{ matrix.config.ms }}, PHP: ${{ matrix.config.php }}"
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
-        php:
-          - "8.0"
-        wpmu:
-          - "0"
-          - "1"
-        wordpress:
-          - latest
-          - trunk
+        config:
+          - { wp: 5.9.x,   ms: 'no',  php: '7.4', phpunit: 7 }
+          - { wp: 6.0.x,   ms: 'no',  php: '7.4', phpunit: 7 }
+          - { wp: 6.1.x,   ms: 'no',  php: '7.4', phpunit: 7 }
+          - { wp: 6.2.x,   ms: 'no',  php: '7.4', phpunit: 7 }
+          - { wp: latest,  ms: 'no',  php: '7.4', phpunit: 7 }
+          - { wp: nightly, ms: 'no',  php: '7.4', phpunit: 7 }
+
+          - { wp: 5.9.x,   ms: 'yes', php: '7.4', phpunit: 7 }
+          - { wp: 6.0.x,   ms: 'yes', php: '7.4', phpunit: 7 }
+          - { wp: 6.1.x,   ms: 'yes', php: '7.4', phpunit: 7 }
+          - { wp: 6.2.x,   ms: 'yes', php: '7.4', phpunit: 7 }
+          - { wp: latest,  ms: 'yes', php: '7.4', phpunit: 7 }
+          - { wp: nightly, ms: 'yes', php: '7.4', phpunit: 7 }
+
+          - { wp: latest,  ms: 'no',  php: '8.0', phpunit: 9 }
+          - { wp: nightly, ms: 'no',  php: '8.0', phpunit: 9 }
+          - { wp: latest,  ms: 'yes', php: '8.0', phpunit: 9 }
+          - { wp: nightly, ms: 'yes', php: '8.0', phpunit: 9 }
+
+          - { wp: latest,  ms: 'no',  php: '8.1', phpunit: 9 }
+          - { wp: nightly, ms: 'no',  php: '8.1', phpunit: 9 }
+          - { wp: latest,  ms: 'yes', php: '8.1', phpunit: 9 }
+          - { wp: nightly, ms: 'yes', php: '8.1', phpunit: 9 }
+
+          - { wp: latest,  ms: 'no',  php: '8.2', phpunit: 9 }
+          - { wp: nightly, ms: 'no',  php: '8.2', phpunit: 9 }
+          - { wp: latest,  ms: 'yes', php: '8.2', phpunit: 9 }
+          - { wp: nightly, ms: 'yes', php: '8.2', phpunit: 9 }
+
     services:
       mysql:
         image: mariadb:latest
-        env:
-          MYSQL_ROOT_PASSWORD: root
         ports:
-          - 3306
-        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=5s --health-retries=10
+          - "3306:3306"
+        env:
+          MYSQL_ROOT_PASSWORD: wordpress
+          MARIADB_INITDB_SKIP_TZINFO: 1
+          MYSQL_USER: wordpress
+          MYSQL_PASSWORD: wordpress
+          MYSQL_DATABASE: wordpress_test
     steps:
       - name: Check out source code
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
 
       - name: Set up PHP
-        uses: shivammathur/setup-php@c5fc0d8281aba02c7fda07d3a70cc5371548067d # 2.25.2
+        uses: shivammathur/setup-php@d30ad8b1843ace22e6698ab99bbafaa747b6bd0d # 2.24.0
         with:
-          php-version: ${{ matrix.php }}
+          php-version: ${{ matrix.config.php }}
+        env:
+          fail-fast: 'true'
 
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-      - name: Validate composer.json and composer.lock
-        run: composer validate
-
-      - name: Cache Composer packages
-        uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3.3.1
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-php-${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-            ${{ runner.os }}-php-${{ matrix.php }}
-            ${{ runner.os }}-php-
+      - name: Install PHPUnit
+        run: |
+          wget -q -O /usr/local/bin/phpunit "https://phar.phpunit.de/phpunit-${{ matrix.config.phpunit }}.phar"
+          chmod +x /usr/local/bin/phpunit
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress --no-interaction
+        uses: ramsey/composer-install@83af392bf5f031813d25e6fe4cd626cdba9a2df6 # 2.2.0
+
+      - name: Set up WordPress and WordPress Test Library
+        uses: sjinks/setup-wordpress-test-library@f4a68bacec7b0b5fcad9770c07e479d7fefe6fcd # 1.1.15
+        with:
+          version: ${{ matrix.config.wp }}
+
+      - name: Set up multisite mode
+        run: echo "WP_MULTISITE=1" >> $GITHUB_ENV
+        if: matrix.config.ms == 'yes'
+
+      - name: Update wp-test-config.php
+        run: |
+          if php -r 'exit(PHP_VERSION_ID < 80100);'; then
+            echo "Disabling WP_DEBUG in wp-test-config.php"
+            sed -i "s@define( 'WP_DEBUG', true );@// define( 'WP_DEBUG', true );@" /tmp/wordpress-tests-lib/wp-tests-config.php
+          fi
 
       - name: Verify MariaDB connection
         run: |
           while ! mysqladmin ping -h 127.0.0.1 -P ${{ job.services.mysql.ports[3306] }} --silent; do
             sleep 1
           done
-        timeout-minutes: 3
-
-      - name: Install WP Test Suite
-        run: ./.github/install-wp-tests.sh wordpress_test root root 127.0.0.1:${{ job.services.mysql.ports[3306] }} ${{ matrix.wordpress }}
+        timeout-minutes: 1
 
       - name: Run tests
-        run: vendor/bin/phpunit
-        env:
-          WP_MULTISITE: ${{ matrix.wpmu }}
+        run: phpunit --order-by=random
 
   build:
     permissions:
@@ -94,9 +116,6 @@ jobs:
         with:
           node-version: lts/*
           cache: npm
-
-      - name: Update npm
-        run: npm i -g npm@latest
 
       - name: Install dependencies
         run: npm ci --ignore-scripts

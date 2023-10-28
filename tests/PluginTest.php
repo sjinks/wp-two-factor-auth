@@ -3,9 +3,12 @@
 use WildWolf\TFA\Plugin;
 use WildWolf\TFA\UserData;
 use WildWolf\TFA\Utils;
+use Yoast\PHPUnitPolyfills\Polyfills\AssertStringContains;
 
 class PluginTest extends WP_UnitTestCase
 {
+	use AssertStringContains;
+
 	public function testInstance()
 	{
 		$i1 = Plugin::instance();
@@ -54,7 +57,7 @@ class PluginTest extends WP_UnitTestCase
 		$s = ob_get_clean();
 
 		$needle = '<input type="text" name="two_factor_code" id="two_factor_auth"';
-		$this->assertContains($needle, $s);
+		$this->assertStringContainsString($needle, $s);
 	}
 
 	public function testBaseUrl()
