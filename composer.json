@@ -42,7 +42,7 @@
 		"php-stubs/wordpress-stubs": "^6.3",
 		"wildwolf/wordpress-test-library-stubs": "^6.2",
 		"wp-phpunit/wp-phpunit": "^6.3",
-		"yoast/phpunit-polyfills": "^3.0"
+		"yoast/phpunit-polyfills": "^4.0"
 	},
 	"scripts": {
 		"test": "phpunit"
