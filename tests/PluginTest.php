@@ -3,12 +3,9 @@
 use WildWolf\TFA\Plugin;
 use WildWolf\TFA\UserData;
 use WildWolf\TFA\Utils;
-use Yoast\PHPUnitPolyfills\Polyfills\AssertStringContains;
 
 class PluginTest extends WP_UnitTestCase
 {
-	use AssertStringContains;
-
 	public function testInstance()
 	{
 		$i1 = Plugin::instance();
