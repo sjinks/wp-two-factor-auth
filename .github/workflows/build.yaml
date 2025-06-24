@@ -17,34 +17,20 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - { wp: 5.9.x,   ms: 'no',  php: '7.4', phpunit: 7 }
-          - { wp: 6.0.x,   ms: 'no',  php: '7.4', phpunit: 7 }
-          - { wp: 6.1.x,   ms: 'no',  php: '7.4', phpunit: 7 }
-          - { wp: 6.2.x,   ms: 'no',  php: '7.4', phpunit: 7 }
-          - { wp: latest,  ms: 'no',  php: '7.4', phpunit: 7 }
-          - { wp: nightly, ms: 'no',  php: '7.4', phpunit: 7 }
+          - { wp: latest,  ms: 'no',  php: '8.1' }
+          - { wp: nightly, ms: 'no',  php: '8.1' }
+          - { wp: latest,  ms: 'yes', php: '8.1' }
+          - { wp: nightly, ms: 'yes', php: '8.1' }
 
-          - { wp: 5.9.x,   ms: 'yes', php: '7.4', phpunit: 7 }
-          - { wp: 6.0.x,   ms: 'yes', php: '7.4', phpunit: 7 }
-          - { wp: 6.1.x,   ms: 'yes', php: '7.4', phpunit: 7 }
-          - { wp: 6.2.x,   ms: 'yes', php: '7.4', phpunit: 7 }
-          - { wp: latest,  ms: 'yes', php: '7.4', phpunit: 7 }
-          - { wp: nightly, ms: 'yes', php: '7.4', phpunit: 7 }
+          - { wp: latest,  ms: 'no',  php: '8.2' }
+          - { wp: nightly, ms: 'no',  php: '8.2' }
+          - { wp: latest,  ms: 'yes', php: '8.2' }
+          - { wp: nightly, ms: 'yes', php: '8.2' }
 
-          - { wp: latest,  ms: 'no',  php: '8.0', phpunit: 9 }
-          - { wp: nightly, ms: 'no',  php: '8.0', phpunit: 9 }
-          - { wp: latest,  ms: 'yes', php: '8.0', phpunit: 9 }
-          - { wp: nightly, ms: 'yes', php: '8.0', phpunit: 9 }
-
-          - { wp: latest,  ms: 'no',  php: '8.1', phpunit: 9 }
-          - { wp: nightly, ms: 'no',  php: '8.1', phpunit: 9 }
-          - { wp: latest,  ms: 'yes', php: '8.1', phpunit: 9 }
-          - { wp: nightly, ms: 'yes', php: '8.1', phpunit: 9 }
-
-          - { wp: latest,  ms: 'no',  php: '8.2', phpunit: 9 }
-          - { wp: nightly, ms: 'no',  php: '8.2', phpunit: 9 }
-          - { wp: latest,  ms: 'yes', php: '8.2', phpunit: 9 }
-          - { wp: nightly, ms: 'yes', php: '8.2', phpunit: 9 }
+          - { wp: latest,  ms: 'no',  php: '8.3' }
+          - { wp: nightly, ms: 'no',  php: '8.3' }
+          - { wp: latest,  ms: 'yes', php: '8.3' }
+          - { wp: nightly, ms: 'yes', php: '8.3' }
 
     services:
       mysql:
@@ -71,11 +57,6 @@ jobs:
       - name: Install subversion
         run: sudo apt-get update && sudo apt-get install -y subversion
 
-      - name: Install PHPUnit
-        run: |
-          wget -q -O /usr/local/bin/phpunit "https://phar.phpunit.de/phpunit-${{ matrix.config.phpunit }}.phar"
-          chmod +x /usr/local/bin/phpunit
-
       - name: Install dependencies
         uses: ramsey/composer-install@57532f8be5bda426838819c5ee9afb8af389d51a # 3.0.0
 
@@ -88,13 +69,6 @@ jobs:
         run: echo "WP_MULTISITE=1" >> $GITHUB_ENV
         if: matrix.config.ms == 'yes'
 
-      - name: Update wp-test-config.php
-        run: |
-          if php -r 'exit(PHP_VERSION_ID < 80100);'; then
-            echo "Disabling WP_DEBUG in wp-test-config.php"
-            sed -i "s@define( 'WP_DEBUG', true );@// define( 'WP_DEBUG', true );@" /tmp/wordpress-tests-lib/wp-tests-config.php
-          fi
-
       - name: Verify MariaDB connection
         run: |
           while ! mysqladmin ping -h 127.0.0.1 -P ${{ job.services.mysql.ports[3306] }} --silent; do
@@ -103,7 +77,7 @@ jobs:
         timeout-minutes: 1
 
       - name: Run tests
-        run: phpunit --order-by=random
+        run: vendor/bin/phpunit --order-by=random
 
   build:
     permissions:
