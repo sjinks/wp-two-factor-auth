@@ -48,7 +48,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Set up PHP
-        uses: shivammathur/setup-php@9e72090525849c5e82e596468b86eb55e9cc5401 # 2.32.0
+        uses: shivammathur/setup-php@0f7f1d08e3e32076e51cae65eb0b0c871405b16e # 2.34.1
         with:
           php-version: ${{ matrix.config.php }}
         env:
@@ -58,10 +58,10 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y subversion
 
       - name: Install dependencies
-        uses: ramsey/composer-install@57532f8be5bda426838819c5ee9afb8af389d51a # 3.0.0
+        uses: ramsey/composer-install@3cf229dc2919194e9e36783941438d17239e8520 # 3.1.1
 
       - name: Set up WordPress and WordPress Test Library
-        uses: sjinks/setup-wordpress-test-library@0590797bb1242f984f15c964a31e21f01c918383 # v2.1.1
+        uses: sjinks/setup-wordpress-test-library@d32f6be78ebd062aa55c4ca2e82c7a8ec7b3cbb7 # v2.1.4
         with:
           version: ${{ matrix.config.wp }}
 
