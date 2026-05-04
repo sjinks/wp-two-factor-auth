@@ -58,7 +58,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y subversion
 
       - name: Install dependencies
-        uses: ramsey/composer-install@a35c6ebd3d08125aaf8852dff361e686a1a67947 # 3.2.0
+        uses: ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda # 4.0.0
 
       - name: Set up WordPress and WordPress Test Library
         uses: sjinks/setup-wordpress-test-library@9726426f2a40656274560a0394718177f8adb424 # v3.0.0
